@@ -746,7 +746,12 @@ function resetSimulator() {
   onCheck();
 }
 
-function openSimulator()  { document.getElementById('simOverlay').classList.add('open'); }
+function openSimulator()  {
+  // always open with all categories collapsed
+  document.querySelectorAll('.sim-items').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.sim-chev').forEach(el => el.classList.remove('open'));
+  document.getElementById('simOverlay').classList.add('open');
+}
 function closeSimulator() { document.getElementById('simOverlay').classList.remove('open'); }
 function overlayClick(e)  { if (e.target === document.getElementById('simOverlay')) closeSimulator(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSimulator(); });
