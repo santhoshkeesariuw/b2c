@@ -158,6 +158,23 @@
     .score-label-row .fa-circle-info  { font-size: clamp(12px,1vw,14px); color: #A0AEC0; cursor: pointer; }
     .score-label-row .spacer          { flex: 1; }
 
+    /* simulated badge — appears beside the score when user has checked items */
+    .sim-badge {
+      display: none; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      color: #92400E; border: 1px solid #FCD34D;
+      border-radius: 11px; padding: 2px 9px;
+      font-size: clamp(9px, 0.78vw, 11px); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.4px;
+      animation: simPulse 1.6s ease-in-out infinite;
+    }
+    .sim-badge.active { display: inline-flex; }
+    .sim-badge i { font-size: clamp(8px, 0.7vw, 10px); }
+    @keyframes simPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(252, 211, 77, 0.4); }
+      50%      { box-shadow: 0 0 0 4px rgba(252, 211, 77, 0); }
+    }
+
     .btn-sim {
       display: inline-flex; align-items: center; gap: clamp(4px,0.4vw,6px);
       background: var(--uw-blue); color: #fff;
