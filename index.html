@@ -136,9 +136,15 @@
       border-radius: 5px; margin-bottom: clamp(10px,1.2vh,16px);
       width: 100%;
     }
+    /* score panel is centered, narrower than full width */
+    .panel.score-panel {
+      max-width: clamp(560px, 62%, 880px);
+      margin-left: auto; margin-right: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
 
     /* ═══════ POINTS SCORED / PROBABLE SCORE ═══════ */
-    .score-section { padding: clamp(12px,1.4vh,18px) clamp(14px,1.4vw,22px) clamp(14px,1.6vh,20px); }
+    .score-section { padding: clamp(14px,1.5vh,20px) clamp(18px,1.8vw,28px) clamp(16px,1.8vh,22px); }
 
     .score-label-row {
       display: flex; align-items: center; gap: clamp(5px,0.5vw,8px);
