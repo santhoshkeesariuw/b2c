@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Overall Performance</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      font-size: 13px;
+      color: #333;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 160px; min-width: 160px;
+      background: #1b2a3b;
+      display: flex; flex-direction: column;
+      color: #cdd5e0; overflow-y: auto;
+    }
+    .sidebar-brand {
+      padding: 18px 14px 12px;
+      border-bottom: 1px solid #263547;
+      text-align: center;
+    }
+    .brand-logo {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: #fff; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 8px; overflow: hidden;
+    }
+    .brand-logo svg { width: 36px; height: 36px; }
+    .brand-name  { font-size: 14px; font-weight: 700; color: #fff; }
+    .brand-sub   { font-size: 10px; color: #7ec8e3; margin-top: 2px; }
+    .brand-user  { font-size: 11px; color: #8fa3b8; margin-top: 6px; }
+    .nav { flex: 1; padding: 8px 0; }
+    .nav-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; cursor: pointer;
+      font-size: 12px; color: #9fb3c8;
+      transition: background .15s, color .15s; white-space: nowrap;
+    }
+    .nav-item:hover { background: #22344a; color: #fff; }
+    .nav-item.active { background: #22344a; color: #fff; }
+    .nav-item.sub { padding-left: 26px; font-size: 11px; }
+    .nav-item.sub.active { color: #7ec8e3; }
+    .nav-item .icon { font-size: 13px; flex-shrink: 0; width: 16px; text-align: center; color: #7a95af; }
+    .nav-item:hover .icon, .nav-item.active .icon { color: #fff; }
+    .nav-item.sub.active .icon { color: #7ec8e3; }
+    .nav-item .arrow { margin-left: auto; font-size: 10px; color: #4d6378; }
+    .sidebar-footer {
+      padding: 10px 14px; border-top: 1px solid #263547;
+      font-size: 10px; color: #4d6378;
+    }
+    .sidebar-footer span { display: block; }
+
+    /* ─── MAIN ─── */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      background: #fff; border-bottom: 1px solid #e2e8f0;
+      display: flex; align-items: center;
+      padding: 0 20px; height: 52px; flex-shrink: 0; gap: 12px;
+    }
+    .topbar-hamburger {
+      background: #2196f3; color: #fff; border: none;
+      border-radius: 4px; width: 30px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; flex-shrink: 0;
+    }
+    .topbar-title { font-size: 18px; font-weight: 600; color: #1a202c; flex: 1; }
+    .topbar-nav { display: flex; align-items: center; gap: 18px; }
+    .topbar-nav a {
+      font-size: 12px; color: #555; text-decoration: none;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap;
+    }
+    .topbar-nav a:hover { color: #2196f3; }
+    .topbar-nav a.highlight { color: #2196f3; font-weight: 600; }
+    .topbar-nav .sep { color: #ccc; }
+
+    /* ─── CONTENT ─── */
+    .content { flex: 1; overflow-y: auto; padding: 16px 20px; }
+
+    .section-header {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 14px;
+    }
+    .section-header h2 { font-size: 15px; font-weight: 600; color: #1a202c; }
+    .btn-print {
+      background: none; border: none; color: #2196f3;
+      cursor: pointer; font-size: 12px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .btn-print:hover { text-decoration: underline; }
+
+    /* ─── PROBABLE SCORE CARD ─── */
+    .score-card {
+      background: #fff; border-radius: 8px;
+      padding: 16px 20px; margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    }
+    .score-card-header {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 14px;
+    }
+    .score-card-header .title { font-size: 13px; font-weight: 700; color: #1a202c; }
+    .score-card-header .fa-circle-info { font-size: 13px; color: #bbb; cursor: pointer; }
+    .score-card-header .fa-rotate    { margin-left: auto; font-size: 13px; color: #bbb; cursor: pointer; }
+
+    .score-display-row { display: flex; align-items: center; gap: 20px; margin-bottom: 16px; }
+
+    .score-big { text-align: center; flex-shrink: 0; min-width: 90px; }
+    .score-num {
+      font-size: 52px; font-weight: 800; line-height: 1;
+      color: #e53e3e; transition: color .4s;
+    }
+    .score-num.borderline { color: #ed8936; }
+    .score-num.high       { color: #38a169; }
+    .score-num.very-high  { color: #3182ce; }
+    .score-out-of { font-size: 11px; color: #999; margin-top: 2px; }
+    .score-band-badge {
+      display: inline-block; margin-top: 6px;
+      border-radius: 12px; padding: 2px 10px;
+      font-size: 11px; font-weight: 700; color: #fff;
+      background: #e53e3e; transition: background .4s;
+    }
+    .score-band-badge.borderline { background: #ed8936; }
+    .score-band-badge.high       { background: #38a169; }
+    .score-band-badge.very-high  { background: #3182ce; }
+
+    .score-meta {
+      flex: 1; border-left: 2px solid #f0f0f0; padding-left: 18px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px;
+    }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 10px; color: #999; }
+    .meta-val   { font-size: 13px; font-weight: 700; color: #333; }
+
+    /* scale track */
+    .scale-wrap { position: relative; padding-top: 20px; padding-bottom: 22px; }
+    .scale-track {
+      display: flex; height: 12px; border-radius: 6px; overflow: hidden;
+    }
+    .scale-seg {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: rgba(255,255,255,.85);
+    }
+    .scale-seg.low        { background: #e53e3e; flex: 28; }
+    .scale-seg.borderline { background: #ed8936; flex: 5; }
+    .scale-seg.high       { background: #38a169; flex: 10; }
+    .scale-seg.very-high  { background: #3182ce; flex: 14; }
+
+    .scale-pointer {
+      position: absolute; top: 0;
+      display: flex; flex-direction: column; align-items: center;
+      transform: translateX(-50%);
+      transition: left .5s cubic-bezier(.4,0,.2,1);
+    }
+    .pointer-label {
+      background: #e53e3e; color: #fff; border-radius: 4px;
+      padding: 1px 6px; font-size: 11px; font-weight: 700;
+      white-space: nowrap; transition: background .4s;
+    }
+    .pointer-label.borderline { background: #ed8936; }
+    .pointer-label.high       { background: #38a169; }
+    .pointer-label.very-high  { background: #3182ce; }
+    .pointer-stem { width: 2px; height: 10px; background: #e53e3e; transition: background .4s; }
+    .pointer-stem.borderline { background: #ed8936; }
+    .pointer-stem.high       { background: #38a169; }
+    .pointer-stem.very-high  { background: #3182ce; }
+
+    .scale-labels { display: flex; margin-top: 5px; }
+    .scale-lbl { font-size: 10px; }
+    .scale-lbl.low        { flex: 28; color: #e53e3e; font-weight: 600; }
+    .scale-lbl.borderline { flex: 5;  color: #ed8936; font-weight: 600; }
+    .scale-lbl.high       { flex: 10; color: #38a169; font-weight: 600; }
+    .scale-lbl.very-high  { flex: 14; color: #3182ce; font-weight: 600; }
+    .scale-lbl span { display: block; font-weight: 400; color: #aaa; }
+
+    /* ─── SIMULATOR CARD ─── */
+    .simulator-card {
+      background: #fff; border-radius: 8px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+      overflow: hidden;
+    }
+    .sim-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 20px; cursor: pointer; user-select: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color .2s, background .15s;
+    }
+    .sim-header:hover { background: #f8fafc; }
+    .sim-header.open  { border-bottom-color: #e2e8f0; }
+    .sim-title { font-size: 13px; font-weight: 700; color: #1a202c; }
+    .sim-toggle-btn {
+      margin-left: auto; display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: #4299e1; font-weight: 600;
+    }
+    .sim-toggle-btn i { font-size: 11px; transition: transform .25s; }
+    .sim-toggle-btn i.open { transform: rotate(180deg); }
+
+    .sim-body {
+      padding: 16px 20px;
+      display: none;
+    }
+    .sim-body.open { display: block; }
+    .sim-subtitle { font-size: 11px; color: #888; margin-bottom: 12px; }
+
+    .sim-potential {
+      display: flex; align-items: center; gap: 10px;
+      background: #f0fdf4; border: 1px solid #c6f6d5;
+      border-radius: 6px; padding: 8px 12px; margin-bottom: 14px;
+    }
+    .sim-potential .pot-icon { font-size: 18px; color: #38a169; }
+    .sim-potential .pot-text { flex: 1; font-size: 12px; color: #276749; }
+    .sim-potential .pot-score {
+      font-size: 20px; font-weight: 800; color: #38a169;
+    }
+    .sim-potential .pot-label { font-size: 10px; color: #9ae6b4; text-align: right; }
+
+    /* category grid */
+    .sim-categories {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+
+    .sim-cat {
+      border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;
+      transition: box-shadow .15s;
+    }
+    .sim-cat:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+
+    .sim-cat-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; cursor: pointer; user-select: none;
+      background: #f8fafc;
+    }
+    .sim-cat-header:hover { background: #edf2f7; }
+
+    .sim-cat-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: #fff; flex-shrink: 0;
+    }
+
+    .sim-cat-info { flex: 1; min-width: 0; }
+    .sim-cat-name { font-size: 12px; font-weight: 700; color: #2d3748; }
+    .sim-cat-sub  { font-size: 10px; color: #888; }
+
+    .sim-cat-right { text-align: right; flex-shrink: 0; }
+    .sim-cat-pts { font-size: 11px; font-weight: 700; color: #38a169; }
+    .sim-cat-chevron { font-size: 10px; color: #aaa; transition: transform .2s; display: block; margin-top: 2px; }
+    .sim-cat-chevron.open { transform: rotate(180deg); }
+
+    .sim-cat-bar { height: 3px; background: #e2e8f0; }
+    .sim-cat-bar-fill { height: 100%; width: 0; transition: width .4s; border-radius: 2px; }
+
+    .sim-cat-items { display: none; padding: 4px 0; }
+    .sim-cat-items.open { display: block; }
+
+    .sim-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px; cursor: pointer;
+      transition: background .1s;
+    }
+    .sim-item:hover { background: #f7fafc; }
+
+    .sim-item input[type="checkbox"] {
+      width: 14px; height: 14px; cursor: pointer;
+      flex-shrink: 0; accent-color: #4299e1;
+    }
+
+    .sim-item-name {
+      flex: 1; font-size: 11px; color: #555;
+      transition: color .2s, text-decoration .2s;
+    }
+    .sim-item.done .sim-item-name {
+      text-decoration: line-through; color: #bbb;
+    }
+    .sim-item-pts {
+      font-size: 10px; font-weight: 700;
+      color: #48bb78; flex-shrink: 0;
+    }
+
+    /* overall simulator progress */
+    .sim-overall {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .sim-overall-bar-wrap { flex: 1; background: #e2e8f0; border-radius: 4px; height: 6px; }
+    .sim-overall-bar { height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg,#4299e1,#38a169); transition: width .4s; }
+    .sim-overall-label { font-size: 11px; color: #888; white-space: nowrap; }
+    .sim-overall-pct { font-size: 13px; font-weight: 700; color: #333; white-space: nowrap; }
+
+    /* ─── MIDDLE: circles + 2×2 stat grid ─── */
+    .mid-section {
+      display: flex; gap: 14px; margin-bottom: 14px; align-items: stretch;
+    }
+    .circles-col {
+      display: flex; flex-direction: column; gap: 12px;
+      align-items: center; justify-content: center;
+      flex-shrink: 0; width: 114px;
+    }
+    .ring-container { position: relative; width: 100px; height: 100px; }
+    .ring-container svg { transform: rotate(-90deg); }
+    .ring-center {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center; line-height: 1.2;
+    }
+    .ring-center .pct { font-size: 18px; font-weight: 700; color: #333; }
+    .ring-center .pct-label { font-size: 10px; color: #888; }
+
+    .stat-grid-2x2 {
+      flex: 1; display: grid;
+      grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px;
+    }
+
+    /* ─── STAT CARDS ─── */
+    .card {
+      background: #fff; border-radius: 6px; padding: 12px 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    }
+    .card-title { font-size: 12px; font-weight: 700; color: #2196f3; margin-bottom: 8px; }
+    .stat-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 4px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-row .stat-key { color: #555; }
+    .stat-badge {
+      background: #e2e8f0; color: #333; border-radius: 10px;
+      min-width: 26px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; padding: 0 5px;
+    }
+
+    /* ─── BOTTOM: bell curve + percentile ─── */
+    .bottom-section { display: grid; grid-template-columns: 3fr 2fr; gap: 14px; }
+    .curve-card {
+      background: #fff; border-radius: 6px; padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    }
+    .percentile-card {
+      background: #fff; border-radius: 6px; padding: 12px 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+    }
+    .percentile-card .card-title { color: #1a202c; font-size: 13px; }
+    .percentile-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px;
+    }
+    .percentile-row:last-child { border-bottom: none; }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      display: inline-block; margin-right: 6px; flex-shrink: 0;
+    }
+    .dot-green { background: #48bb78; }
+    .dot-blue  { background: #4299e1; }
+    .percentile-key { display: flex; align-items: center; color: #555; }
+    .percentile-val { font-weight: 700; font-size: 12px; color: #333; }
+  </style>
+</head>
+<body>
+
+<!-- ════ SIDEBAR ════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="18" stroke="#1b2a3b" stroke-width="2"/>
+        <path d="M20 20 Q26 14 26 20 Q26 28 18 28 Q10 28 10 20 Q10 10 22 10 Q34 10 34 20" stroke="#1b2a3b" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="brand-name">UWorld</div>
+    <div class="brand-sub">MCAT Comprehensive</div>
+    <div class="brand-user">Santhosh Keesari</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-item"><i class="icon fa-solid fa-gauge"></i> Dashboard</div>
+    <div class="nav-item"><i class="icon fa-solid fa-calendar-days"></i> Study Planner</div>
+    <div class="nav-item"><i class="icon fa-solid fa-book-open"></i> UBooks + Videos</div>
+    <div class="nav-item">
+      <i class="icon fa-solid fa-database"></i> QBank
+      <i class="arrow fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="nav-item sub"><i class="icon fa-solid fa-pen"></i> Create Test</div>
+    <div class="nav-item sub"><i class="icon fa-solid fa-clipboard-list"></i> Previous Tests</div>
+    <div class="nav-item sub">
+      <i class="icon fa-solid fa-chart-bar"></i> Performance
+      <i class="arrow fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="nav-item sub active" style="padding-left:38px"><i class="icon fa-solid fa-circle-dot"></i> Overall</div>
+    <div class="nav-item sub" style="padding-left:38px"><i class="icon fa-solid fa-file-lines"></i> Reports</div>
+    <div class="nav-item sub" style="padding-left:38px"><i class="icon fa-solid fa-chart-line"></i> Graphs</div>
+    <div class="nav-item"><i class="icon fa-solid fa-magnifying-glass"></i> Search</div>
+    <div class="nav-item">
+      <i class="icon fa-solid fa-file-pen"></i> Practice Exams
+      <i class="arrow fa-solid fa-chevron-right"></i>
+    </div>
+    <div class="nav-item"><i class="icon fa-solid fa-building-columns"></i> AAMC®</div>
+    <div class="nav-item">
+      <i class="icon fa-solid fa-layer-group"></i> Flashcards
+      <i class="arrow fa-solid fa-chevron-right"></i>
+    </div>
+    <div class="nav-item"><i class="icon fa-solid fa-book"></i> My Notebook</div>
+    <div class="nav-item"><i class="icon fa-solid fa-rotate"></i> Reset Options</div>
+    <div class="nav-item"><i class="icon fa-solid fa-circle-question"></i> Help</div>
+    <div class="nav-item"><i class="icon fa-solid fa-comments"></i> Forum</div>
+  </nav>
+  <div class="sidebar-footer">
+    <span>Expiration Date</span>
+    <span>Apr 02, 2027 11:59 PM EDT</span>
+  </div>
+</aside>
+
+<!-- ════ MAIN ════ -->
+<div class="main">
+  <header class="topbar">
+    <button class="topbar-hamburger"><i class="fa-solid fa-bars"></i></button>
+    <span class="topbar-title">Overall Performance</span>
+    <nav class="topbar-nav">
+      <a href="#" class="highlight"><i class="fa-solid fa-star"></i> Whats New</a>
+      <span class="sep">|</span>
+      <a href="#">MCAT Comprehensive <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></a>
+      <span class="sep">|</span>
+      <a href="#"><i class="fa-solid fa-calendar-days"></i> Test Date</a>
+      <span class="sep">|</span>
+      <a href="#"><i class="fa-solid fa-house"></i> My Account</a>
+      <span class="sep">|</span>
+      <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </nav>
+  </header>
+
+  <div class="content">
+
+    <!-- Section header -->
+    <div class="section-header">
+      <h2>Statistics</h2>
+      <button class="btn-print"><i class="fa-solid fa-print"></i> Print</button>
+    </div>
+
+    <!-- ── PROBABLE SCORE CARD ── -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <span class="title"><i class="fa-solid fa-trophy" style="color:#f6ad55;margin-right:5px"></i>Probable MCAT Score</span>
+        <i class="fa-solid fa-circle-info" style="font-size:13px;color:#bbb;cursor:pointer" title="Estimated based on QBank accuracy + completed learning items"></i>
+        <i class="fa-solid fa-rotate" style="margin-left:auto;font-size:13px;color:#bbb;cursor:pointer" onclick="resetSimulator()"></i>
+      </div>
+
+      <div class="score-display-row">
+        <div class="score-big">
+          <div class="score-num" id="scoreNum">474</div>
+          <div class="score-out-of">out of 528</div>
+          <span class="score-band-badge" id="scoreBand">Low</span>
+        </div>
+        <div class="score-meta">
+          <div class="meta-item">
+            <span class="meta-label"><i class="fa-solid fa-circle-check" style="color:#48bb78"></i> Accuracy</span>
+            <span class="meta-val">23%</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label"><i class="fa-solid fa-bullseye" style="color:#4299e1"></i> Percentile</span>
+            <span class="meta-val" id="metaPercentile">2nd</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label"><i class="fa-solid fa-users" style="color:#ed8936"></i> Median</span>
+            <span class="meta-val">500 (50th)</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label"><i class="fa-solid fa-clock" style="color:#a0aec0"></i> Avg Time/Q</span>
+            <span class="meta-val">1 sec</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Score scale 472–528 -->
+      <div class="scale-wrap" id="scaleWrap">
+        <div class="scale-pointer" id="scalePointer">
+          <span class="pointer-label" id="pointerLabel">474</span>
+          <div class="pointer-stem" id="pointerStem"></div>
+        </div>
+        <div class="scale-track">
+          <div class="scale-seg low">Low</div>
+          <div class="scale-seg borderline"></div>
+          <div class="scale-seg high">High</div>
+          <div class="scale-seg very-high">Very High</div>
+        </div>
+        <div class="scale-labels">
+          <div class="scale-lbl low">Low<span>472–499</span></div>
+          <div class="scale-lbl borderline">Border<span>500–504</span></div>
+          <div class="scale-lbl high">High<span>505–514</span></div>
+          <div class="scale-lbl very-high">Very High<span>515–528</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCORE SIMULATOR CARD ── -->
+    <div class="simulator-card">
+      <div class="sim-header" id="simHeader" onclick="toggleSimulator()">
+        <i class="fa-solid fa-sliders" style="color:#4299e1;font-size:14px"></i>
+        <span class="sim-title">Score Simulator</span>
+        <div class="sim-toggle-btn">
+          <span id="simToggleLabel">Expand</span>
+          <i class="fa-solid fa-chevron-up" id="simChevron"></i>
+        </div>
+      </div>
+
+      <div class="sim-body" id="simBody">
+        <p class="sim-subtitle">See how your probable score improves as you complete each learning activity.</p>
+
+        <!-- Potential score banner -->
+        <div class="sim-potential">
+          <i class="fa-solid fa-rocket pot-icon"></i>
+          <div class="pot-text">Complete all activities to potentially reach</div>
+          <div>
+            <div class="pot-score">519</div>
+            <div class="pot-label">Max potential</div>
+          </div>
+        </div>
+
+        <!-- Category cards (rendered by JS) -->
+        <div class="sim-categories" id="simCategories"></div>
+
+        <!-- Overall progress -->
+        <div class="sim-overall">
+          <span class="sim-overall-label"><i class="fa-solid fa-check-circle" style="color:#48bb78"></i> Overall Progress</span>
+          <div class="sim-overall-bar-wrap">
+            <div class="sim-overall-bar" id="overallBar"></div>
+          </div>
+          <span class="sim-overall-pct" id="overallPct">0 / 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MIDDLE: circles + 2×2 stat grid ── -->
+    <div class="mid-section">
+      <div class="circles-col">
+        <!-- 23% Correct -->
+        <div style="position:relative;width:100px;height:100px">
+          <svg width="100" height="100" viewBox="0 0 100 100" style="transform:rotate(-90deg)">
+            <circle cx="50" cy="50" r="40" stroke="#fce4e4" stroke-width="10" fill="none"/>
+            <circle cx="50" cy="50" r="40" stroke="#48bb78" stroke-width="10" fill="none"
+              stroke-dasharray="58 251" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;line-height:1.2">
+            <div style="font-size:18px;font-weight:700;color:#333">23%</div>
+            <div style="font-size:10px;color:#888">Correct</div>
+          </div>
+        </div>
+        <!-- 3% Used -->
+        <div style="position:relative;width:100px;height:100px">
+          <svg width="100" height="100" viewBox="0 0 100 100" style="transform:rotate(-90deg)">
+            <circle cx="50" cy="50" r="40" stroke="#e2e8f0" stroke-width="10" fill="none"/>
+            <circle cx="50" cy="50" r="40" stroke="#4299e1" stroke-width="10" fill="none"
+              stroke-dasharray="8 251" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;line-height:1.2">
+            <div style="font-size:18px;font-weight:700;color:#333">3%</div>
+            <div style="font-size:10px;color:#888">Used</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-grid-2x2">
+        <div class="card">
+          <div class="card-title">Your Score</div>
+          <div class="stat-row"><span class="stat-key">Total Correct</span><span class="stat-badge">19</span></div>
+          <div class="stat-row"><span class="stat-key">Total Incorrect</span><span class="stat-badge">62</span></div>
+          <div class="stat-row"><span class="stat-key">Total Omitted</span><span class="stat-badge">1</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Answer Changes</div>
+          <div class="stat-row"><span class="stat-key">Correct to Incorrect</span><span class="stat-badge">0</span></div>
+          <div class="stat-row"><span class="stat-key">Incorrect to Correct</span><span class="stat-badge">0</span></div>
+          <div class="stat-row"><span class="stat-key">Incorrect to Incorrect</span><span class="stat-badge">0</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">QBank Usage</div>
+          <div class="stat-row"><span class="stat-key">Used Questions</span><span class="stat-badge">90</span></div>
+          <div class="stat-row"><span class="stat-key">Unused Questions</span><span class="stat-badge">2929</span></div>
+          <div class="stat-row"><span class="stat-key">Total Questions</span><span class="stat-badge">3019</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Test Count</div>
+          <div class="stat-row"><span class="stat-key">Tests Created</span><span class="stat-badge">2</span></div>
+          <div class="stat-row"><span class="stat-key">Tests Completed</span><span class="stat-badge">2</span></div>
+          <div class="stat-row"><span class="stat-key">Suspended Tests</span><span class="stat-badge">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BOTTOM: bell curve + percentile ── -->
+    <div class="bottom-section">
+      <div class="curve-card">
+        <canvas id="bellCurve" height="180"></canvas>
+      </div>
+      <div class="percentile-card">
+        <div class="card-title">Percentile Rank</div>
+        <div class="percentile-row">
+          <span class="percentile-key"><span class="dot dot-green"></span>Your Score (2nd rank)</span>
+          <span class="percentile-val">23%</span>
+        </div>
+        <div class="percentile-row">
+          <span class="percentile-key"><span class="dot dot-blue"></span>Median Score (50th rank)</span>
+          <span class="percentile-val">60%</span>
+        </div>
+        <div class="percentile-row">
+          <span class="percentile-key">Your Avg Time Spent (sec)</span>
+          <span class="percentile-val">1</span>
+        </div>
+        <div class="percentile-row">
+          <span class="percentile-key">Others' Avg Time Spent (sec)</span>
+          <span class="percentile-val">64</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════════════
+// SIMULATOR DATA
+// ══════════════════════════════════════
+const CATEGORIES = [
+  {
+    id: 'ubooks',
+    name: 'UBooks + Videos',
+    icon: 'fa-book-open',
+    color: '#4299e1',
+    items: [
+      { name: 'Chem & Physics: Atomic Structure',   pts: 1.5 },
+      { name: 'Chem & Physics: Thermodynamics',     pts: 1.5 },
+      { name: 'Biology: Cell Biology & Genetics',   pts: 2   },
+      { name: 'Biology: Organ Systems',             pts: 2   },
+      { name: 'Biochemistry: Enzymes & Metabolism', pts: 2   },
+      { name: 'Psychology & Sociology',             pts: 2   },
+      { name: 'CARS Strategy Videos',               pts: 2   },
+    ]
+  },
+  {
+    id: 'practice',
+    name: 'Practice Exams',
+    icon: 'fa-file-pen',
+    color: '#ed8936',
+    items: [
+      { name: 'Full-Length Practice Exam 1', pts: 4 },
+      { name: 'Full-Length Practice Exam 2', pts: 4 },
+      { name: 'Full-Length Practice Exam 3', pts: 4 },
+      { name: 'Section Test: Chem / Physics', pts: 2 },
+      { name: 'Section Test: CARS',           pts: 2 },
+      { name: 'Section Test: Bio / Biochem',  pts: 2 },
+    ]
+  },
+  {
+    id: 'flashcards',
+    name: 'Flashcards',
+    icon: 'fa-layer-group',
+    color: '#9f7aea',
+    items: [
+      { name: 'Biology & Biochemistry Deck', pts: 1.5 },
+      { name: 'General Chemistry Deck',      pts: 1.5 },
+      { name: 'Organic Chemistry Deck',      pts: 1.5 },
+      { name: 'Physics Deck',                pts: 1.5 },
+      { name: 'Psychology & Sociology Deck', pts: 1.5 },
+      { name: 'High-Yield CARS Vocab Deck',  pts: 1   },
+    ]
+  },
+  {
+    id: 'aamc',
+    name: 'AAMC® Materials',
+    icon: 'fa-building-columns',
+    color: '#38b2ac',
+    items: [
+      { name: 'AAMC Sample Test',          pts: 3 },
+      { name: 'AAMC Practice Exam 1',      pts: 4 },
+      { name: 'AAMC Practice Exam 2',      pts: 4 },
+      { name: 'AAMC Question Packs',       pts: 2 },
+      { name: 'AAMC Section Bank',         pts: 3 },
+    ]
+  }
+];
+
+const BASE_SCORE  = 474;
+const SCORE_MIN   = 472;
+const SCORE_MAX   = 528;
+
+// ── Render simulator ──────────────────
+const container = document.getElementById('simCategories');
+
+CATEGORIES.forEach(cat => {
+  const totalPts = cat.items.reduce((s, i) => s + i.pts, 0);
+
+  const el = document.createElement('div');
+  el.className = 'sim-cat';
+  el.innerHTML = `
+    <div class="sim-cat-header" onclick="toggleCat('${cat.id}')">
+      <div class="sim-cat-icon" style="background:${cat.color}">
+        <i class="fa-solid ${cat.icon}"></i>
+      </div>
+      <div class="sim-cat-info">
+        <div class="sim-cat-name">${cat.name}</div>
+        <div class="sim-cat-sub" id="sub-${cat.id}">0 / ${cat.items.length} completed</div>
+      </div>
+      <div class="sim-cat-right">
+        <div class="sim-cat-pts">+${totalPts} pts</div>
+        <i class="fa-solid fa-chevron-down sim-cat-chevron" id="chev-${cat.id}"></i>
+      </div>
+    </div>
+    <div class="sim-cat-bar">
+      <div class="sim-cat-bar-fill" id="bar-${cat.id}" style="background:${cat.color}"></div>
+    </div>
+    <div class="sim-cat-items" id="items-${cat.id}">
+      ${cat.items.map((item, idx) => `
+        <label class="sim-item" id="row-${cat.id}-${idx}">
+          <input type="checkbox" data-cat="${cat.id}" data-idx="${idx}" data-pts="${item.pts}"
+            onchange="updateScore()" />
+          <span class="sim-item-name">${item.name}</span>
+          <span class="sim-item-pts">+${item.pts} pts</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+  container.appendChild(el);
+});
+
+function toggleCat(id) {
+  const panel = document.getElementById(`items-${id}`);
+  const chev  = document.getElementById(`chev-${id}`);
+  const open  = panel.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+// ── Score update ──────────────────────
+function getBand(score) {
+  if (score <= 499) return 'low';
+  if (score <= 504) return 'borderline';
+  if (score <= 514) return 'high';
+  return 'very-high';
+}
+
+function getBandLabel(score) {
+  if (score <= 499) return 'Low';
+  if (score <= 504) return 'Borderline';
+  if (score <= 514) return 'High';
+  return 'Very High';
+}
+
+function getPercentile(score) {
+  if (score <= 476) return '2nd';
+  if (score <= 484) return '10th';
+  if (score <= 490) return '20th';
+  if (score <= 495) return '30th';
+  if (score <= 500) return '40th';
+  if (score <= 501) return '50th';
+  if (score <= 505) return '60th';
+  if (score <= 510) return '72nd';
+  if (score <= 515) return '82nd';
+  if (score <= 520) return '91st';
+  return '97th+';
+}
+
+function updateScore() {
+  // Tally checked points
+  let gained = 0;
+  document.querySelectorAll('.sim-item input[type=checkbox]').forEach(cb => {
+    if (cb.checked) gained += parseFloat(cb.dataset.pts);
+    const row = cb.closest('.sim-item');
+    row.classList.toggle('done', cb.checked);
+  });
+
+  const score = Math.min(SCORE_MAX, Math.round(BASE_SCORE + gained));
+  const band  = getBand(score);
+  const pct   = ((score - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * 100;
+
+  // Update big number
+  animateNumber('scoreNum', score);
+  document.getElementById('pointerLabel').textContent = score;
+
+  // Band classes
+  ['low','borderline','high','very-high'].forEach(b => {
+    document.getElementById('scoreNum').classList.remove(b);
+    document.getElementById('scoreBand').classList.remove(b);
+    document.getElementById('pointerLabel').classList.remove(b);
+    document.getElementById('pointerStem').classList.remove(b);
+  });
+  if (band !== 'low') {
+    document.getElementById('scoreNum').classList.add(band);
+    document.getElementById('scoreBand').classList.add(band);
+    document.getElementById('pointerLabel').classList.add(band);
+    document.getElementById('pointerStem').classList.add(band);
+  }
+  document.getElementById('scoreBand').textContent = getBandLabel(score);
+  document.getElementById('metaPercentile').textContent = getPercentile(score);
+
+  // Move pointer
+  document.getElementById('scalePointer').style.left = pct + '%';
+
+  // Per-category progress bars
+  CATEGORIES.forEach(cat => {
+    const total    = cat.items.length;
+    const done     = [...document.querySelectorAll(`input[data-cat="${cat.id}"]:checked`)].length;
+    const fillPct  = total ? (done / total) * 100 : 0;
+    document.getElementById(`bar-${cat.id}`).style.width = fillPct + '%';
+    document.getElementById(`sub-${cat.id}`).textContent = `${done} / ${total} completed`;
+  });
+
+  // Overall progress
+  const allCBs    = document.querySelectorAll('.sim-item input[type=checkbox]');
+  const doneCBs   = document.querySelectorAll('.sim-item input[type=checkbox]:checked');
+  const allTotal  = allCBs.length;
+  const allDone   = doneCBs.length;
+  document.getElementById('overallBar').style.width = allTotal ? (allDone / allTotal * 100) + '%' : '0%';
+  document.getElementById('overallPct').textContent = `${allDone} / ${allTotal}`;
+}
+
+function toggleSimulator() {
+  const body    = document.getElementById('simBody');
+  const header  = document.getElementById('simHeader');
+  const chevron = document.getElementById('simChevron');
+  const label   = document.getElementById('simToggleLabel');
+  const isOpen  = body.classList.toggle('open');
+  header.classList.toggle('open', isOpen);
+  chevron.classList.toggle('open', isOpen);
+  label.textContent = isOpen ? 'Collapse' : 'Expand';
+}
+
+function resetSimulator() {
+  document.querySelectorAll('.sim-item input[type=checkbox]').forEach(cb => {
+    cb.checked = false;
+    cb.closest('.sim-item').classList.remove('done');
+  });
+  updateScore();
+}
+
+// Animate number counter
+function animateNumber(id, target) {
+  const el  = document.getElementById(id);
+  const from = parseInt(el.textContent) || BASE_SCORE;
+  const diff = target - from;
+  const steps = 20;
+  let step = 0;
+  clearInterval(el._timer);
+  el._timer = setInterval(() => {
+    step++;
+    el.textContent = Math.round(from + diff * (step / steps));
+    if (step >= steps) { el.textContent = target; clearInterval(el._timer); }
+  }, 16);
+}
+
+// ── Initial pointer placement ─────────
+(function () {
+  const pct = ((BASE_SCORE - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * 100;
+  document.getElementById('scalePointer').style.left = pct + '%';
+  // kick off overall count
+  updateScore();
+})();
+
+
+// ══════════════════════════════════════
+// BELL CURVE
+// ══════════════════════════════════════
+const canvas = document.getElementById('bellCurve');
+const ctx    = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width  = canvas.parentElement.clientWidth - 28;
+  canvas.height = 180;
+  drawCurve();
+}
+
+function bellY(x, mean, sigma) {
+  return Math.exp(-0.5 * Math.pow((x - mean) / sigma, 2));
+}
+
+function drawCurve() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const mean = 0.5, sigma = 0.15;
+  const padL = 40, padR = 20, padT = 20, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  const pts = [];
+  for (let i = 0; i <= 200; i++) {
+    const t = i / 200;
+    pts.push({ x: padL + t * plotW, y: padT + plotH - bellY(t, mean, sigma) * plotH * 0.9 });
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, padT + plotH);
+  pts.forEach(p => ctx.lineTo(p.x, p.y));
+  ctx.lineTo(pts[pts.length - 1].x, padT + plotH);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
+  grad.addColorStop(0, 'rgba(66,153,225,.18)');
+  grad.addColorStop(1, 'rgba(66,153,225,.03)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  ctx.beginPath();
+  pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+  ctx.strokeStyle = '#4299e1'; ctx.lineWidth = 2; ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(padL, padT + plotH); ctx.lineTo(padL + plotW, padT + plotH);
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1; ctx.stroke();
+
+  const x50 = padL + mean * plotW;
+  ctx.beginPath(); ctx.moveTo(x50, padT); ctx.lineTo(x50, padT + plotH);
+  ctx.strokeStyle = '#4299e1'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#4299e1'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('50th', x50, padT - 6);
+
+  const x2 = padL + 0.14 * plotW;
+  ctx.beginPath(); ctx.arc(x2, padT + plotH - 2, 6, 0, Math.PI * 2);
+  ctx.fillStyle = '#48bb78'; ctx.fill();
+  ctx.fillStyle = '#48bb78'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('2nd', x2, padT + plotH + 16);
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+</script>
+</body>
+</html>
