@@ -715,6 +715,9 @@ function onCheck() {
   bl.textContent = score + ' – ' + lbl;
   bl.className = 'band ' + (band === 'low' ? '' : band);
 
+  // toggle Simulated badge whenever any item is checked
+  document.getElementById('simBadge').classList.toggle('active', gained > 0);
+
   ['low','borderline','high','very-high'].forEach(b => {
     const el = document.getElementById('seg-' + b);
     el.className = 'score-seg' + (b === band ? ' active ' + b : '');
