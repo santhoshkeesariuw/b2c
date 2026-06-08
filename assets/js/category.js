@@ -1,124 +1,160 @@
-/* ─────────────────────────────────────
-   UWorld – Category Landing Page Renderer
-   Call renderCategory(PAGE_CONFIG) on DOMContentLoaded
-───────────────────────────────────── */
+/**
+ * UWorld B2C — Category Page Renderer
+ * Call renderCategory(PAGE_CONFIG) once per page.
+ * Depends on: theme.js (loaded first in HTML)
+ * Zero inline styles — all theming done via data-color + applyThemes().
+ */
 
-function tint(hex, a) {
-  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${a})`;
-}
-function rgb(hex) {
-  return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)].join(',');
-}
+'use strict';
 
 const FEATURE_META = {
-  qbank:          { label:'QBank',            icon:'fa-database'         },
-  practiceExams:  { label:'Practice Exams',   icon:'fa-file-pen'         },
-  flashcards:     { label:'Flashcards',       icon:'fa-bolt'             },
-  analytics:      { label:'Analytics',        icon:'fa-chart-bar'        },
-  studyPlanner:   { label:'Study Planner',    icon:'fa-calendar-days'    },
-  videos:         { label:'Videos',           icon:'fa-play-circle'      },
+  qbank:         { label: 'QBank',          icon: 'fa-database'      },
+  practiceExams: { label: 'Practice Exams', icon: 'fa-file-pen'      },
+  flashcards:    { label: 'Flashcards',     icon: 'fa-bolt'          },
+  analytics:     { label: 'Analytics',      icon: 'fa-chart-bar'     },
+  studyPlanner:  { label: 'Study Planner',  icon: 'fa-calendar-days' },
+  videos:        { label: 'Videos',         icon: 'fa-play-circle'   },
 };
 
-function renderCategory(cfg) {
-  document.title = `UWorld – ${cfg.name}`;
+/* ── Hero ── */
+function renderHero(cfg) {
+  const heroEl = document.getElementById('cat-hero');
+  if (!heroEl) return;
 
-  /* — hero — */
-  const glowColor = tint(cfg.color, 0.2);
-  const liveCount = cfg.products.filter(p => p.available).length;
-  const totalQ    = cfg.products.reduce((s,p) => s + (p.questionCount||0), 0);
+  const statsHTML = (cfg.stats || [])
+    .map((s) => `
+      <div class="cat-stat">
+        <div class="cat-stat__value">${s.val}</div>
+        <div class="cat-stat__label">${s.lbl}</div>
+      </div>`)
+    .join('');
 
-  const statsHtml = cfg.stats
-    ? cfg.stats.map(s=>`<div class="cs-item"><div class="cs-val">${s.val}</div><div class="cs-lbl">${s.lbl}</div></div>`).join('')
-    : '';
-
-  document.getElementById('cat-hero').innerHTML = `
-    <div class="cat-hero-glow" style="background:radial-gradient(circle,${glowColor} 0%,transparent 68%)"></div>
-    <div class="cat-hero-inner">
+  heroEl.innerHTML = `
+    <div class="cat-hero__glow" aria-hidden="true"></div>
+    <div class="cat-hero__inner">
       <a class="back-link" href="../index.html">
-        <i class="fa-solid fa-arrow-left"></i> All Products
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All Products
       </a>
-      <div class="cat-hero-body">
-        <div class="cat-icon-wrap" style="background:${cfg.color}">
-          <i class="fa-solid ${cfg.icon}"></i>
+      <div class="cat-hero__body">
+        <div class="cat-hero__icon" data-color="${cfg.color}" data-available="true">
+          <i class="fa-solid ${cfg.icon}" aria-hidden="true"></i>
         </div>
-        <div class="cat-text">
-          <div class="cat-eyebrow">UWorld Exam Prep</div>
-          <div class="cat-name">${cfg.name}</div>
-          <div class="cat-desc">${cfg.desc}</div>
-          ${statsHtml ? `<div class="cat-stats">${statsHtml}</div>` : ''}
+        <div class="cat-hero__text">
+          <div class="cat-hero__eyebrow">UWorld Exam Prep</div>
+          <div class="cat-hero__name">${cfg.name}</div>
+          <div class="cat-hero__desc">${cfg.desc}</div>
+          ${statsHTML ? `<div class="cat-stats">${statsHTML}</div>` : ''}
         </div>
       </div>
     </div>`;
 
-  /* — products grid — */
-  const availCount = cfg.products.filter(p=>p.available).length;
-  const total = cfg.products.length;
-
-  const gridHtml = total === 0
-    ? `<div class="empty-state">
-         <div class="empty-icon"><i class="fa-solid ${cfg.icon}"></i></div>
-         <div class="empty-title">Products Coming Soon</div>
-         <div class="empty-sub">We're building content for ${cfg.name}. Check back soon.</div>
-       </div>`
-    : cfg.products.map((p,i) => productCard(p, i, cfg.color)).join('');
-
-  document.getElementById('cat-products').innerHTML = `
-    <div class="sec-hd">
-      <div>
-        <div class="overline">${cfg.name} Prep</div>
-        <div class="sec-title">Available Products</div>
-      </div>
-      <span class="sec-count">${availCount > 0 ? availCount + ' live · ' : ''}${total} product${total!==1?'s':''}</span>
-    </div>
-    <div class="grid">${gridHtml}</div>`;
+  /* Apply category color to icon and glow */
+  setTheme(heroEl.querySelector('.cat-hero__icon'), cfg.color, true);
+  setGlow(heroEl.querySelector('.cat-hero__glow'), cfg.color);
 }
 
-function productCard(p, idx, catColor) {
-  const color   = p.color || catColor;
-  const iconBg  = p.available ? tint(color, 0.1) : '#F3F4F6';
-  const cr      = rgb(color);
-  const features = p.features || {};
+/* ── Product card template ── */
+function productCardHTML(p) {
+  const available  = !!p.available;
+  const stateClass = available ? 'pcard--available' : 'pcard--coming-soon';
+  const features   = p.features || {};
 
-  const badge = p.available
-    ? `<span class="status status-av"><span class="live-dot"></span> Available</span>`
-    : `<span class="status status-soon">Coming Soon</span>`;
+  const badge = available
+    ? `<span class="badge badge--available"><span class="live-dot" aria-hidden="true"></span> Available</span>`
+    : `<span class="badge badge--coming-soon">Coming Soon</span>`;
 
-  const featsHtml = Object.entries(FEATURE_META)
+  const featsHTML = Object.entries(FEATURE_META)
     .filter(([k]) => features[k] !== undefined)
     .map(([k, m]) => `
-      <span class="feat ${features[k] ? 'on' : 'off'}" style="${p.available && features[k] ? `--icon-bg:${iconBg};--c:${color};--cr:${cr}` : ''}">
-        <i class="fa-solid ${m.icon}"></i>${m.label}
-      </span>`).join('');
+      <span class="feat ${features[k] ? 'feat--on' : 'feat--off'}">
+        <i class="fa-solid ${m.icon}" aria-hidden="true"></i>${m.label}
+      </span>`)
+    .join('');
 
-  const onFeats = Object.entries(features).filter(([,v])=>v).length;
-  const offFeats = Object.entries(features).filter(([,v])=>!v).length;
+  const onCount  = Object.values(features).filter(Boolean).length;
+  const dataHref = available && p.url ? p.url : '';
 
-  const foot = p.available && p.url
-    ? `<a class="pcard-btn" style="background:${color}" href="${p.url}">
-         Open QBank <i class="fa-solid fa-arrow-right"></i>
+  const footHTML = available && p.url
+    ? `<a class="btn btn--brand btn--md" href="${p.url}">
+         Open QBank <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
        </a>
-       ${onFeats > 0 ? `<span class="feat-count">${onFeats} feature${onFeats>1?'s':''} available</span>` : ''}`
-    : `<span class="pcard-soon-txt"><i class="fa-regular fa-clock"></i> In development</span>`;
-
-  const click = p.available && p.url ? `onclick="window.location.href='${p.url}'"` : '';
+       ${onCount > 0 ? `<span class="pcard__feat-count">${onCount} feature${onCount > 1 ? 's' : ''} available</span>` : ''}`
+    : `<span class="btn btn--muted">
+         <i class="fa-regular fa-clock" aria-hidden="true"></i> In development
+       </span>`;
 
   return `
-    <div class="pcard ${p.available?'av':'cs'} stagger"
-         style="--c:${color};--cr:${cr};--icon-bg:${iconBg};animation-delay:${idx*50}ms"
-         ${click}>
-      <div class="pcard-bar"></div>
-      <div class="pcard-body">
-        <div class="pcard-top">
-          <div class="pcard-icon"><i class="fa-solid ${p.icon}"></i></div>
+    <div class="pcard ${stateClass} stagger"
+         data-color="${p.color || ''}"
+         data-available="${available}"
+         data-href="${dataHref}"
+         role="${available ? 'button' : 'article'}"
+         tabindex="${available ? '0' : '-1'}"
+         aria-label="${p.name}">
+      <div class="pcard__bar" aria-hidden="true"></div>
+      <div class="pcard__body">
+        <div class="pcard__top">
+          <div class="pcard__icon"><i class="fa-solid ${p.icon}" aria-hidden="true"></i></div>
           ${badge}
         </div>
         <div>
-          <div class="pcard-name">${p.name}</div>
-          <div class="pcard-desc">${p.desc}</div>
+          <div class="pcard__name">${p.name}</div>
+          <div class="pcard__desc">${p.desc}</div>
         </div>
-        ${featsHtml ? `<div class="pcard-features">${featsHtml}</div>` : ''}
-        <div class="pcard-foot">${foot}</div>
+        ${featsHTML ? `<div class="pcard__features">${featsHTML}</div>` : ''}
+        <div class="pcard__footer">${footHTML}</div>
       </div>
     </div>`;
+}
+
+/* ── Products grid ── */
+function renderProducts(cfg) {
+  const gridEl = document.getElementById('cat-products');
+  if (!gridEl) return;
+
+  const products   = cfg.products || [];
+  const available  = products.filter((p) => p.available).length;
+
+  const gridContent = products.length === 0
+    ? `<div class="empty-state">
+         <div class="empty-state__icon"><i class="fa-solid ${cfg.icon}" aria-hidden="true"></i></div>
+         <div class="empty-state__title">Products Coming Soon</div>
+         <div class="empty-state__subtitle">We're building content for ${cfg.name}. Check back soon.</div>
+       </div>`
+    : products.map(productCardHTML).join('');
+
+  gridEl.innerHTML = `
+    <div class="section-header">
+      <div>
+        <div class="overline">${cfg.name} Prep</div>
+        <div class="section-title">Available Products</div>
+      </div>
+      <span class="section-count">
+        ${available > 0 ? available + ' live · ' : ''}${products.length} product${products.length !== 1 ? 's' : ''}
+      </span>
+    </div>
+    <div class="grid grid--3">${gridContent}</div>`;
+
+  /* Apply themes and stagger to all cards */
+  applyThemes(gridEl, 50);
+
+  /* Event delegation for card navigation */
+  gridEl.addEventListener('click', onProductCardClick);
+  gridEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') onProductCardClick(e);
+  });
+}
+
+function onProductCardClick(e) {
+  const card = e.target.closest('[data-href]');
+  if (card && card.dataset.href) {
+    window.location.href = card.dataset.href;
+  }
+}
+
+/* ── Public API ── */
+function renderCategory(cfg) {
+  document.title = `UWorld – ${cfg.name}`;
+  renderHero(cfg);
+  renderProducts(cfg);
 }

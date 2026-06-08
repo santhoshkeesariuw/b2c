@@ -5,456 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UWorld – Choose Your Exam</title>
   <link rel="stylesheet" href="assets/css/fa7-pro.css" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:       #1B2D3E;
-      --blue:       #0B6FBE;
-      --blue-lt:    #1A80D0;
-      --bg:         #F0F2F5;
-      --surface:    #FFFFFF;
-      --border:     #E8ECF1;
-      --text-1:     #0F1923;
-      --text-2:     #374151;
-      --text-3:     #6B7280;
-      --text-4:     #9CA3AF;
-      --ease:       cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-      background: var(--bg);
-      color: var(--text-2);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── NAV ── */
-    .nav {
-      position: sticky; top: 0; z-index: 200;
-      height: 58px;
-      background: rgba(27,45,62,0.97);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      display: flex; align-items: center;
-      padding: 0 clamp(20px, 5vw, 64px); gap: 12px;
-    }
-    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-    .nav-logo img { height: 32px; width: auto; display: block; }
-    .nav-wordmark { font-size: 19px; font-weight: 700; color: #fff; letter-spacing: -0.2px; }
-    .nav-div    { width: 1px; height: 18px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
-    .nav-tag    { font-size: 12px; color: rgba(255,255,255,0.35); }
-    .nav-spacer { flex: 1; }
-    .nav-links  { display: flex; align-items: center; gap: 2px; }
-    .nav-link {
-      padding: 6px 12px; border-radius: 6px;
-      color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 500;
-      text-decoration: none; transition: color .15s, background .15s;
-    }
-    .nav-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
-    .nav-btn {
-      margin-left: 8px; padding: 7px 18px;
-      background: var(--blue); color: #fff;
-      border: none; border-radius: 7px; cursor: pointer;
-      font-size: 13px; font-weight: 600; text-decoration: none;
-      transition: background .15s;
-    }
-    .nav-btn:hover { background: var(--blue-lt); }
-
-    /* ── HERO ── */
-    .hero {
-      background: var(--navy);
-      padding: clamp(40px,6vh,64px) clamp(20px,5vw,64px);
-      position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 26px 26px;
-      pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute; top: -100px; right: -60px;
-      width: 460px; height: 460px;
-      background: radial-gradient(circle, rgba(11,111,190,0.18) 0%, transparent 68%);
-      pointer-events: none;
-    }
-    .hero-inner {
-      position: relative; z-index: 1;
-      text-align: center; max-width: 560px; margin: 0 auto;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(11,111,190,0.18); border: 1px solid rgba(11,111,190,0.3);
-      border-radius: 20px; padding: 4px 14px;
-      font-size: 11px; font-weight: 600; color: #7EC8F4;
-      letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-size: clamp(26px,3.4vw,38px); font-weight: 800; color: #fff;
-      line-height: 1.18; letter-spacing: -0.5px; margin-bottom: 14px;
-    }
-    .hero h1 em { font-style: normal; color: #5BB8F5; }
-    .hero-sub {
-      font-size: clamp(13px,1.15vw,15px); color: rgba(255,255,255,0.42);
-      line-height: 1.7; max-width: 440px; margin: 0 auto;
-    }
-    .hero-stats {
-      display: flex; justify-content: center; flex-wrap: wrap;
-      gap: clamp(20px,4vw,52px);
-      margin-top: clamp(28px,4vh,40px);
-      padding-top: clamp(22px,3.5vh,32px);
-      border-top: 1px solid rgba(255,255,255,0.07);
-      position: relative; z-index: 1;
-    }
-    .stat-n { font-size: clamp(20px,2.2vw,27px); font-weight: 800; color: #fff; letter-spacing: -0.4px; }
-    .stat-l { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 2px; letter-spacing: 0.4px; text-transform: uppercase; font-weight: 500; }
-
-    /* ── MAIN ── */
-    .main {
-      flex: 1;
-      padding: clamp(28px,4vh,44px) clamp(20px,5vw,64px) clamp(48px,7vh,72px);
-      max-width: 1280px; width: 100%; margin: 0 auto;
-    }
-
-    /* ── BREADCRUMB ── */
-    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
-    .breadcrumb.hidden { display: none; }
-    .back-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 6px 14px 6px 10px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; font-size: 12.5px; font-weight: 600;
-      color: var(--text-2); cursor: pointer; text-decoration: none;
-      transition: background .15s, transform .2s var(--ease);
-    }
-    .back-btn:hover { background: #F7F9FB; transform: translateX(-2px); }
-    .back-btn i { font-size: 10px; color: var(--text-4); }
-    .bc-sep   { font-size: 9px; color: var(--text-4); }
-    .bc-label { font-size: 13px; font-weight: 600; color: var(--text-1); }
-
-    /* ── SECTION HEADER ── */
-    .section-hd {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: clamp(16px,2.5vh,24px); flex-wrap: wrap; gap: 6px;
-    }
-    .overline  { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--blue); margin-bottom: 4px; }
-    .sec-title { font-size: clamp(16px,1.7vw,20px); font-weight: 700; color: var(--text-1); letter-spacing: -0.2px; }
-    .sec-count { font-size: 12.5px; color: var(--text-4); font-weight: 500; }
-
-    /* ── GRID ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: clamp(12px,1.4vw,16px);
-    }
-    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 720px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 480px)  { .grid { grid-template-columns: 1fr; } }
-
-    /* ── CARD ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: clamp(18px,2vw,24px);
-      display: flex; flex-direction: column; gap: 12px;
-      transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s;
-    }
-
-    /* available */
-    .card.av { cursor: pointer; }
-    .card.av:hover {
-      transform: translateY(-3px);
-      border-color: rgba(var(--cr), 0.2);
-      box-shadow: 0 10px 32px rgba(var(--cr), 0.12), 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .card.av:active { transform: scale(0.98); transition-duration: .08s; }
-
-    /* coming soon */
-    .card.cs { cursor: default; }
-    .card.cs:hover { background: #FAFBFC; }
-
-    /* icon */
-    .card-icon {
-      width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 18px;
-    }
-    .card.av .card-icon { background: var(--icon-bg); color: var(--c); }
-    .card.cs .card-icon { background: #F3F4F6; color: #B0B7C3; }
-
-    /* text */
-    .card-name { font-size: 14px; font-weight: 700; color: var(--text-1); letter-spacing: -0.1px; line-height: 1.3; }
-    .card.cs .card-name { color: var(--text-3); }
-    .card-desc { font-size: 12px; color: var(--text-4); line-height: 1.6; flex: 1; }
-
-    /* footer */
-    .card-foot {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 10px; border-top: 1px solid #F3F4F6; margin-top: auto;
-    }
-    .card-cta {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12.5px; font-weight: 600; color: var(--c);
-    }
-    .card.cs .card-cta { color: var(--text-4); font-weight: 500; }
-    .cta-arrow { font-size: 10px; transition: transform .18s var(--ease); }
-    .card.av:hover .cta-arrow { transform: translateX(3px); }
-
-    /* sub-count chip */
-    .card-chip {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 11px; font-weight: 500;
-      background: #F3F4F6; color: var(--text-4);
-      padding: 3px 9px; border-radius: 20px;
-    }
-    .card.av .card-chip { background: var(--icon-bg); color: var(--c); opacity: 0.85; }
-    .card-chip i { font-size: 9px; }
-
-    /* ── PRODUCT CARD (sub-view) ── */
-    .pcrd {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: clamp(18px,2vw,24px);
-      display: flex; flex-direction: column; gap: 12px;
-      transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s;
-    }
-    .pcrd.av { cursor: pointer; }
-    .pcrd.av:hover {
-      transform: translateY(-3px);
-      border-color: rgba(var(--cr),0.2);
-      box-shadow: 0 10px 32px rgba(var(--cr),0.12), 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .pcrd.av:active { transform: scale(0.98); transition-duration: .08s; }
-    .pcrd.cs { cursor: default; }
-    .pcrd.cs:hover { background: #FAFBFC; }
-
-    .pcrd-icon {
-      width: 44px; height: 44px; border-radius: 11px;
-      display: flex; align-items: center; justify-content: center; font-size: 18px;
-    }
-    .pcrd.av .pcrd-icon { background: var(--icon-bg); color: var(--c); }
-    .pcrd.cs .pcrd-icon { background: #F3F4F6; color: #B0B7C3; }
-
-    .pcrd-name { font-size: 14px; font-weight: 700; color: var(--text-1); letter-spacing: -0.1px; }
-    .pcrd.cs .pcrd-name { color: var(--text-3); }
-    .pcrd-desc { font-size: 12px; color: var(--text-4); line-height: 1.6; flex: 1; }
-
-    .pcrd-stats { display: flex; gap: 16px; }
-    .ps { display: flex; flex-direction: column; gap: 1px; }
-    .ps-v { font-size: 14px; font-weight: 700; color: var(--text-1); }
-    .ps-l { font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-4); font-weight: 500; }
-    .pcrd.cs .ps-v { color: var(--text-4); }
-
-    .pcrd-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #F3F4F6; margin-top: auto; }
-    .pcrd-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 16px; border-radius: 8px;
-      background: var(--c); color: #fff;
-      font-size: 12.5px; font-weight: 600; text-decoration: none;
-      transition: filter .15s, gap .2s var(--ease);
-    }
-    .pcrd-btn:hover { filter: brightness(1.08); gap: 10px; }
-    .pcrd-btn i { font-size: 10px; }
-    .pcrd-soon { font-size: 12px; color: var(--text-4); display: flex; align-items: center; gap: 5px; }
-    .pcrd-soon i { font-size: 10px; }
-
-    /* ── TRANSITIONS ── */
-    .enter { animation: vIn  .26s var(--ease) both; }
-    .back  { animation: vOut .26s var(--ease) both; }
-    @keyframes vIn  { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes vOut { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:translateX(0); } }
-    .stagger { animation: vIn .28s var(--ease) both; }
-
-    /* ── FOOTER ── */
-    .footer {
-      background: var(--navy); border-top: 1px solid rgba(255,255,255,0.05);
-      padding: 22px clamp(20px,5vw,64px);
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-    }
-    .ft-l    { display: flex; align-items: center; gap: 10px; }
-    .ft-logo img { height: 22px; width: auto; opacity: 0.5; }
-    .ft-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5); }
-    .ft-copy { font-size: 12px; color: rgba(255,255,255,0.22); }
-    .ft-links { display: flex; gap: 20px; }
-    .ft-links a { font-size: 12px; color: rgba(255,255,255,0.28); text-decoration: none; transition: color .15s; }
-    .ft-links a:hover { color: rgba(255,255,255,0.55); }
-  </style>
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
 </head>
-<body>
+<body class="page">
 
-<!-- NAV -->
 <nav class="nav">
-  <a class="nav-brand" href="index.html">
-    <div class="nav-logo"><img src="assets/images/UWorld logo icon.png" alt="UWorld" /></div>
-    <span class="nav-wordmark">UWorld</span>
+  <a class="nav__brand" href="index.html">
+    <div class="nav__logo"><img src="assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <span class="nav__wordmark">UWorld</span>
   </a>
-  <div class="nav-div"></div>
-  <span class="nav-tag">Exam Prep Platform</span>
-  <div class="nav-spacer"></div>
-  <div class="nav-links">
-    <a href="#" class="nav-link">Products</a>
-    <a href="#" class="nav-link">Support</a>
-    <a href="#" class="nav-btn">Sign In</a>
+  <div class="nav__divider"></div>
+  <span class="nav__tag">Exam Prep Platform</span>
+  <div class="nav__spacer"></div>
+  <div class="nav__links">
+    <a href="#" class="nav__link">Products</a>
+    <a href="#" class="nav__link">Support</a>
+    <a href="#" class="nav__btn">Sign In</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow"><i class="fa-solid fa-graduation-cap"></i> Trusted by 3M+ students worldwide</div>
-    <h1>Prepare Smarter.<br><em>Score Higher.</em></h1>
-    <p class="hero-sub">Adaptive question banks, full-length practice exams, and performance analytics — built to help you pass on the first attempt.</p>
-    <div class="hero-stats">
-      <div><div class="stat-n">3M+</div><div class="stat-l">Students</div></div>
-      <div><div class="stat-n">10+</div><div class="stat-l">Exams</div></div>
-      <div><div class="stat-n">95%</div><div class="stat-l">Pass Rate</div></div>
-      <div><div class="stat-n">15+</div><div class="stat-l">Years</div></div>
+<section class="hero">
+  <div class="hero__dots" aria-hidden="true"></div>
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__inner">
+    <div class="hero__eyebrow">
+      <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+      Trusted by 3M+ students worldwide
+    </div>
+    <h1 class="hero__title">Prepare Smarter.<br><em>Score Higher.</em></h1>
+    <p class="hero__subtitle">
+      Adaptive question banks, full-length practice exams, and performance analytics —
+      built to help you pass on the first attempt.
+    </p>
+    <div class="hero__stats">
+      <div>
+        <div class="hero__stat-value">3M+</div>
+        <div class="hero__stat-label">Students</div>
+      </div>
+      <div>
+        <div class="hero__stat-value">10+</div>
+        <div class="hero__stat-label">Exams</div>
+      </div>
+      <div>
+        <div class="hero__stat-value">95%</div>
+        <div class="hero__stat-label">Pass Rate</div>
+      </div>
+      <div>
+        <div class="hero__stat-value">15+</div>
+        <div class="hero__stat-label">Years</div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- MAIN -->
-<div class="main">
-  <div id="view"></div>
-</div>
+<main class="main">
+  <div id="catalog-view"></div>
+</main>
 
-<!-- FOOTER -->
 <footer class="footer">
-  <div class="ft-l">
-    <div class="ft-logo"><img src="assets/images/UWorld logo icon.png" alt="" /></div>
-    <span class="ft-name">UWorld</span>
+  <div class="footer__brand">
+    <div class="footer__logo"><img src="assets/images/UWorld logo icon.png" alt="" /></div>
+    <span class="footer__name">UWorld</span>
   </div>
-  <span class="ft-copy">© 2025 UWorld, LLC. All rights reserved.</span>
-  <div class="ft-links">
+  <span class="footer__copy">© 2025 UWorld, LLC. All rights reserved.</span>
+  <div class="footer__links">
     <a href="#">Privacy</a>
     <a href="#">Terms</a>
     <a href="#">Contact</a>
   </div>
 </footer>
 
-<script>
-/* Every card navigates to [category]/index.html */
-const CATALOG = [
-  {
-    id:'medical',      name:'Medical',      icon:'fa-stethoscope',         color:'#B45309',
-    desc:'USMLE Step 1, Step 2 CK, and Step 3 licensing exam preparation.',
-    items:[]
-  },
-  {
-    id:'nursing',      name:'Nursing',      icon:'fa-heart-pulse',          color:'#6B46C1',
-    desc:'NCLEX-RN and NCLEX-PN licensure exam prep for aspiring nurses.',
-    items:[]
-  },
-  {
-    id:'pre-med',      name:'Pre-Med',      icon:'fa-flask-vial',           color:'#0B6FBE',
-    desc:'Everything you need to earn your place in medical school.',
-    items:[
-      {
-        id:'mcat', name:'MCAT', icon:'fa-flask-vial', color:'#0B6FBE',
-        desc:'3,000+ adaptive questions, full-length practice exams, score simulator, and performance analytics.',
-        available:true, url:'pre-med/mcat.html',
-        stats:[{v:'3,019',l:'Questions'},{v:'528',l:'Max Score'},{v:'4',l:'Sections'}]
-      }
-    ]
-  },
-  {
-    id:'college-prep', name:'College Prep', icon:'fa-pen-nib',              color:'#0E7C7B',
-    desc:'SAT, ACT, and AP exam prep for students aiming for top universities.',
-    items:[
-      {id:'sat-act',     name:'SAT & ACT',  icon:'fa-pen-nib',              color:'#0E7C7B', desc:'Digital SAT and ACT prep with adaptive modules and score prediction.'},
-      {id:'ap-ela-lote', name:'AP ELA-LOTE',icon:'fa-book-open',            color:'#0E7C7B', desc:'AP English Language & Literature and World Languages.'},
-      {id:'ap-history',  name:'AP History', icon:'fa-landmark',             color:'#0E7C7B', desc:'AP US History, World History, and Government & Politics.'},
-      {id:'ap-stats',    name:'AP Stats',   icon:'fa-chart-bar',            color:'#0E7C7B', desc:'AP Statistics covering data analysis, probability, and inference.'},
-      {id:'ap-math',     name:'AP Math',    icon:'fa-square-root-variable', color:'#0E7C7B', desc:'AP Calculus AB/BC and Precalculus fundamentals.'},
-      {id:'ap-science',  name:'AP Science', icon:'fa-atom',                 color:'#0E7C7B', desc:'AP Biology, Chemistry, Physics C, and Environmental Science.'}
-    ]
-  },
-  {
-    id:'legal',        name:'Legal',        icon:'fa-scale-balanced',       color:'#9C4221',
-    desc:'Bar exam and law school admission test preparation.',
-    items:[]
-  },
-  {
-    id:'finance',      name:'Finance',      icon:'fa-chart-line',           color:'#276749',
-    desc:'Professional finance certifications and investment management exams.',
-    items:[
-      {id:'cfa-cmt', name:'CFA / CMT', icon:'fa-chart-line', color:'#276749', desc:'CFA Level I–III and CMT exam prep with item-set practice and analytics.'}
-    ]
-  },
-  {
-    id:'accounting',   name:'Accounting',   icon:'fa-calculator',           color:'#1E429F',
-    desc:'CPA and CMA professional licensing exam preparation.',
-    items:[
-      {id:'cpa-cma',    name:'CPA / CMA',   icon:'fa-calculator',         color:'#1E429F', desc:'US CPA and CMA exam prep with task-based simulations and MCQs.'},
-      {id:'cpa-canada', name:'CPA Canada',  icon:'fa-flag',               color:'#1E429F', desc:'CPA Canada Common Final Examination (CFE) preparation.'},
-      {id:'cpa-old',    name:'CPA Legacy',  icon:'fa-clock-rotate-left',  color:'#1E429F', desc:'Legacy CPA exam content and archived practice materials.'}
-    ]
-  },
-  {
-    id:'pharmacy',     name:'Pharmacy',     icon:'fa-pills',                color:'#744210',
-    desc:'NAPLEX and MPJE pharmacist licensure exam preparation.',
-    items:[]
-  }
-];
-
-function tint(hex, a) {
-  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
-  return `rgba(${r},${g},${b},${a})`;
-}
-function rgb(hex) {
-  return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)].join(',');
-}
-function hasLive(cat) { return cat.items.some(i=>i.available); }
-
-function folderCard(cat, idx) {
-  const live   = hasLive(cat);
-  const count  = cat.items.length;
-  const iconBg = live ? tint(cat.color,0.1) : '#F3F4F6';
-  const cr     = rgb(cat.color);
-
-  const chipHtml = count > 0
-    ? `<span class="card-chip"><i class="fa-solid fa-layer-group"></i>${count} product${count>1?'s':''}</span>`
-    : `<span class="card-chip"><i class="fa-solid fa-hourglass"></i>In development</span>`;
-
-  const ctaHtml = live
-    ? `<span class="card-cta">Explore <i class="fa-solid fa-arrow-right cta-arrow"></i></span>`
-    : `<span class="card-cta">View Products</span>`;
-
-  return `
-    <div class="card ${live?'av':'cs'} stagger"
-         style="--c:${cat.color};--cr:${cr};--icon-bg:${iconBg};animation-delay:${idx*40}ms"
-         onclick="window.location.href='${cat.id}/index.html'">
-      <div class="card-icon"><i class="fa-solid ${cat.icon}"></i></div>
-      <div>
-        <div class="card-name">${cat.name}</div>
-        <div class="card-desc">${cat.desc}</div>
-      </div>
-      <div class="card-foot">
-        ${ctaHtml}
-        ${chipHtml}
-      </div>
-    </div>`;
-}
-
-document.getElementById('view').innerHTML = `
-  <div class="enter">
-    <div class="section-hd">
-      <div>
-        <div class="overline">Exam Prep Catalog</div>
-        <div class="sec-title">All Products</div>
-      </div>
-      <span class="sec-count">${CATALOG.length} categories</span>
-    </div>
-    <div class="grid">
-      ${CATALOG.map((cat,i) => folderCard(cat,i)).join('')}
-    </div>
-  </div>`;
-</script>
+<script src="assets/js/theme.js"></script>
+<script src="assets/js/catalog.js"></script>
 </body>
 </html>

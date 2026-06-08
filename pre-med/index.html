@@ -1,45 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UWorld – Pre-Med</title>
   <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/layout.css" />
+  <link rel="stylesheet" href="../assets/css/components.css" />
   <link rel="stylesheet" href="../assets/css/category.css" />
 </head>
-<body>
+<body class="page">
+
 <nav class="nav">
-  <a class="nav-brand" href="../index.html">
-    <div class="nav-logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
-    <span class="nav-wordmark">UWorld</span>
+  <a class="nav__brand" href="../index.html">
+    <div class="nav__logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <span class="nav__wordmark">UWorld</span>
   </a>
-  <div class="nav-div"></div>
-  <span class="nav-tag">Pre-Med</span>
-  <div class="nav-spacer"></div>
-  <div class="nav-links">
-    <a href="../index.html" class="nav-link">All Products</a>
-    <a href="#" class="nav-link">Support</a>
-    <a href="#" class="nav-btn">Sign In</a>
+  <div class="nav__divider"></div>
+  <span class="nav__tag">Pre-Med</span>
+  <div class="nav__spacer"></div>
+  <div class="nav__links">
+    <a href="../index.html" class="nav__link">All Products</a>
+    <a href="#" class="nav__link">Support</a>
+    <a href="#" class="nav__btn">Sign In</a>
   </div>
 </nav>
 
 <div class="cat-hero" id="cat-hero"></div>
-
-<div class="main">
-  <div id="cat-products"></div>
-</div>
+<main class="main"><div id="cat-products"></div></main>
 
 <footer class="footer">
-  <div class="ft-l">
-    <div class="ft-logo"><img src="../assets/images/UWorld logo icon.png" alt="" /></div>
-    <span class="ft-name">UWorld</span>
+  <div class="footer__brand">
+    <div class="footer__logo"><img src="../assets/images/UWorld logo icon.png" alt="" /></div>
+    <span class="footer__name">UWorld</span>
   </div>
-  <span class="ft-copy">© 2025 UWorld, LLC. All rights reserved.</span>
-  <div class="ft-links">
-    <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a>
+  <span class="footer__copy">© 2025 UWorld, LLC. All rights reserved.</span>
+  <div class="footer__links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
   </div>
 </footer>
 
+<script src="../assets/js/theme.js"></script>
 <script src="../assets/js/category.js"></script>
 <script>
 renderCategory({
