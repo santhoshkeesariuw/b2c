@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<!-- MCAT QBank — Performance › Overall -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Performance Report</title>
+  <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+  <link rel="stylesheet" href="../assets/css/performance.css" />
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <img src="../assets/images/UWorld logo icon.png" alt="UWorld" />
+    </div>
+    <div class="sidebar__name">UWorld</div>
+    <div class="sidebar__subbrand">MCAT QBank</div>
+    <div class="sidebar__user">Santhosh Keesari</div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <a href="mcat.html" class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-house"></i>Dashboard
+    </a>
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-calendar-days"></i>Study Planner
+    </div>
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-book-open"></i>UBooks + Videos
+    </div>
+
+    <!-- QBank — expanded (pre-open to show Overall as active) -->
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub sidebar__nav-item--open"
+         data-sub="qbank-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-file-lines"></i>
+      QBank
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu sidebar__sub-menu--open" id="qbank-sub">
+
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-pen-to-square"></i>Create Test
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-table-list"></i>Previous Tests
+      </div>
+
+      <!-- Performance — expanded (pre-open) -->
+      <div class="sidebar__sub-item sidebar__sub-item--has-sub sidebar__sub-item--open"
+           data-sub="perf-sub">
+        <i class="sidebar__sub-item__icon fa-light fa-chart-bar"></i>
+        Performance
+        <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+      </div>
+      <div class="sidebar__sub-menu sidebar__sub-menu--nested sidebar__sub-menu--open"
+           id="perf-sub">
+        <!-- Overall — active -->
+        <div class="sidebar__sub-item sidebar__sub-item--nested sidebar__sub-item--active">
+          <i class="sidebar__sub-item__icon fa-light fa-clipboard-check"></i>Overall
+        </div>
+        <div class="sidebar__sub-item sidebar__sub-item--nested">
+          <i class="sidebar__sub-item__icon fa-light fa-chart-pie"></i>Reports
+        </div>
+        <div class="sidebar__sub-item sidebar__sub-item--nested">
+          <i class="sidebar__sub-item__icon fa-light fa-chart-line"></i>Graphs
+        </div>
+      </div>
+
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-magnifying-glass"></i>Search
+      </div>
+    </div>
+
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="exams-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-list-check"></i>
+      Practice Exams
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="exams-sub"></div>
+
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="flash-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-bolt"></i>
+      Flashcards
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="flash-sub"></div>
+
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-book"></i>My Notebook
+    </div>
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-rotate-left"></i>Reset Options
+    </div>
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-circle-question"></i>Help
+    </div>
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-comments"></i>Forum
+    </div>
+  </nav>
+
+  <div class="sidebar__footer">
+    <span>Expiration Date</span>
+    <span>Oct 15, 2026 11:59 PM EDT</span>
+  </div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="dash-main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="topbar__hamburger" aria-label="Toggle sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <span class="topbar__title">Performance — Overall</span>
+    <nav class="topbar__nav">
+      <a href="#" class="topbar__nav-link topbar__nav-link--accent">
+        <i class="fa-solid fa-sparkles"></i> Whats New
+      </a>
+      <span class="topbar__sep">|</span>
+      <a href="#" class="topbar__nav-link">
+        MCAT QBank <i class="fa-solid fa-chevron-down icon--xs"></i>
+      </a>
+      <span class="topbar__sep">|</span>
+      <a href="#" class="topbar__nav-link">
+        <i class="fa-light fa-list-check"></i> Upcoming Tasks
+      </a>
+      <span class="topbar__sep">|</span>
+      <a href="#" class="topbar__nav-link">
+        <i class="fa-light fa-calendar-days"></i> Test Date : Nov 7, 2026
+      </a>
+      <span class="topbar__sep">|</span>
+      <button class="topbar__avatar" aria-label="Account">
+        <i class="fa-light fa-user"></i>
+      </button>
+    </nav>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ══════════════════════════════════════
+         PAGE HEADER
+         ══════════════════════════════════════ -->
+    <div class="perf-header">
+      <div class="perf-header__info">
+        <h2 class="perf-header__title">Performance Report</h2>
+        <div class="perf-header__subtitle" id="perfSubtitle">
+          MCAT QBank · Same test window cohort
+        </div>
+      </div>
+      <div class="perf-header__controls">
+        <span class="perf-header__compare-label">Compare to:</span>
+        <div class="cohort-selector" role="group" aria-label="Cohort">
+          <button class="cohort-selector__btn cohort-selector__btn--active"
+                  data-cohort="same-window">Same test window</button>
+          <button class="cohort-selector__btn"
+                  data-cohort="all">All Step 1 students</button>
+          <button class="cohort-selector__btn"
+                  data-cohort="institution">My institution</button>
+          <button class="cohort-selector__btn"
+                  data-cohort="top-quartile">Top quartile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         TABS
+         ══════════════════════════════════════ -->
+    <div class="perf-tabs" role="tablist">
+      <button class="perf-tab perf-tab--active"
+              role="tab" aria-selected="true" data-tab="subjects">Subjects</button>
+      <button class="perf-tab"
+              role="tab" aria-selected="false" data-tab="systems">Systems</button>
+      <button class="perf-tab"
+              role="tab" aria-selected="false" data-tab="topics">Topics</button>
+      <button class="perf-tab"
+              role="tab" aria-selected="false" data-tab="comparison">
+        Peer Comparison
+        <span class="perf-tab__badge">NEW</span>
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PANEL — SUBJECTS (default)
+         ══════════════════════════════════════ -->
+    <div class="perf-panel perf-panel--active" id="panel-subjects"
+         role="tabpanel" aria-label="Subjects">
+
+      <div class="perf-filter-row">
+        <span class="perf-filter-label">Show:</span>
+        <select class="perf-filter-select" aria-label="Display mode">
+          <option>Score with peer comparison</option>
+          <option>Score only</option>
+        </select>
+        <div class="perf-filter-right">
+          <input class="perf-filter-search" type="search"
+                 placeholder="Search subjects…" aria-label="Search subjects" />
+          <button class="perf-btn-print" aria-label="Print report">
+            <i class="fa-light fa-print"></i> Print
+          </button>
+        </div>
+      </div>
+
+      <div class="perf-table-card">
+        <table class="perf-table" aria-label="Subject performance">
+          <thead>
+            <tr>
+              <th></th>
+              <th>NAME</th>
+              <th>USAGE</th>
+              <th>CORRECT Q</th>
+              <th>INCORRECT Q</th>
+              <th>OMITTED Q</th>
+              <th>YOUR SCORE</th>
+              <th>PEER MEDIAN</th>
+              <th>P-RANK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Anatomy -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Anatomy</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:1.6%"></div>
+                </div>
+              </td>
+              <td>5 / 307</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">62%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Behavioral Science -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Behavioral Science</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2%"></div>
+                </div>
+              </td>
+              <td>5 / 255</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">71%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Biochemistry -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Biochemistry</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:3.8%"></div>
+                </div>
+              </td>
+              <td>6 / 158</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>6 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">58%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Biostatistics -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Biostatistics</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:4.1%"></div>
+                </div>
+              </td>
+              <td>5 / 121</td>
+              <td>0 (0%)</td>
+              <td>1 (20%)</td>
+              <td>4 (80%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">65%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Embryology -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Embryology</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:6.7%"></div>
+                </div>
+              </td>
+              <td>5 / 75</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">54%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Genetics -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Genetics</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:5.7%"></div>
+                </div>
+              </td>
+              <td>6 / 105</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>6 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">60%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Histology -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Histology</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:17.2%"></div>
+                </div>
+              </td>
+              <td>5 / 29</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">67%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Immunology -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Immunology</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:3.8%"></div>
+                </div>
+              </td>
+              <td>5 / 132</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">63%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <!-- Microbiology -->
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Microbiology</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:0.9%"></div>
+                </div>
+              </td>
+              <td>3 / 348</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>3 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">59%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination row -->
+        <div style="padding: 12px 14px; display:flex; justify-content:flex-end;
+                    align-items:center; gap:14px; font-size:12px;
+                    color: var(--color-text-muted); border-top:1px solid var(--color-border-subtle);">
+          <span>Items per page:</span>
+          <select style="font-size:12px; padding:3px 6px; border:1px solid var(--color-border-strong);
+                         border-radius: var(--radius-xs); background:#fff;">
+            <option>10</option><option>25</option><option>50</option>
+          </select>
+          <span>1 – 9 of 9</span>
+          <span style="cursor:pointer; padding:0 4px;">‹</span>
+          <span style="cursor:pointer; padding:0 4px;">›</span>
+        </div>
+      </div>
+    </div><!-- /panel-subjects -->
+
+    <!-- ══════════════════════════════════════
+         PANEL — SYSTEMS
+         ══════════════════════════════════════ -->
+    <div class="perf-panel" id="panel-systems"
+         role="tabpanel" aria-label="Systems">
+
+      <div class="perf-filter-row">
+        <span class="perf-filter-label">Show:</span>
+        <select class="perf-filter-select" aria-label="Display mode">
+          <option>Score with peer comparison</option>
+          <option>Score only</option>
+        </select>
+        <div class="perf-filter-right">
+          <input class="perf-filter-search" type="search"
+                 placeholder="Search systems…" aria-label="Search systems" />
+          <button class="perf-btn-print" aria-label="Print report">
+            <i class="fa-light fa-print"></i> Print
+          </button>
+        </div>
+      </div>
+
+      <div class="perf-table-card">
+        <table class="perf-table" aria-label="System performance">
+          <thead>
+            <tr>
+              <th></th>
+              <th>NAME</th>
+              <th>USAGE</th>
+              <th>CORRECT Q</th>
+              <th>INCORRECT Q</th>
+              <th>OMITTED Q</th>
+              <th>YOUR SCORE</th>
+              <th>PEER MEDIAN</th>
+              <th>P-RANK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Cardiovascular</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:1.9%"></div>
+                </div>
+              </td>
+              <td>8 / 425</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>8 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">64%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Respiratory</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:1.9%"></div>
+                </div>
+              </td>
+              <td>6 / 318</td>
+              <td>0 (0%)</td>
+              <td>1 (17%)</td>
+              <td>5 (83%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">58%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Renal / Urinary</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2.6%"></div>
+                </div>
+              </td>
+              <td>7 / 265</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>7 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">61%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Gastrointestinal</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:1.7%"></div>
+                </div>
+              </td>
+              <td>5 / 290</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">63%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Nervous System</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2.2%"></div>
+                </div>
+              </td>
+              <td>9 / 415</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>9 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">59%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Endocrine</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2.7%"></div>
+                </div>
+              </td>
+              <td>5 / 188</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">66%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Musculoskeletal</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2.8%"></div>
+                </div>
+              </td>
+              <td>4 / 145</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>4 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">57%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Hematopoietic / Lymphatic</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2.5%"></div>
+                </div>
+              </td>
+              <td>5 / 202</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">62%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Reproductive</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:2.4%"></div>
+                </div>
+              </td>
+              <td>4 / 167</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>4 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">54%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Integumentary</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:3.4%"></div>
+                </div>
+              </td>
+              <td>3 / 88</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>3 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">51%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding: 12px 14px; display:flex; justify-content:flex-end;
+                    align-items:center; gap:14px; font-size:12px;
+                    color: var(--color-text-muted); border-top:1px solid var(--color-border-subtle);">
+          <span>Items per page:</span>
+          <select style="font-size:12px; padding:3px 6px; border:1px solid var(--color-border-strong);
+                         border-radius: var(--radius-xs); background:#fff;">
+            <option>10</option><option>25</option><option>50</option>
+          </select>
+          <span>1 – 10 of 10</span>
+          <span style="cursor:pointer; padding:0 4px;">‹</span>
+          <span style="cursor:pointer; padding:0 4px;">›</span>
+        </div>
+      </div>
+    </div><!-- /panel-systems -->
+
+    <!-- ══════════════════════════════════════
+         PANEL — TOPICS
+         ══════════════════════════════════════ -->
+    <div class="perf-panel" id="panel-topics"
+         role="tabpanel" aria-label="Topics">
+
+      <div class="perf-filter-row">
+        <span class="perf-filter-label">Show:</span>
+        <select class="perf-filter-select" aria-label="Display mode">
+          <option>Score with peer comparison</option>
+          <option>Score only</option>
+        </select>
+        <div class="perf-filter-right">
+          <input class="perf-filter-search" type="search"
+                 placeholder="Search topics…" aria-label="Search topics" />
+          <button class="perf-btn-print" aria-label="Print report">
+            <i class="fa-light fa-print"></i> Print
+          </button>
+        </div>
+      </div>
+
+      <div class="perf-table-card">
+        <table class="perf-table" aria-label="Topic performance">
+          <thead>
+            <tr>
+              <th></th>
+              <th>NAME</th>
+              <th>USAGE</th>
+              <th>CORRECT Q</th>
+              <th>INCORRECT Q</th>
+              <th>OMITTED Q</th>
+              <th>YOUR SCORE</th>
+              <th>PEER MEDIAN</th>
+              <th>P-RANK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Enzyme Kinetics</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:6.1%"></div>
+                </div>
+              </td>
+              <td>6 / 98</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>6 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">55%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Cardiac Physiology</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:5.3%"></div>
+                </div>
+              </td>
+              <td>7 / 132</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>7 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">62%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Acid-Base Balance</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:5.3%"></div>
+                </div>
+              </td>
+              <td>5 / 94</td>
+              <td>0 (0%)</td>
+              <td>1 (20%)</td>
+              <td>4 (80%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">60%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Neurotransmitters</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:4.5%"></div>
+                </div>
+              </td>
+              <td>4 / 88</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>4 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">63%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Cell Signaling</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:4.8%"></div>
+                </div>
+              </td>
+              <td>5 / 105</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">58%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Hormones &amp; Endocrine</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:4.3%"></div>
+                </div>
+              </td>
+              <td>5 / 115</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>5 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">64%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">Membrane Transport</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:4.9%"></div>
+                </div>
+              </td>
+              <td>4 / 82</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>4 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">52%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+            <tr>
+              <td><span class="perf-expand-icon">+</span></td>
+              <td>
+                <div class="perf-subject-name">DNA Replication</div>
+                <div class="perf-usage-bar">
+                  <div class="perf-usage-bar__fill" style="width:4.2%"></div>
+                </div>
+              </td>
+              <td>3 / 72</td>
+              <td>0 (0%)</td>
+              <td>0 (0%)</td>
+              <td>3 (100%)</td>
+              <td><span class="perf-score-pill">0%</span></td>
+              <td class="perf-peer-val">57%</td>
+              <td><span class="perf-prank perf-prank--neutral">0th</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="padding: 12px 14px; display:flex; justify-content:flex-end;
+                    align-items:center; gap:14px; font-size:12px;
+                    color: var(--color-text-muted); border-top:1px solid var(--color-border-subtle);">
+          <span>Items per page:</span>
+          <select style="font-size:12px; padding:3px 6px; border:1px solid var(--color-border-strong);
+                         border-radius: var(--radius-xs); background:#fff;">
+            <option>10</option><option>25</option><option>50</option>
+          </select>
+          <span>1 – 8 of 8</span>
+          <span style="cursor:pointer; padding:0 4px;">‹</span>
+          <span style="cursor:pointer; padding:0 4px;">›</span>
+        </div>
+      </div>
+    </div><!-- /panel-topics -->
+
+    <!-- ══════════════════════════════════════
+         PANEL — PEER COMPARISON
+         ══════════════════════════════════════ -->
+    <div class="perf-panel" id="panel-comparison"
+         role="tabpanel" aria-label="Peer Comparison">
+
+      <!-- Overall percentile card -->
+      <div class="perf-card">
+        <div class="perf-card__head">
+          <span class="perf-card__title">Your overall percentile</span>
+          <span class="perf-card__subtitle">Cohort: Same test window · 4,847 students</span>
+        </div>
+        <div class="perf-card__body">
+
+          <!-- Percentile track bar -->
+          <div class="percentile-track">
+            <div class="percentile-marker peer-line"
+                 style="left:64%"
+                 data-label="Peer median 64%"></div>
+            <div class="percentile-marker"
+                 style="left:38%"
+                 data-label="You · 38th"></div>
+          </div>
+
+          <!-- Legend -->
+          <div class="perf-legend">
+            <span>
+              <span class="perf-legend__dot"
+                    style="background: var(--color-brand-navy)"></span> You
+            </span>
+            <span>
+              <span class="perf-legend__dot"
+                    style="background:#fff; border:1px solid #D1D5DB; box-sizing:border-box;"></span>
+              Peer median
+            </span>
+            <span style="color: var(--color-text-muted);">
+              Bell curve shows score distribution across the cohort.
+            </span>
+          </div>
+
+          <!-- Bell curve (lazy-rendered by JS on first tab open) -->
+          <div class="bell-curve-container" id="bellCurveContainer"></div>
+
+        </div>
+      </div>
+
+      <!-- Subject-level comparison bars -->
+      <div class="perf-card">
+        <div class="perf-card__head">
+          <span class="perf-card__title">Subject-level comparison</span>
+          <span class="perf-card__subtitle">Bars: You vs. peer median</span>
+        </div>
+        <div class="perf-card__body">
+
+          <div class="perf-legend" style="margin-bottom:16px;">
+            <span>
+              <span class="perf-legend__dot"
+                    style="background: var(--color-brand-blue)"></span> You
+            </span>
+            <span>
+              <span class="perf-legend__dot"
+                    style="background:#94a3b8"></span> Peer median
+            </span>
+          </div>
+
+          <!-- Anatomy -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Anatomy</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:32%">32%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:62%">62%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−30 pts</div>
+          </div>
+
+          <!-- Behavioral Science -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Behavioral Sci.</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:38%">38%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:71%">71%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−33 pts</div>
+          </div>
+
+          <!-- Biochemistry -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Biochemistry</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:29%">29%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:58%">58%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−29 pts</div>
+          </div>
+
+          <!-- Biostatistics -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Biostatistics</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:41%">41%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:65%">65%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−24 pts</div>
+          </div>
+
+          <!-- Embryology -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Embryology</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:26%">26%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:54%">54%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−28 pts</div>
+          </div>
+
+          <!-- Genetics -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Genetics</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:33%">33%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:60%">60%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−27 pts</div>
+          </div>
+
+          <!-- Immunology -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Immunology</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:35%">35%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:63%">63%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−28 pts</div>
+          </div>
+
+          <!-- Microbiology -->
+          <div class="comparison-row">
+            <div class="comparison-subject">Microbiology</div>
+            <div class="comparison-bars">
+              <div class="comparison-bar comparison-bar--you"  style="width:30%">30%</div>
+              <div class="comparison-bar comparison-bar--peer" style="width:59%">59%</div>
+            </div>
+            <div class="comparison-delta comparison-delta--neg">−29 pts</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Privacy notice -->
+      <div class="perf-warning-card">
+        <span class="perf-warning-icon">⚠</span>
+        <div>
+          <strong>Privacy &amp; guardrails:</strong> Comparisons require a cohort of ≥ 30 active
+          students. Peer data is aggregated only — no individual peer's metrics are ever shown.
+          You can disable comparisons in
+          <a href="#" style="color: var(--color-brand-blue); font-weight:500;">
+            Settings → Reports</a>.
+        </div>
+      </div>
+
+    </div><!-- /panel-comparison -->
+
+  </div><!-- /.content -->
+</div><!-- /.dash-main -->
+
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/performance.js"></script>
+</body>
+</html>
