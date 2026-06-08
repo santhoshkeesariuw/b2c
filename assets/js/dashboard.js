@@ -328,15 +328,260 @@ function initPlannerTabs() {
   });
 }
 
-/* ── Test Your Knowledge form ── */
+/* ════════════════════════════════════════
+   TEST YOUR KNOWLEDGE — suggestions + form
+   ════════════════════════════════════════ */
+
+var TYK_TOPICS = [
+  /* Biology */
+  { cat: 'Biology', label: 'Cell Biology' },
+  { cat: 'Biology', label: 'Cell Membrane & Transport' },
+  { cat: 'Biology', label: 'Cell Division & Mitosis' },
+  { cat: 'Biology', label: 'Meiosis & Gametogenesis' },
+  { cat: 'Biology', label: 'DNA Replication' },
+  { cat: 'Biology', label: 'DNA Repair Mechanisms' },
+  { cat: 'Biology', label: 'Transcription & RNA Processing' },
+  { cat: 'Biology', label: 'Translation & Protein Synthesis' },
+  { cat: 'Biology', label: 'Gene Regulation' },
+  { cat: 'Biology', label: 'Mutations & Genetic Disorders' },
+  { cat: 'Biology', label: 'Mendelian Genetics' },
+  { cat: 'Biology', label: 'Molecular Genetics' },
+  { cat: 'Biology', label: 'Evolution & Natural Selection' },
+  { cat: 'Biology', label: 'Ecology & Population Dynamics' },
+  { cat: 'Biology', label: 'Nervous System' },
+  { cat: 'Biology', label: 'Action Potential & Synaptic Transmission' },
+  { cat: 'Biology', label: 'Cardiovascular System' },
+  { cat: 'Biology', label: 'Respiratory System' },
+  { cat: 'Biology', label: 'Digestive System' },
+  { cat: 'Biology', label: 'Endocrine System' },
+  { cat: 'Biology', label: 'Immune System' },
+  { cat: 'Biology', label: 'Reproductive System' },
+  { cat: 'Biology', label: 'Musculoskeletal System' },
+  { cat: 'Biology', label: 'Renal System & Kidney Function' },
+  { cat: 'Biology', label: 'Skin & Integumentary System' },
+  { cat: 'Biology', label: 'Sensory Systems' },
+  { cat: 'Biology', label: 'Embryology & Development' },
+  { cat: 'Biology', label: 'Microbiology & Viruses' },
+
+  /* Biochemistry */
+  { cat: 'Biochemistry', label: 'Amino Acids & Peptides' },
+  { cat: 'Biochemistry', label: 'Protein Structure & Folding' },
+  { cat: 'Biochemistry', label: 'Enzyme Kinetics' },
+  { cat: 'Biochemistry', label: 'Enzyme Inhibition' },
+  { cat: 'Biochemistry', label: 'Glycolysis' },
+  { cat: 'Biochemistry', label: 'Krebs Cycle (TCA Cycle)' },
+  { cat: 'Biochemistry', label: 'Oxidative Phosphorylation' },
+  { cat: 'Biochemistry', label: 'Gluconeogenesis' },
+  { cat: 'Biochemistry', label: 'Glycogen Metabolism' },
+  { cat: 'Biochemistry', label: 'Fatty Acid Oxidation (Beta-oxidation)' },
+  { cat: 'Biochemistry', label: 'Fatty Acid Synthesis' },
+  { cat: 'Biochemistry', label: 'Lipid Metabolism' },
+  { cat: 'Biochemistry', label: 'Amino Acid Metabolism' },
+  { cat: 'Biochemistry', label: 'Nucleotide Metabolism' },
+  { cat: 'Biochemistry', label: 'Carbohydrate Structure' },
+  { cat: 'Biochemistry', label: 'Nucleic Acids' },
+  { cat: 'Biochemistry', label: 'Signal Transduction' },
+  { cat: 'Biochemistry', label: 'Vitamins & Cofactors' },
+  { cat: 'Biochemistry', label: 'Metabolism Regulation' },
+  { cat: 'Biochemistry', label: 'Cellular Respiration' },
+
+  /* General Chemistry */
+  { cat: 'General Chemistry', label: 'Atomic Structure' },
+  { cat: 'General Chemistry', label: 'Periodic Table & Trends' },
+  { cat: 'General Chemistry', label: 'Chemical Bonding' },
+  { cat: 'General Chemistry', label: 'Molecular Geometry & VSEPR' },
+  { cat: 'General Chemistry', label: 'Thermodynamics & Thermochemistry' },
+  { cat: 'General Chemistry', label: 'Chemical Kinetics' },
+  { cat: 'General Chemistry', label: 'Chemical Equilibrium' },
+  { cat: 'General Chemistry', label: 'Acids and Bases' },
+  { cat: 'General Chemistry', label: 'Buffers & pH' },
+  { cat: 'General Chemistry', label: 'Electrochemistry' },
+  { cat: 'General Chemistry', label: 'Gases & Gas Laws' },
+  { cat: 'General Chemistry', label: 'Solutions & Colligative Properties' },
+  { cat: 'General Chemistry', label: 'Nuclear Chemistry & Radioactivity' },
+  { cat: 'General Chemistry', label: 'Oxidation–Reduction Reactions' },
+  { cat: 'General Chemistry', label: 'Stoichiometry' },
+
+  /* Organic Chemistry */
+  { cat: 'Organic Chemistry', label: 'Functional Groups' },
+  { cat: 'Organic Chemistry', label: 'Stereochemistry' },
+  { cat: 'Organic Chemistry', label: 'SN1 & SN2 Reactions' },
+  { cat: 'Organic Chemistry', label: 'E1 & E2 Elimination' },
+  { cat: 'Organic Chemistry', label: 'Addition Reactions' },
+  { cat: 'Organic Chemistry', label: 'Carbonyl Chemistry' },
+  { cat: 'Organic Chemistry', label: 'Carboxylic Acids & Derivatives' },
+  { cat: 'Organic Chemistry', label: 'Amines & Amides' },
+  { cat: 'Organic Chemistry', label: 'Aromatic Compounds' },
+  { cat: 'Organic Chemistry', label: 'Carbohydrate Chemistry' },
+  { cat: 'Organic Chemistry', label: 'Lipid Chemistry' },
+  { cat: 'Organic Chemistry', label: 'Spectroscopy & NMR' },
+
+  /* Physics */
+  { cat: 'Physics', label: 'Kinematics & Motion' },
+  { cat: 'Physics', label: "Newton's Laws of Motion" },
+  { cat: 'Physics', label: 'Work, Energy & Power' },
+  { cat: 'Physics', label: 'Momentum & Collisions' },
+  { cat: 'Physics', label: 'Waves & Sound' },
+  { cat: 'Physics', label: 'Optics & Light' },
+  { cat: 'Physics', label: 'Electrostatics & Coulomb\'s Law' },
+  { cat: 'Physics', label: 'Electric Circuits' },
+  { cat: 'Physics', label: 'Magnetism' },
+  { cat: 'Physics', label: 'Fluid Mechanics' },
+  { cat: 'Physics', label: 'Thermodynamics (Physics)' },
+  { cat: 'Physics', label: 'Nuclear Physics' },
+
+  /* Psychology & Sociology */
+  { cat: 'Psychology', label: 'Learning & Conditioning' },
+  { cat: 'Psychology', label: 'Memory & Forgetting' },
+  { cat: 'Psychology', label: 'Motivation & Emotion' },
+  { cat: 'Psychology', label: 'Developmental Psychology' },
+  { cat: 'Psychology', label: 'Personality Theories' },
+  { cat: 'Psychology', label: 'Psychological Disorders' },
+  { cat: 'Psychology', label: 'Social Psychology' },
+  { cat: 'Psychology', label: 'Perception & Sensation' },
+  { cat: 'Psychology', label: 'Consciousness & Sleep' },
+  { cat: 'Psychology', label: 'Language & Cognition' },
+  { cat: 'Psychology', label: 'Drug Addiction & Neurotransmitters' },
+  { cat: 'Psychology', label: 'Stress & Coping' },
+  { cat: 'Psychology', label: 'Demographics & Social Stratification' },
+  { cat: 'Psychology', label: 'Culture & Identity' },
+  { cat: 'Psychology', label: 'Research Methods & Statistics' },
+
+  /* CARS */
+  { cat: 'CARS', label: 'Critical Analysis & Reasoning' },
+  { cat: 'CARS', label: 'Argumentation & Evidence' },
+  { cat: 'CARS', label: 'Author Tone & Purpose' },
+  { cat: 'CARS', label: 'Inference Questions' },
+];
+
 function initTykForm() {
-  var form = document.getElementById('tyk-form');
-  if (!form) return;
+  var form    = document.getElementById('tyk-form');
+  var input   = document.getElementById('tyk-topic');
+  var listEl  = document.getElementById('tyk-suggestions');
+  if (!form || !input || !listEl) return;
+
+  var focusIdx = -1;   /* keyboard-highlighted suggestion index */
+
+  /* ── Suggest ── */
+  function showSuggestions(query) {
+    listEl.innerHTML = '';
+    focusIdx = -1;
+
+    if (!query) {
+      closeSuggestions();
+      return;
+    }
+
+    var q = query.toLowerCase();
+    var matched = TYK_TOPICS.filter(function (t) {
+      return t.label.toLowerCase().indexOf(q) !== -1;
+    }).slice(0, 10);  /* cap at 10 items */
+
+    if (!matched.length) { closeSuggestions(); return; }
+
+    /* Group by category */
+    var groups = {};
+    matched.forEach(function (t) {
+      if (!groups[t.cat]) groups[t.cat] = [];
+      groups[t.cat].push(t);
+    });
+
+    Object.keys(groups).forEach(function (cat) {
+      if (Object.keys(groups).length > 1) {
+        var hdr = document.createElement('li');
+        hdr.className = 'tyk-suggestion-group';
+        hdr.textContent = cat;
+        listEl.appendChild(hdr);
+      }
+      groups[cat].forEach(function (t) {
+        var li = document.createElement('li');
+        li.className = 'tyk-suggestion';
+        li.setAttribute('role', 'option');
+        /* bold-highlight the matching substring */
+        var hl = t.label.replace(
+          new RegExp('(' + escapeRe(query) + ')', 'gi'),
+          '<mark>$1</mark>'
+        );
+        li.innerHTML = '<i class="fa-light fa-magnifying-glass"></i>' + hl;
+        li.addEventListener('mousedown', function (e) {
+          e.preventDefault();   /* don't blur input */
+          pickSuggestion(t.label);
+        });
+        listEl.appendChild(li);
+      });
+    });
+
+    listEl.classList.add('open');
+    input.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeSuggestions() {
+    listEl.classList.remove('open');
+    input.setAttribute('aria-expanded', 'false');
+    focusIdx = -1;
+  }
+
+  function pickSuggestion(label) {
+    input.value = label;
+    closeSuggestions();
+    input.focus();
+  }
+
+  function getItems() {
+    return listEl.querySelectorAll('.tyk-suggestion');
+  }
+
+  function setFocus(idx) {
+    var items = getItems();
+    items.forEach(function (el) { el.classList.remove('focused'); });
+    if (idx >= 0 && idx < items.length) {
+      items[idx].classList.add('focused');
+      items[idx].scrollIntoView({ block: 'nearest' });
+    }
+    focusIdx = idx;
+  }
+
+  function escapeRe(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  /* ── Events ── */
+  input.addEventListener('input', function () {
+    showSuggestions(input.value.trim());
+  });
+
+  input.addEventListener('focus', function () {
+    if (input.value.trim()) showSuggestions(input.value.trim());
+  });
+
+  input.addEventListener('blur', function () {
+    /* slight delay so mousedown on item fires first */
+    setTimeout(closeSuggestions, 160);
+  });
+
+  input.addEventListener('keydown', function (e) {
+    var items = getItems();
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setFocus(Math.min(focusIdx + 1, items.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setFocus(Math.max(focusIdx - 1, 0));
+    } else if (e.key === 'Enter' && focusIdx >= 0 && items[focusIdx]) {
+      e.preventDefault();
+      pickSuggestion(items[focusIdx].textContent.replace(/^\s+/, ''));
+    } else if (e.key === 'Escape') {
+      closeSuggestions();
+    }
+  });
+
+  /* ── Submit ── */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var topic  = document.getElementById('tyk-topic').value.trim();
+    closeSuggestions();
+    var topic  = input.value.trim();
     var qcount = document.getElementById('tyk-qcount').value;
-    if (!topic) { document.getElementById('tyk-topic').focus(); return; }
+    if (!topic) { input.focus(); return; }
     window.location.href = 'mcat-test.html?topic=' + encodeURIComponent(topic) + '&q=' + qcount;
   });
 }

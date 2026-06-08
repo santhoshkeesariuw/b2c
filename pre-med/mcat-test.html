@@ -16,35 +16,37 @@
   <!-- ════════ TOP TOOLBAR ════════ -->
   <header class="test-topbar">
 
-    <!-- Left: tool icons -->
+    <!-- Left: tool icons + topic badge -->
     <div class="ttb-left">
-      <button class="tbar-btn" title="Bookmark" id="btn-bookmark" aria-label="Bookmark">
+      <button class="tbar-btn" id="btn-bookmark" title="Bookmark" aria-label="Bookmark">
         <i class="fa-light fa-bookmark"></i>
       </button>
-      <button class="tbar-btn" title="Highlight" aria-label="Highlight">
-        <i class="fa-light fa-highlighter"></i>
-      </button>
-      <button class="tbar-btn" title="Notes" aria-label="Notes">
-        <i class="fa-light fa-note-sticky"></i>
+      <button class="tbar-btn" title="Strikethrough" aria-label="Strikethrough">
+        <i class="fa-light fa-strikethrough"></i>
       </button>
       <button class="tbar-btn" title="Lab Values" aria-label="Lab Values">
-        <i class="fa-light fa-flask"></i>
+        <i class="fa-light fa-file-medical"></i>
       </button>
-      <!-- Topic badge -->
+      <button class="tbar-btn" title="Add note" aria-label="Add note">
+        <i class="fa-light fa-circle-plus"></i>
+      </button>
+      <div class="tbar-sep"></div>
       <span class="topic-badge" id="topic-badge">Topic</span>
     </div>
 
-    <!-- Center: question counter -->
+    <!-- Center: question counter (absolutely centred) -->
     <div class="ttb-center">
-      <button class="q-counter-btn" id="q-counter-btn" aria-haspopup="true" aria-expanded="false" aria-label="Jump to question">
-        <span id="q-num">1</span>/<span id="q-total">10</span>
+      <button class="q-counter-btn" id="q-counter-btn"
+              aria-haspopup="true" aria-expanded="false" aria-label="Jump to question">
+        <span id="q-num">1</span><span class="q-sep">/</span><span id="q-total">10</span>
         <i class="fa-solid fa-chevron-down"></i>
       </button>
     </div>
 
     <!-- Right: utility icons + timer -->
     <div class="ttb-right">
-      <button class="tbar-btn" title="Fullscreen" aria-label="Fullscreen" onclick="document.documentElement.requestFullscreen && document.documentElement.requestFullscreen()">
+      <button class="tbar-btn" title="Fullscreen" aria-label="Fullscreen"
+              onclick="if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}">
         <i class="fa-light fa-expand"></i>
       </button>
       <button class="tbar-btn" title="Help" aria-label="Help">
@@ -56,51 +58,46 @@
       <button class="tbar-btn" title="Toggle layout" aria-label="Toggle layout">
         <i class="fa-light fa-table-columns"></i>
       </button>
-      <div class="test-timer" id="test-timer" aria-live="off">00:00</div>
+      <div class="tbar-sep"></div>
+      <div class="test-timer" id="test-timer" aria-live="off">02:48</div>
     </div>
 
   </header>
 
-  <!-- Question navigation dropdown -->
+  <!-- Question-jump dropdown (appears below topbar, centred) -->
   <div class="q-nav-dropdown" id="q-nav-dropdown" role="dialog" aria-label="Jump to question">
     <div class="qnd-title">Jump to question</div>
-    <div class="qnd-grid" id="qnd-grid"></div>
+    <div class="qnd-grid" id="qnd-grid"><!-- filled by JS --></div>
   </div>
 
-  <!-- ════════ BODY (SPLIT PANES) ════════ -->
+  <!-- ════════ SPLIT PANES ════════ -->
   <div class="test-body">
 
     <!-- LEFT — Passage -->
     <div class="test-pane test-pane--passage" id="passage-pane">
       <div class="pane-scroll">
-        <div class="passage-label" id="passage-label">Passage 1 (Questions 1–5)</div>
-        <div class="passage-body" id="passage-body">
-          <!-- Filled by JS -->
-        </div>
-        <div class="passage-footer-note" id="passage-note"></div>
+        <p class="passage-label" id="passage-label"></p>
+        <div class="passage-body" id="passage-body"></div>
+        <p class="passage-footer-note" id="passage-note"></p>
       </div>
     </div>
 
-    <!-- RIGHT — Question -->
+    <!-- RIGHT — Question + Choices -->
     <div class="test-pane test-pane--question">
       <div class="pane-scroll">
 
-        <div class="q-label" id="q-label">Question 1</div>
-        <div class="q-stem" id="q-stem"></div>
+        <p class="q-label" id="q-label">Question 1</p>
+        <p class="q-stem" id="q-stem"></p>
 
-        <ul class="q-choices" id="q-choices">
-          <!-- Filled by JS -->
-        </ul>
+        <ul class="q-choices" id="q-choices"></ul>
 
-        <button class="q-submit-btn" id="q-submit" disabled>
-          Submit
-        </button>
+        <button class="q-submit-btn" id="q-submit" disabled>Submit</button>
 
-        <!-- Explanation (shown after submit) -->
+        <!-- Answer explanation (visible after submit) -->
         <div class="q-explanation" id="q-explanation">
           <div class="q-explanation__label">
             <i id="expl-icon" class="fa-light fa-circle-check expl-correct"></i>
-            <span id="expl-verdict">Correct!</span>
+            <span id="expl-verdict"></span>
           </div>
           <p id="expl-text"></p>
         </div>
@@ -125,7 +122,7 @@
 
     <div class="tbot-center">
       <button class="tbot-feedback" aria-label="Send feedback">
-        <i class="fa-light fa-comment"></i> Feedback
+        <i class="fa-light fa-comment-dots"></i> Feedback
       </button>
     </div>
 

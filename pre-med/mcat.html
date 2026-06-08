@@ -156,7 +156,7 @@
         </div>
       </div>
       <form class="tyk-form" id="tyk-form" novalidate>
-        <div class="tyk-input-wrap">
+        <div class="tyk-input-wrap" id="tyk-input-wrap">
           <i class="fa-light fa-magnifying-glass tyk-input-icon"></i>
           <input
             type="text"
@@ -165,7 +165,12 @@
             placeholder="e.g. Cellular Respiration, Amino Acids, Behavior…"
             autocomplete="off"
             maxlength="120"
+            aria-autocomplete="list"
+            aria-controls="tyk-suggestions"
+            aria-expanded="false"
           />
+          <!-- Suggestions dropdown -->
+          <ul class="tyk-suggestions" id="tyk-suggestions" role="listbox" aria-label="Topic suggestions"></ul>
         </div>
         <div class="tyk-form-right">
           <select class="tyk-select" id="tyk-qcount" aria-label="Number of questions">
