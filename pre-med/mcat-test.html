@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- MCAT QBank — Test Interface -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Test</title>
+  <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../assets/css/test.css" />
+</head>
+<body>
+
+<div class="test-wrap">
+
+  <!-- ════════ TOP TOOLBAR ════════ -->
+  <header class="test-topbar">
+
+    <!-- Left: tool icons -->
+    <div class="ttb-left">
+      <button class="tbar-btn" title="Bookmark" id="btn-bookmark" aria-label="Bookmark">
+        <i class="fa-light fa-bookmark"></i>
+      </button>
+      <button class="tbar-btn" title="Highlight" aria-label="Highlight">
+        <i class="fa-light fa-highlighter"></i>
+      </button>
+      <button class="tbar-btn" title="Notes" aria-label="Notes">
+        <i class="fa-light fa-note-sticky"></i>
+      </button>
+      <button class="tbar-btn" title="Lab Values" aria-label="Lab Values">
+        <i class="fa-light fa-flask"></i>
+      </button>
+      <!-- Topic badge -->
+      <span class="topic-badge" id="topic-badge">Topic</span>
+    </div>
+
+    <!-- Center: question counter -->
+    <div class="ttb-center">
+      <button class="q-counter-btn" id="q-counter-btn" aria-haspopup="true" aria-expanded="false" aria-label="Jump to question">
+        <span id="q-num">1</span>/<span id="q-total">10</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+    </div>
+
+    <!-- Right: utility icons + timer -->
+    <div class="ttb-right">
+      <button class="tbar-btn" title="Fullscreen" aria-label="Fullscreen" onclick="document.documentElement.requestFullscreen && document.documentElement.requestFullscreen()">
+        <i class="fa-light fa-expand"></i>
+      </button>
+      <button class="tbar-btn" title="Help" aria-label="Help">
+        <i class="fa-light fa-circle-question"></i>
+      </button>
+      <button class="tbar-btn" title="Settings" aria-label="Settings">
+        <i class="fa-light fa-gear"></i>
+      </button>
+      <button class="tbar-btn" title="Toggle layout" aria-label="Toggle layout">
+        <i class="fa-light fa-table-columns"></i>
+      </button>
+      <div class="test-timer" id="test-timer" aria-live="off">00:00</div>
+    </div>
+
+  </header>
+
+  <!-- Question navigation dropdown -->
+  <div class="q-nav-dropdown" id="q-nav-dropdown" role="dialog" aria-label="Jump to question">
+    <div class="qnd-title">Jump to question</div>
+    <div class="qnd-grid" id="qnd-grid"></div>
+  </div>
+
+  <!-- ════════ BODY (SPLIT PANES) ════════ -->
+  <div class="test-body">
+
+    <!-- LEFT — Passage -->
+    <div class="test-pane test-pane--passage" id="passage-pane">
+      <div class="pane-scroll">
+        <div class="passage-label" id="passage-label">Passage 1 (Questions 1–5)</div>
+        <div class="passage-body" id="passage-body">
+          <!-- Filled by JS -->
+        </div>
+        <div class="passage-footer-note" id="passage-note"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT — Question -->
+    <div class="test-pane test-pane--question">
+      <div class="pane-scroll">
+
+        <div class="q-label" id="q-label">Question 1</div>
+        <div class="q-stem" id="q-stem"></div>
+
+        <ul class="q-choices" id="q-choices">
+          <!-- Filled by JS -->
+        </ul>
+
+        <button class="q-submit-btn" id="q-submit" disabled>
+          Submit
+        </button>
+
+        <!-- Explanation (shown after submit) -->
+        <div class="q-explanation" id="q-explanation">
+          <div class="q-explanation__label">
+            <i id="expl-icon" class="fa-light fa-circle-check expl-correct"></i>
+            <span id="expl-verdict">Correct!</span>
+          </div>
+          <p id="expl-text"></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /.test-body -->
+
+  <!-- ════════ BOTTOM BAR ════════ -->
+  <footer class="test-bottombar">
+
+    <div class="tbot-left">
+      <button class="tbot-action tbot-action--danger" id="btn-end" aria-label="End test">
+        <i class="fa-light fa-circle-stop"></i> End
+      </button>
+      <div class="tbot-sep"></div>
+      <button class="tbot-action" id="btn-suspend" aria-label="Suspend test">
+        <i class="fa-light fa-circle-pause"></i> Suspend
+      </button>
+    </div>
+
+    <div class="tbot-center">
+      <button class="tbot-feedback" aria-label="Send feedback">
+        <i class="fa-light fa-comment"></i> Feedback
+      </button>
+    </div>
+
+    <div class="tbot-right">
+      <button class="tbot-nav" id="btn-prev" aria-label="Previous question" disabled>
+        <i class="fa-light fa-arrow-left"></i> Previous
+      </button>
+      <div class="tbot-sep"></div>
+      <button class="tbot-nav" id="btn-next" aria-label="Next question">
+        Next <i class="fa-light fa-arrow-right"></i>
+      </button>
+    </div>
+
+  </footer>
+
+</div><!-- /.test-wrap -->
+
+<script src="../assets/js/test.js"></script>
+</body>
+</html>

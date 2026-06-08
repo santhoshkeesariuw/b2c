@@ -144,6 +144,42 @@
       </div>
     </div>
 
+    <!-- ── Test Your Knowledge card ── -->
+    <div class="tyk-card">
+      <div class="tyk-card__head">
+        <div class="tyk-card__icon">
+          <i class="fa-light fa-brain"></i>
+        </div>
+        <div class="tyk-card__info">
+          <div class="tyk-card__title">Test Your Knowledge</div>
+          <div class="tyk-card__sub">Enter any MCAT topic and get an instant quiz</div>
+        </div>
+      </div>
+      <form class="tyk-form" id="tyk-form" novalidate>
+        <div class="tyk-input-wrap">
+          <i class="fa-light fa-magnifying-glass tyk-input-icon"></i>
+          <input
+            type="text"
+            class="tyk-input"
+            id="tyk-topic"
+            placeholder="e.g. Cellular Respiration, Amino Acids, Behavior…"
+            autocomplete="off"
+            maxlength="120"
+          />
+        </div>
+        <div class="tyk-form-right">
+          <select class="tyk-select" id="tyk-qcount" aria-label="Number of questions">
+            <option value="5">5 Qs</option>
+            <option value="10" selected>10 Qs</option>
+            <option value="20">20 Qs</option>
+          </select>
+          <button type="submit" class="tyk-start-btn" id="tyk-start">
+            <i class="fa-light fa-play"></i> Start
+          </button>
+        </div>
+      </form>
+    </div>
+
     <!-- ── Study planner + progress grid ── -->
     <div class="dash-grid">
 

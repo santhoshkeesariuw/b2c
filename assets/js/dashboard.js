@@ -328,12 +328,26 @@ function initPlannerTabs() {
   });
 }
 
+/* ── Test Your Knowledge form ── */
+function initTykForm() {
+  var form = document.getElementById('tyk-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var topic  = document.getElementById('tyk-topic').value.trim();
+    var qcount = document.getElementById('tyk-qcount').value;
+    if (!topic) { document.getElementById('tyk-topic').focus(); return; }
+    window.location.href = 'mcat-test.html?topic=' + encodeURIComponent(topic) + '&q=' + qcount;
+  });
+}
+
 /* ── Boot ── */
 document.addEventListener('DOMContentLoaded', () => {
   /* Dashboard home */
   initSidebarAccordion();
   initProgressBars();
   initPlannerTabs();
+  initTykForm();
 
   /* Overall performance page (simulator, bell curve) */
   buildSimulator();
