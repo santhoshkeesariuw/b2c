@@ -78,6 +78,63 @@ body {
 }
 .sidebar__footer span { display: block; }
 
+/* ── Sidebar sub-menus ── */
+
+/* Chevron on expandable items (replaces __arrow on expandable items) */
+.sidebar__nav-item__chevron {
+  margin-left: auto;
+  font-size: clamp(8px,0.7vw,10px);
+  color: #3E5770;
+  transition: transform var(--dur-base);
+  flex-shrink: 0;
+}
+.sidebar__nav-item--open > .sidebar__nav-item__chevron { transform: rotate(0deg); }
+.sidebar__nav-item:not(.sidebar__nav-item--open) > .sidebar__nav-item__chevron { transform: rotate(-90deg); }
+
+/* Sub-menu container */
+.sidebar__sub-menu {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--dur-slow) var(--ease-expo);
+}
+.sidebar__sub-menu--open { max-height: 600px; }
+
+/* Sub-item */
+.sidebar__sub-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px,0.55vw,9px);
+  padding: clamp(7px,0.78vh,10px) clamp(14px,1.1vw,18px) clamp(7px,0.78vh,10px) clamp(28px,2.4vw,38px);
+  cursor: pointer;
+  font-size: clamp(11px,0.92vw,13px);
+  color: var(--sidebar-text);
+  transition: background var(--dur-fast), color var(--dur-fast);
+  white-space: nowrap;
+}
+.sidebar__sub-item:hover { background: var(--sidebar-active); color: #fff; }
+.sidebar__sub-item--active { background: var(--sidebar-active); color: #fff; }
+
+/* Sub-item expand chevron reuse */
+.sidebar__sub-item > .sidebar__nav-item__chevron { color: #3E5770; }
+.sidebar__sub-item--open > .sidebar__nav-item__chevron { transform: rotate(0deg); }
+.sidebar__sub-item:not(.sidebar__sub-item--open) > .sidebar__nav-item__chevron { transform: rotate(-90deg); }
+
+/* Sub-item icon */
+.sidebar__sub-item__icon {
+  font-size: clamp(10px,0.88vw,12px);
+  width: clamp(13px,1.1vw,16px);
+  text-align: center;
+  color: var(--sidebar-icon);
+  flex-shrink: 0;
+}
+.sidebar__sub-item:hover .sidebar__sub-item__icon,
+.sidebar__sub-item--active .sidebar__sub-item__icon { color: #fff; }
+
+/* Nested (level-3) sub-items */
+.sidebar__sub-menu--nested .sidebar__sub-item--nested {
+  padding-left: clamp(42px,3.6vw,54px);
+}
+
 /* ════════ MAIN ════════ */
 .dash-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
 

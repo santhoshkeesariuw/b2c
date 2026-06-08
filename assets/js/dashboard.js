@@ -287,6 +287,27 @@ function wireButtons() {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSimulator(); });
 }
 
+/* ── Sidebar expand/collapse ── */
+function initSidebarAccordion() {
+  document.querySelectorAll('[data-sub]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const subId  = trigger.dataset.sub;
+      const sub    = document.getElementById(subId);
+      if (!sub) return;
+
+      const isOpen = sub.classList.contains('sidebar__sub-menu--open');
+
+      if (isOpen) {
+        sub.classList.remove('sidebar__sub-menu--open');
+        trigger.classList.remove('sidebar__nav-item--open', 'sidebar__sub-item--open');
+      } else {
+        sub.classList.add('sidebar__sub-menu--open');
+        trigger.classList.add('sidebar__nav-item--open', 'sidebar__sub-item--open');
+      }
+    });
+  });
+}
+
 /* ── Progress bars via data-progress attribute ── */
 function initProgressBars() {
   document.querySelectorAll('[data-progress]').forEach((el) => {
@@ -310,6 +331,7 @@ function initPlannerTabs() {
 /* ── Boot ── */
 document.addEventListener('DOMContentLoaded', () => {
   /* Dashboard home */
+  initSidebarAccordion();
   initProgressBars();
   initPlannerTabs();
 

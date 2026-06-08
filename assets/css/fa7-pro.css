@@ -202,6 +202,9 @@
 /* ── MCAT Sidebar ── */
 .fa-file-lines:before        { content: "\f15c"; }   /* QBank menu item */
 .fa-list-check:before        { content: "\e1b8"; }   /* Practice Exams menu item */
+.fa-table-list:before        { content: "\f00b"; }   /* Previous Tests */
+.fa-clipboard-check:before   { content: "\f46c"; }   /* Overall */
+.fa-chart-pie:before         { content: "\f200"; }   /* Reports */
 .fa-rotate-left:before       { content: "\f2ea"; }   /* Reset Options */
 .fa-rotate-right:before      { content: "\f2f9"; }
 .fa-rotate:before            { content: "\f2f1"; }

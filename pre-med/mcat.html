@@ -27,9 +27,54 @@
     <div class="sidebar__nav-item sidebar__nav-item--active"><i class="sidebar__nav-item__icon fa-light fa-house"></i>Dashboard</div>
     <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-calendar-days"></i>Study Planner</div>
     <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-book-open"></i>UBooks + Videos</div>
-    <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-file-lines"></i>QBank<i class="sidebar__nav-item__arrow fa-light fa-chevron-right"></i></div>
-    <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-list-check"></i>Practice Exams<i class="sidebar__nav-item__arrow fa-light fa-chevron-right"></i></div>
-    <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-bolt"></i>Flashcards<i class="sidebar__nav-item__arrow fa-light fa-chevron-right"></i></div>
+    <!-- QBank — expandable -->
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub sidebar__nav-item--open" data-sub="qbank-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-file-lines"></i>
+      QBank
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu sidebar__sub-menu--open" id="qbank-sub">
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-pen-to-square"></i>Create Test
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-table-list"></i>Previous Tests
+      </div>
+      <!-- Performance — nested expandable -->
+      <div class="sidebar__sub-item sidebar__sub-item--has-sub sidebar__sub-item--open" data-sub="perf-sub">
+        <i class="sidebar__sub-item__icon fa-light fa-chart-bar"></i>
+        Performance
+        <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+      </div>
+      <div class="sidebar__sub-menu sidebar__sub-menu--open sidebar__sub-menu--nested" id="perf-sub">
+        <div class="sidebar__sub-item sidebar__sub-item--nested">
+          <i class="sidebar__sub-item__icon fa-light fa-clipboard-check"></i>Overall
+        </div>
+        <div class="sidebar__sub-item sidebar__sub-item--nested">
+          <i class="sidebar__sub-item__icon fa-light fa-chart-pie"></i>Reports
+        </div>
+        <div class="sidebar__sub-item sidebar__sub-item--nested">
+          <i class="sidebar__sub-item__icon fa-light fa-chart-line"></i>Graphs
+        </div>
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-magnifying-glass"></i>Search
+      </div>
+    </div>
+
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="exams-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-list-check"></i>
+      Practice Exams
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="exams-sub"></div>
+
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="flash-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-bolt"></i>
+      Flashcards
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="flash-sub"></div>
     <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-book"></i>My Notebook</div>
     <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-rotate-left"></i>Reset Options</div>
     <div class="sidebar__nav-item"><i class="sidebar__nav-item__icon fa-light fa-circle-question"></i>Help</div>
