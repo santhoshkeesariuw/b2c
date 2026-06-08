@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- MCAT Score Dashboard -->
+<!-- MCAT QBank — Dashboard -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UWorld – Overall Performance</title>
+  <title>UWorld – Dashboard</title>
   <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
   <link rel="stylesheet" href="../assets/css/tokens.css" />
   <link rel="stylesheet" href="../assets/css/base.css" />
@@ -20,7 +20,7 @@
     </div>
     <div class="sidebar__name">UWorld</div>
     <div class="sidebar__subbrand">MCAT QBank</div>
-    <div class="sidebar__user">Santhosh Keesari</div>
+    <div class="sidebar__user">Naga Supriya Challa</div>
   </div>
 
   <nav class="sidebar__nav">
@@ -38,7 +38,7 @@
 
   <div class="sidebar__footer">
     <span>Expiration Date</span>
-    <span>Nov 16, 2026 11:59 PM EDT</span>
+    <span>Oct 15, 2026 11:59 PM EDT</span>
   </div>
 </aside>
 
@@ -47,179 +47,264 @@
 
   <!-- TOPBAR -->
   <header class="topbar">
-    <button class="topbar__hamburger"><i class="fa-solid fa-bars"></i></button>
-    <span class="topbar__title">Overall Performance</span>
+    <button class="topbar__hamburger" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+    <span class="topbar__title">Dashboard</span>
     <nav class="topbar__nav">
-      <a href="#" class="topbar__nav-link topbar__nav-link--accent"><i class="fa-solid fa-star"></i> What's New</a>
+      <a href="#" class="topbar__nav-link topbar__nav-link--accent"><i class="fa-solid fa-sparkles"></i> Whats New</a>
       <span class="topbar__sep">|</span>
-      <a href="#" class="topbar__nav-link">MCAT Comprehensive <i class="fa-solid fa-chevron-down icon--xs"></i></a>
+      <a href="#" class="topbar__nav-link">MCAT QBank <i class="fa-solid fa-chevron-down icon--xs"></i></a>
       <span class="topbar__sep">|</span>
-      <a href="#" class="topbar__nav-link"><i class="fa-solid fa-calendar-days"></i> Test Date</a>
+      <a href="#" class="topbar__nav-link"><i class="fa-light fa-list-check"></i> Upcoming Tasks</a>
       <span class="topbar__sep">|</span>
-      <a href="#" class="topbar__nav-link"><i class="fa-solid fa-house"></i> My Account</a>
+      <a href="#" class="topbar__nav-link"><i class="fa-light fa-calendar-days"></i> Test Date : Nov 7, 2026</a>
       <span class="topbar__sep">|</span>
-      <a href="#" class="topbar__nav-link"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+      <button class="topbar__avatar" aria-label="Account"><i class="fa-light fa-user"></i></button>
     </nav>
   </header>
 
   <!-- CONTENT -->
   <div class="content">
 
-    <!-- heading row -->
-    <div class="content-header">
-      <h2>Statistics</h2>
-      <button class="btn--print"><i class="fa-solid fa-print"></i> Print</button>
+    <!-- ── Welcome ── -->
+    <div class="welcome">
+      <div class="welcome__greeting">Welcome,</div>
+      <div class="welcome__name">Naga Supriya</div>
     </div>
 
-    <!-- ── PROBABLE MCAT SCORE (centered card, not full width) ── -->
-    <div class="panel panel--centered">
-      <div class="score-section">
-        <div class="score-label-row">
-          <span class="score-label">Probable MCAT Score :</span>
-          <span class="score-band" id="bandLabel">474 &nbsp;–&nbsp; Low</span>
-          <span class="sim-badge" id="simBadge"><i class="fa-solid fa-wand-magic-sparkles"></i> Simulated</span>
-          <i class="fa-solid fa-circle-info score-info-icon"></i>
-          <span class="score-label-row__spacer"></span>
-          <button class="btn--simulate" onclick="openSimulator()">
-            <i class="fa-solid fa-sliders"></i> Simulate Score
-          </button>
-          <i class="fa-solid fa-rotate-right score-reset-icon" onclick="resetSimulator()"></i>
+    <!-- ── Stat cards ── -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card__left">
+          <div class="stat-card__label">Question Score</div>
+          <div class="stat-card__metric">3%</div>
+          <div class="stat-card__sub">Correct</div>
         </div>
-        <div class="score-arrow" id="arrowRow">
-          <i class="fa-solid fa-caret-down"></i>
+        <div class="stat-card__icon"><i class="fa-light fa-file-lines"></i></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__left">
+          <div class="stat-card__label">QBank Usage</div>
+          <div class="stat-card__metric">3%</div>
+          <div class="stat-card__sub">78 / 3007 Used</div>
         </div>
-        <div class="score-bar">
-          <div class="score-seg score-seg--active score-seg--low" id="seg-low">Low</div>
-          <div class="score-seg" id="seg-borderline">Borderline</div>
-          <div class="score-seg" id="seg-high">High</div>
-          <div class="score-seg" id="seg-very-high">Very High</div>
+        <div class="stat-card__icon"><i class="fa-light fa-book"></i></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__left">
+          <div class="stat-card__label">Test Count</div>
+          <div class="stat-card__metric">100%</div>
+          <div class="stat-card__sub">3 / 3 Completed</div>
         </div>
+        <div class="stat-card__icon"><i class="fa-light fa-list-check"></i></div>
       </div>
     </div>
 
-    <!-- ── CIRCLES + STATS ── -->
-    <div class="panel middle-section">
+    <!-- ── Study planner + progress grid ── -->
+    <div class="dash-grid">
 
-      <div class="circles-col">
-        <!-- 23% Correct -->
-        <div class="ring-wrap">
-          <svg viewBox="0 0 110 110">
-            <circle cx="55" cy="55" r="44" stroke="#D6F5E3" stroke-width="9" fill="none"/>
-            <circle cx="55" cy="55" r="44" stroke="#27AE60" stroke-width="9" fill="none"
-              stroke-dasharray="63 276" stroke-linecap="round"/>
-          </svg>
-          <div class="ring-center">
-            <div class="ring-center__pct">23%</div>
-            <div class="ring-center__lbl">Correct</div>
+      <!-- Study Planner -->
+      <div class="planner-card">
+        <div class="planner-card__head">
+          <i class="fa-light fa-calendar-days planner-card__head-icon"></i>
+          <span class="planner-card__title">Study Planner</span>
+          <span class="planner-card__date">Today, June 8, 2026</span>
+        </div>
+        <div class="planner-card__toolbar">
+          <div class="planner-tabs" role="tablist">
+            <button class="planner-tab planner-tab--active" role="tab" aria-selected="true">Upcoming</button>
+            <button class="planner-tab" role="tab" aria-selected="false">Overdue <span class="planner-badge">227</span></button>
+          </div>
+          <a href="#" class="planner-view-link">View Plan</a>
+        </div>
+        <div class="planner-list">
+          <div class="planner-item">
+            <i class="fa-light fa-circle-check planner-item__check"></i>
+            <span class="planner-item__name">GCHM 2.1 Chemical Bonding UBook + Videos</span>
+            <span class="task-chip task-chip--ubooks">Review UBooks</span>
+            <span class="planner-item__time">53 mins</span>
+          </div>
+          <div class="planner-item">
+            <i class="fa-light fa-circle-check planner-item__check"></i>
+            <span class="planner-item__name">GCHM 2.1 Chemical Bonding Quiz</span>
+            <span class="task-chip task-chip--flashcards">Review Flashcards</span>
+            <span class="planner-item__time">42 mins</span>
+          </div>
+          <div class="planner-item">
+            <i class="fa-light fa-circle-check planner-item__check"></i>
+            <span class="planner-item__name">GCHM 2.2 Bond Polarity and Molecular Polarity</span>
+            <span class="task-chip task-chip--ubooks">Review UBooks</span>
+            <span class="planner-item__time">1 hr</span>
+          </div>
+          <div class="planner-item">
+            <i class="fa-light fa-circle-check planner-item__check"></i>
+            <span class="planner-item__name">GCHM 2.2 Bond Polarity and Molecular Polarity Quiz</span>
+            <span class="task-chip task-chip--flashcards">Review Flashcards</span>
+            <span class="planner-item__time">18 mins</span>
+          </div>
+          <div class="planner-item">
+            <i class="fa-light fa-circle-check planner-item__check"></i>
+            <span class="planner-item__name">GCHM 2.3 Intermolecular Forces UBook + Videos</span>
+            <span class="task-chip task-chip--ubooks">Review UBooks</span>
+            <span class="planner-item__time">35 mins</span>
+          </div>
+          <div class="planner-item">
+            <i class="fa-light fa-circle-check planner-item__check"></i>
+            <span class="planner-item__name">GCHM 2.3 Intermolecular Forces Quiz</span>
+            <span class="task-chip task-chip--flashcards">Review Flashcards</span>
+            <span class="planner-item__time">15 mins</span>
           </div>
         </div>
-        <!-- 3% Used -->
-        <div class="ring-wrap">
-          <svg viewBox="0 0 110 110">
-            <circle cx="55" cy="55" r="44" stroke="#DBEAFE" stroke-width="9" fill="none"/>
-            <circle cx="55" cy="55" r="44" stroke="#0B6FBE" stroke-width="9" fill="none"
-              stroke-dasharray="8 276" stroke-linecap="round"/>
-          </svg>
-          <div class="ring-center">
-            <div class="ring-center__pct">3%</div>
-            <div class="ring-center__lbl">Used</div>
+      </div>
+
+      <!-- Study Plan Progress -->
+      <div class="study-progress-card">
+        <div class="study-progress-card__title">Study Plan Progress</div>
+        <div class="study-progress-card__sub">21 / 74 <span class="study-progress-card__days">54 days remaining</span></div>
+        <div class="donut-wrap">
+          <div class="donut-center">
+            <div class="donut-center__pct">0.69%</div>
+            <div class="donut-center__lbl">Completed</div>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item">
+            <div class="legend-dot legend-dot--green"></div>
+            <span>Completed</span><span class="legend-item__val">6</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot legend-dot--red"></div>
+            <span>Overdue</span><span class="legend-item__val">227</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot legend-dot--blue"></div>
+            <span>Incomplete</span><span class="legend-item__val">645</span>
           </div>
         </div>
       </div>
 
-      <!-- 2×2 stat grid -->
-      <div class="stats-grid">
-        <div class="stat-section">
-          <div class="stat-section__title">Your Score</div>
-          <div class="stat-row"><span>Total Correct</span><span class="stat-badge">19</span></div>
-          <div class="stat-row"><span>Total Incorrect</span><span class="stat-badge">62</span></div>
-          <div class="stat-row"><span>Total Omitted</span><span class="stat-badge">1</span></div>
-        </div>
-        <div class="stat-section">
-          <div class="stat-section__title">Answer Changes</div>
-          <div class="stat-row"><span>Correct to Incorrect</span><span class="stat-badge">0</span></div>
-          <div class="stat-row"><span>Incorrect to Correct</span><span class="stat-badge">0</span></div>
-          <div class="stat-row"><span>Incorrect to Incorrect</span><span class="stat-badge">0</span></div>
-        </div>
-        <div class="stat-section">
-          <div class="stat-section__title">QBank Usage</div>
-          <div class="stat-row"><span>Used Questions</span><span class="stat-badge">90</span></div>
-          <div class="stat-row"><span>Unused Questions</span><span class="stat-badge">2929</span></div>
-          <div class="stat-row"><span>Total Questions</span><span class="stat-badge">3019</span></div>
-        </div>
-        <div class="stat-section">
-          <div class="stat-section__title">Test Count</div>
-          <div class="stat-row"><span>Tests Created</span><span class="stat-badge">2</span></div>
-          <div class="stat-row"><span>Tests Completed</span><span class="stat-badge">2</span></div>
-          <div class="stat-row"><span>Suspended Tests</span><span class="stat-badge">0</span></div>
-        </div>
-      </div>
-    </div>
+    </div><!-- /dash-grid -->
 
-    <!-- ── BELL CURVE + PERCENTILE RANK ── -->
-    <div class="bottom-section">
-      <div class="curve-panel">
-        <canvas id="bellCurve"></canvas>
-      </div>
-      <div class="percentile-panel">
-        <div class="percentile-panel__title">Percentile Rank</div>
-        <div class="percentile-row">
-          <span class="percentile-key"><span class="percentile-dot percentile-dot--green"></span>Your Score (2nd rank)</span>
-          <span class="percentile-value">23%</span>
+    <!-- ── UBook Progress ── -->
+    <div class="ubook-section">
+      <div class="ubook-section__head">
+        <div>
+          <div class="ubook-section__title">UBook Progress</div>
+          <div class="ubook-section__count">6 / 377</div>
         </div>
-        <div class="percentile-row">
-          <span class="percentile-key"><span class="percentile-dot percentile-dot--blue"></span>Median Score (50th rank)</span>
-          <span class="percentile-value">60%</span>
-        </div>
-        <div class="percentile-row">
-          <span class="percentile-key">Your Avg Time Spent (sec)</span>
-          <span class="percentile-value">1</span>
-        </div>
-        <div class="percentile-row">
-          <span class="percentile-key">Others' Avg Time Spent (sec)</span>
-          <span class="percentile-value">64</span>
+        <div class="ubook-section__pickup">
+          Pick up where you left off:
+          <a href="#" class="ubook-section__pickup-link">Chapter 2: Gene Expression 2.1 The Ce…</a>
         </div>
       </div>
-    </div>
+
+      <table class="ubook-table">
+        <thead>
+          <tr>
+            <th class="th-subject">Subjects</th>
+            <th class="th-section" colspan="2">UBook Lessons</th>
+            <th class="th-section" colspan="2">Flashcard Quizzes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-subject">Biology</td>
+            <td class="td-bar" data-progress="10">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">10%</span>
+            </td>
+            <td class="td-count">6 of 61 Complete</td>
+            <td class="td-bar" data-progress="3">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">3%</span>
+            </td>
+            <td class="td-count">2 of 61 Complete</td>
+          </tr>
+          <tr>
+            <td class="td-subject">Biochemistry</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 42 Complete</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 42 Complete</td>
+          </tr>
+          <tr>
+            <td class="td-subject">General Chemistry</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 41 Complete</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 41 Complete</td>
+          </tr>
+          <tr>
+            <td class="td-subject">Organic Chemistry</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 63 Complete</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 63 Complete</td>
+          </tr>
+          <tr>
+            <td class="td-subject">Physics</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 20 Complete</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 20 Complete</td>
+          </tr>
+          <tr>
+            <td class="td-subject">Behavioral Sciences</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 118 Complete</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 118 Complete</td>
+          </tr>
+          <tr>
+            <td class="td-subject">Critical Analysis &amp; Reasoning Skills</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 32 Complete</td>
+            <td class="td-bar" data-progress="0">
+              <div class="ubook-mini-bar"><div class="ubook-mini-bar__fill"></div></div>
+              <span class="ubook-pct">0%</span>
+            </td>
+            <td class="td-count">0 of 0 Complete</td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- /ubook-section -->
+
+    <div class="dash-footer-copy">Copyright © UWorld. All rights reserved.</div>
 
   </div><!-- /content -->
 </div><!-- /dash-main -->
-
-<!-- ════════ SIMULATOR MODAL ════════ -->
-<div class="modal-overlay" id="simOverlay" onclick="overlayClick(event)">
-  <div class="modal">
-    <div class="modal__head">
-      <div class="modal__head-icon"><i class="fa-solid fa-sliders"></i></div>
-      <div class="modal__head-content">
-        <div class="modal__head-title">Score Simulator</div>
-        <div class="modal__head-subtitle">Check off learning items to see your probable score improve in real time</div>
-      </div>
-      <button class="modal__close" onclick="closeSimulator()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-
-    <div class="modal__body">
-      <div class="pot-banner">
-        <i class="fa-solid fa-rocket"></i>
-        <div class="pot-banner__text">Complete all activities to potentially reach</div>
-        <div>
-          <div class="pot-banner__score">519</div>
-          <div class="pot-banner__label">Max potential</div>
-        </div>
-      </div>
-      <div class="sim-cats" id="simCats"></div>
-    </div>
-
-    <div class="modal__foot">
-      <i class="fa-solid fa-circle-check modal__foot-icon"></i>
-      <span class="modal__foot-label">Progress</span>
-      <div class="progress-wrap"><div class="progress-bar" id="ovBar"></div></div>
-      <span class="progress-pct" id="ovPct">0 / 0</span>
-      <button class="btn--reset" onclick="resetSimulator()">
-        <i class="fa-solid fa-rotate"></i> Reset
-      </button>
-    </div>
-  </div>
-</div>
 
 <script src="../assets/js/theme.js"></script>
 <script src="../assets/js/dashboard.js"></script>

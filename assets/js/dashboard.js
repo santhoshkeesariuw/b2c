@@ -287,8 +287,33 @@ function wireButtons() {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSimulator(); });
 }
 
+/* ── Progress bars via data-progress attribute ── */
+function initProgressBars() {
+  document.querySelectorAll('[data-progress]').forEach((el) => {
+    setProgress(el, parseFloat(el.dataset.progress));
+  });
+}
+
+/* ── Planner tab switching ── */
+function initPlannerTabs() {
+  const tabs = document.querySelectorAll('.planner-tab');
+  if (!tabs.length) return;
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => { t.classList.remove('planner-tab--active'); t.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('planner-tab--active');
+      tab.setAttribute('aria-selected', 'true');
+    });
+  });
+}
+
 /* ── Boot ── */
 document.addEventListener('DOMContentLoaded', () => {
+  /* Dashboard home */
+  initProgressBars();
+  initPlannerTabs();
+
+  /* Overall performance page (simulator, bell curve) */
   buildSimulator();
   wireButtons();
   onCheckChange();
