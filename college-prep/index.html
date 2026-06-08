@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – College Prep</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../assets/css/category.css" />
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-brand" href="../index.html">
+    <div class="nav-logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <span class="nav-wordmark">UWorld</span>
+  </a>
+  <div class="nav-div"></div><span class="nav-tag">College Prep</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">All Products</a>
+    <a href="#" class="nav-link">Support</a>
+    <a href="#" class="nav-btn">Sign In</a>
+  </div>
+</nav>
+<div class="cat-hero" id="cat-hero"></div>
+<div class="main"><div id="cat-products"></div></div>
+<footer class="footer">
+  <div class="ft-l"><div class="ft-logo"><img src="../assets/images/UWorld logo icon.png" alt="" /></div><span class="ft-name">UWorld</span></div>
+  <span class="ft-copy">© 2025 UWorld, LLC. All rights reserved.</span>
+  <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+</footer>
+<script src="../assets/js/category.js"></script>
+<script>
+renderCategory({
+  id: 'college-prep', name: 'College Prep', icon: 'fa-pen-nib', color: '#0E7C7B',
+  desc: 'SAT, ACT, and Advanced Placement exam prep for high school students pursuing top universities and earning college credit.',
+  stats: [{ val:'6', lbl:'Products' }, { val:'1,800+', lbl:'Questions' }, { val:'AP + SAT/ACT', lbl:'Coverage' }],
+  products: [
+    {
+      id: 'sat-act', name: 'SAT & ACT', icon: 'fa-pen-nib', color: '#0E7C7B',
+      desc: 'Digital SAT and ACT prep with adaptive modules, timed section drills, and score projection tools.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    },
+    {
+      id: 'ap-ela-lote', name: 'AP ELA-LOTE', icon: 'fa-book-open', color: '#0E7C7B',
+      desc: 'AP English Language, AP Literature, and World Languages — argument analysis, rhetorical strategies, and text interpretation.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    },
+    {
+      id: 'ap-history', name: 'AP History', icon: 'fa-landmark', color: '#0E7C7B',
+      desc: 'AP US History, World History, and Government & Politics — document analysis, causation, and argumentation.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    },
+    {
+      id: 'ap-stats', name: 'AP Stats', icon: 'fa-chart-bar', color: '#0E7C7B',
+      desc: 'AP Statistics — exploring data, sampling, probability, statistical inference, and regression analysis.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    },
+    {
+      id: 'ap-math', name: 'AP Math', icon: 'fa-square-root-variable', color: '#0E7C7B',
+      desc: 'AP Calculus AB/BC and Precalculus — limits, derivatives, integrals, and series with worked solutions.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    },
+    {
+      id: 'ap-science', name: 'AP Science', icon: 'fa-atom', color: '#0E7C7B',
+      desc: 'AP Biology, Chemistry, Physics 1/2/C, and Environmental Science — lab-based and conceptual mastery.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    }
+  ]
+});
+</script>
+</body>
+</html>

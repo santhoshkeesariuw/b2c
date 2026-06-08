@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Medical</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../assets/css/category.css" />
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-brand" href="../index.html">
+    <div class="nav-logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <span class="nav-wordmark">UWorld</span>
+  </a>
+  <div class="nav-div"></div><span class="nav-tag">Medical</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">All Products</a>
+    <a href="#" class="nav-link">Support</a>
+    <a href="#" class="nav-btn">Sign In</a>
+  </div>
+</nav>
+<div class="cat-hero" id="cat-hero"></div>
+<div class="main"><div id="cat-products"></div></div>
+<footer class="footer">
+  <div class="ft-l"><div class="ft-logo"><img src="../assets/images/UWorld logo icon.png" alt="" /></div><span class="ft-name">UWorld</span></div>
+  <span class="ft-copy">© 2025 UWorld, LLC. All rights reserved.</span>
+  <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+</footer>
+<script src="../assets/js/category.js"></script>
+<script>
+renderCategory({
+  id: 'medical', name: 'Medical', icon: 'fa-stethoscope', color: '#B45309',
+  desc: 'USMLE licensing exam preparation for medical students and graduates. Build clinical knowledge and pass your boards with confidence.',
+  stats: [{ val:'4,200+', lbl:'Questions' }, { val:'3', lbl:'Step Exams' }, { val:'18', lbl:'Organ Systems' }],
+  products: [
+    {
+      id: 'step1', name: 'USMLE Step 1', icon: 'fa-stethoscope', color: '#B45309',
+      desc: 'Basic science foundations — organ systems, pathology, pharmacology, and microbiology mapped to NBME blueprints.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false, studyPlanner: false }
+    },
+    {
+      id: 'step2', name: 'USMLE Step 2 CK', icon: 'fa-hospital', color: '#B45309',
+      desc: 'Clinical knowledge — internal medicine, surgery, pediatrics, OB/GYN, psychiatry, and preventive medicine.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    },
+    {
+      id: 'step3', name: 'USMLE Step 3', icon: 'fa-user-doctor', color: '#B45309',
+      desc: 'Clinical management and patient care — CCS cases, biostatistics, and advanced clinical decision making.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    }
+  ]
+});
+</script>
+</body>
+</html>

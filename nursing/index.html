@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Nursing</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../assets/css/category.css" />
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-brand" href="../index.html">
+    <div class="nav-logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <span class="nav-wordmark">UWorld</span>
+  </a>
+  <div class="nav-div"></div><span class="nav-tag">Nursing</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">All Products</a>
+    <a href="#" class="nav-link">Support</a>
+    <a href="#" class="nav-btn">Sign In</a>
+  </div>
+</nav>
+<div class="cat-hero" id="cat-hero"></div>
+<div class="main"><div id="cat-products"></div></div>
+<footer class="footer">
+  <div class="ft-l"><div class="ft-logo"><img src="../assets/images/UWorld logo icon.png" alt="" /></div><span class="ft-name">UWorld</span></div>
+  <span class="ft-copy">© 2025 UWorld, LLC. All rights reserved.</span>
+  <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a></div>
+</footer>
+<script src="../assets/js/category.js"></script>
+<script>
+renderCategory({
+  id: 'nursing', name: 'Nursing', icon: 'fa-heart-pulse', color: '#6B46C1',
+  desc: 'NCLEX licensure exam prep for Registered Nurses and Practical Nurses. Adaptive questions aligned with the NGN format and NCSBN test plans.',
+  stats: [{ val:'2,500+', lbl:'Questions' }, { val:'2', lbl:'Exams' }, { val:'8', lbl:'Client Needs' }],
+  products: [
+    {
+      id: 'nclex-rn', name: 'NCLEX-RN', icon: 'fa-heart-pulse', color: '#6B46C1',
+      desc: 'Registered Nurse licensure — NGN-format questions covering safety, health promotion, psychosocial integrity, and physiological adaptation.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false, studyPlanner: false }
+    },
+    {
+      id: 'nclex-pn', name: 'NCLEX-PN', icon: 'fa-stethoscope', color: '#6B46C1',
+      desc: 'Practical Nurse licensure — coordinated care, basic care, pharmacological therapies, and reduction of risk potential.',
+      available: false,
+      features: { qbank: false, practiceExams: false, flashcards: false, analytics: false }
+    }
+  ]
+});
+</script>
+</body>
+</html>

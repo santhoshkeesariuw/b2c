@@ -321,13 +321,6 @@
 
 <!-- MAIN -->
 <div class="main">
-  <div class="breadcrumb hidden" id="breadcrumb">
-    <button class="back-btn" onclick="goHome()">
-      <i class="fa-solid fa-arrow-left"></i> All Products
-    </button>
-    <span class="bc-sep"><i class="fa-solid fa-chevron-right"></i></span>
-    <span class="bc-label" id="bc-label"></span>
-  </div>
   <div id="view"></div>
 </div>
 
@@ -346,6 +339,7 @@
 </footer>
 
 <script>
+/* Every card navigates to [category]/index.html */
 const CATALOG = [
   {
     id:'medical',      name:'Medical',      icon:'fa-stethoscope',         color:'#B45309',
@@ -418,12 +412,11 @@ function rgb(hex) {
 }
 function hasLive(cat) { return cat.items.some(i=>i.available); }
 
-/* ── FOLDER CARD ── */
 function folderCard(cat, idx) {
-  const live    = hasLive(cat);
-  const count   = cat.items.length;
-  const iconBg  = live ? tint(cat.color,0.1) : '#F3F4F6';
-  const cr      = rgb(cat.color);
+  const live   = hasLive(cat);
+  const count  = cat.items.length;
+  const iconBg = live ? tint(cat.color,0.1) : '#F3F4F6';
+  const cr     = rgb(cat.color);
 
   const chipHtml = count > 0
     ? `<span class="card-chip"><i class="fa-solid fa-layer-group"></i>${count} product${count>1?'s':''}</span>`
@@ -431,14 +424,12 @@ function folderCard(cat, idx) {
 
   const ctaHtml = live
     ? `<span class="card-cta">Explore <i class="fa-solid fa-arrow-right cta-arrow"></i></span>`
-    : `<span class="card-cta">Coming Soon</span>`;
-
-  const click = count > 0 ? `onclick="openFolder('${cat.id}')"` : '';
+    : `<span class="card-cta">View Products</span>`;
 
   return `
     <div class="card ${live?'av':'cs'} stagger"
          style="--c:${cat.color};--cr:${cr};--icon-bg:${iconBg};animation-delay:${idx*40}ms"
-         ${click}>
+         onclick="window.location.href='${cat.id}/index.html'">
       <div class="card-icon"><i class="fa-solid ${cat.icon}"></i></div>
       <div>
         <div class="card-name">${cat.name}</div>
@@ -451,95 +442,19 @@ function folderCard(cat, idx) {
     </div>`;
 }
 
-/* ── PRODUCT CARD ── */
-function productCard(item, idx) {
-  const iconBg = item.available ? tint(item.color,0.1) : '#F3F4F6';
-  const cr     = rgb(item.color);
-
-  const statsHtml = item.available && item.stats
-    ? `<div class="pcrd-stats">${item.stats.map(s=>`<div class="ps"><div class="ps-v">${s.v}</div><div class="ps-l">${s.l}</div></div>`).join('')}</div>`
-    : '';
-
-  const footHtml = item.available && item.url
-    ? `<a class="pcrd-btn" style="background:${item.color}" href="${item.url}">Open Dashboard <i class="fa-solid fa-arrow-right"></i></a>`
-    : `<span class="pcrd-soon"><i class="fa-regular fa-clock"></i> Coming Soon</span>`;
-
-  const click = item.available && item.url ? `onclick="window.location.href='${item.url}'"` : '';
-
-  return `
-    <div class="pcrd ${item.available?'av':'cs'} stagger"
-         style="--c:${item.color};--cr:${cr};--icon-bg:${iconBg};animation-delay:${idx*50}ms"
-         ${click}>
-      <div class="pcrd-icon"><i class="fa-solid ${item.icon}"></i></div>
+document.getElementById('view').innerHTML = `
+  <div class="enter">
+    <div class="section-hd">
       <div>
-        <div class="pcrd-name">${item.name}</div>
-        <div class="pcrd-desc">${item.desc}</div>
+        <div class="overline">Exam Prep Catalog</div>
+        <div class="sec-title">All Products</div>
       </div>
-      ${statsHtml}
-      <div class="pcrd-foot">${footHtml}</div>
-    </div>`;
-}
-
-/* ── VIEWS ── */
-let goingBack = false;
-
-function renderHome() {
-  const anim = goingBack ? 'back' : 'enter';
-  goingBack = false;
-
-  document.getElementById('view').innerHTML = `
-    <div class="${anim}">
-      <div class="section-hd">
-        <div>
-          <div class="overline">Exam Prep Catalog</div>
-          <div class="sec-title">All Products</div>
-        </div>
-        <span class="sec-count">${CATALOG.length} categories</span>
-      </div>
-      <div class="grid">
-        ${CATALOG.map((cat,i) => folderCard(cat,i)).join('')}
-      </div>
-    </div>`;
-
-  document.getElementById('breadcrumb').classList.add('hidden');
-  document.title = 'UWorld – Choose Your Exam';
-}
-
-function openFolder(id) {
-  const cat = CATALOG.find(p=>p.id===id);
-  if (!cat || !cat.items.length) return;
-
-  if (cat.items.length===1 && cat.items[0].available) {
-    window.location.href = cat.items[0].url;
-    return;
-  }
-
-  document.getElementById('view').innerHTML = `
-    <div class="enter">
-      <div class="section-hd">
-        <div>
-          <div class="overline" style="color:${cat.color}">${cat.name}</div>
-          <div class="sec-title">Select a Product</div>
-        </div>
-        <span class="sec-count">${cat.items.length} product${cat.items.length!==1?'s':''}</span>
-      </div>
-      <div class="grid">
-        ${cat.items.map((item,i) => productCard(item,i)).join('')}
-      </div>
-    </div>`;
-
-  const bc = document.getElementById('breadcrumb');
-  bc.classList.remove('hidden');
-  document.getElementById('bc-label').textContent = cat.name;
-  document.title = `UWorld – ${cat.name}`;
-}
-
-function goHome() {
-  goingBack = true;
-  renderHome();
-}
-
-renderHome();
+      <span class="sec-count">${CATALOG.length} categories</span>
+    </div>
+    <div class="grid">
+      ${CATALOG.map((cat,i) => folderCard(cat,i)).join('')}
+    </div>
+  </div>`;
 </script>
 </body>
 </html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Pre-Med</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../assets/css/category.css" />
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-brand" href="../index.html">
+    <div class="nav-logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <span class="nav-wordmark">UWorld</span>
+  </a>
+  <div class="nav-div"></div>
+  <span class="nav-tag">Pre-Med</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="../index.html" class="nav-link">All Products</a>
+    <a href="#" class="nav-link">Support</a>
+    <a href="#" class="nav-btn">Sign In</a>
+  </div>
+</nav>
+
+<div class="cat-hero" id="cat-hero"></div>
+
+<div class="main">
+  <div id="cat-products"></div>
+</div>
+
+<footer class="footer">
+  <div class="ft-l">
+    <div class="ft-logo"><img src="../assets/images/UWorld logo icon.png" alt="" /></div>
+    <span class="ft-name">UWorld</span>
+  </div>
+  <span class="ft-copy">© 2025 UWorld, LLC. All rights reserved.</span>
+  <div class="ft-links">
+    <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a>
+  </div>
+</footer>
+
+<script src="../assets/js/category.js"></script>
+<script>
+renderCategory({
+  id:    'pre-med',
+  name:  'Pre-Med',
+  icon:  'fa-flask-vial',
+  color: '#0B6FBE',
+  desc:  'Comprehensive preparation for medical school admissions. Master every section of the MCAT with adaptive questions, full-length exams, and score analytics.',
+  stats: [
+    { val:'3,019', lbl:'Questions' },
+    { val:'528',   lbl:'Max Score' },
+    { val:'4',     lbl:'Sections'  },
+    { val:'1',     lbl:'Live Product' }
+  ],
+  products: [
+    {
+      id:   'mcat',
+      name: 'MCAT',
+      icon: 'fa-flask-vial',
+      color: '#0B6FBE',
+      desc: 'The Medical College Admission Test — covers Biology, Biochemistry, Chemistry, Physics, Psychology, Sociology, and CARS.',
+      available: true,
+      url: 'mcat.html',
+      questionCount: 3019,
+      features: {
+        qbank:         true,
+        practiceExams: true,
+        flashcards:    true,
+        analytics:     true,
+        studyPlanner:  true,
+        videos:        true
+      }
+    }
+  ]
+});
+</script>
+</body>
+</html>
