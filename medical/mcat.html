@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<!-- MCAT Score Dashboard -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Overall Performance</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w:      clamp(190px, 15vw, 230px);
+      --topbar-h:       clamp(46px,  5vh,  56px);
+      --uw-blue:        #0B6FBE;
+      --uw-blue-lt:     #1A80D0;
+      --uw-blue-dim:    #4A9FD8;
+      --sidebar-bg:     #1B2D3E;
+      --sidebar-active: #243D52;
+      --sidebar-border: #263F54;
+      --sidebar-text:   #A0B4C8;
+      --sidebar-icon:   #6B8BA4;
+      --content-bg:     #EEF1F5;
+      --panel-border:   #DDE3EA;
+      --font-nav:       clamp(11.5px, 0.95vw, 13.5px);
+      --font-base:      clamp(12px,   1vw,    13.5px);
+      --font-sm:        clamp(10.5px, 0.85vw, 12px);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--content-bg);
+      display: flex; height: 100vh; overflow: hidden;
+      font-size: var(--font-base); color: #2D3748;
+    }
+
+    /* ═══════ SIDEBAR ═══════ */
+    .sidebar {
+      width: var(--sidebar-w); min-width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
+    }
+    .sidebar-brand {
+      padding: clamp(14px,1.8vh,20px) clamp(10px,1vw,16px) clamp(10px,1.2vh,14px);
+      border-bottom: 1px solid var(--sidebar-border); text-align: center;
+    }
+    .brand-logo {
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto clamp(8px,0.9vh,12px);
+    }
+    .brand-logo img { width: clamp(48px,5vw,64px); height: auto; display: block; }
+    .brand-name { font-size: clamp(20px,1.8vw,26px); font-weight: 700; color: #fff; letter-spacing: 0.3px; }
+    .brand-sub  { font-size: clamp(11px,0.95vw,13px); color: #C8D4E0; margin-top: 4px; font-weight: 600; }
+    .brand-user { font-size: clamp(10.5px,0.88vw,12.5px); color: #8FA3B8; margin-top: 8px; }
+
+    .nav { flex: 1; padding: clamp(4px,0.5vh,8px) 0; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: clamp(7px,0.6vw,10px);
+      padding: clamp(8px,0.85vh,11px) clamp(14px,1.1vw,18px);
+      cursor: pointer; font-size: var(--font-nav); color: var(--sidebar-text);
+      transition: background .12s, color .12s;
+      white-space: nowrap; border-left: 3px solid transparent;
+    }
+    .nav-item:hover           { background: var(--sidebar-active); color: #fff; }
+    .nav-item.active          { background: var(--sidebar-active); color: #fff; border-left-color: var(--uw-blue-dim); }
+    .nav-item.sub             { padding-left: clamp(26px,2.2vw,34px); font-size: clamp(11px,0.9vw,12.5px); }
+    .nav-item.sub.active      { color: var(--uw-blue-dim); border-left-color: var(--uw-blue-dim); }
+    .nav-item.deep            { padding-left: clamp(38px,3.2vw,50px); }
+    .nav-item .icon           { font-size: clamp(11px,0.95vw,13px); width: clamp(14px,1.2vw,18px); text-align: center; color: var(--sidebar-icon); flex-shrink: 0; }
+    .nav-item:hover .icon,
+    .nav-item.active .icon    { color: #fff; }
+    .nav-item.sub.active .icon{ color: var(--uw-blue-dim); }
+    .nav-item .arrow          { margin-left: auto; font-size: clamp(8px,0.7vw,10px); color: #3E5770; }
+
+    .sidebar-footer {
+      padding: clamp(8px,0.9vh,12px) clamp(12px,1vw,16px);
+      border-top: 1px solid var(--sidebar-border);
+      font-size: clamp(9.5px,0.8vw,11px); color: #3E5770;
+    }
+    .sidebar-footer span { display: block; }
+
+    /* ═══════ MAIN ═══════ */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    /* ═══════ TOPBAR ═══════ */
+    .topbar {
+      background: #fff; border-bottom: 1px solid #DDE3EA;
+      display: flex; align-items: center;
+      padding: 0 clamp(14px,1.5vw,24px);
+      height: var(--topbar-h); flex-shrink: 0; gap: clamp(10px,1vw,16px);
+    }
+    .topbar-hamburger {
+      background: var(--uw-blue); color: #fff; border: none; border-radius: 4px;
+      width: clamp(26px,2.5vw,32px); height: clamp(24px,2.2vh,30px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: clamp(12px,1.1vw,15px); flex-shrink: 0;
+    }
+    .topbar-title {
+      font-size: clamp(14px,1.3vw,18px); font-weight: 700; color: #1A202C; flex: 1;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .topbar-nav { display: flex; align-items: center; gap: clamp(8px,0.9vw,14px); flex-shrink: 0; }
+    .topbar-nav a {
+      font-size: clamp(11px,0.9vw,13px); color: #4A5568; text-decoration: none;
+      display: flex; align-items: center; gap: 4px; white-space: nowrap;
+    }
+    .topbar-nav a:hover        { color: var(--uw-blue); }
+    .topbar-nav a.highlight    { color: var(--uw-blue); font-weight: 600; }
+    .topbar-nav .sep           { color: #CBD5E0; font-size: 13px; }
+
+    /* ═══════ CONTENT ═══════ */
+    .content {
+      flex: 1; overflow-y: auto;
+      padding: clamp(12px,1.5vh,20px) clamp(12px,1.5vw,20px) clamp(16px,2vh,24px);
+    }
+
+    /* section heading row */
+    .sec-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: clamp(10px,1.2vh,16px);
+    }
+    .sec-header h2 { font-size: clamp(13px,1.1vw,15px); font-weight: 700; color: #1A202C; }
+    .btn-print {
+      background: none; border: none; color: var(--uw-blue);
+      cursor: pointer; font-size: clamp(11px,0.9vw,13px);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .btn-print:hover { text-decoration: underline; }
+
+    /* ─── white content panel ─── */
+    .panel {
+      background: #fff; border: 1px solid var(--panel-border);
+      border-radius: 5px; margin-bottom: clamp(10px,1.2vh,16px);
+      width: 100%;
+    }
+    /* score panel is centered, narrower than full width */
+    .panel.score-panel {
+      max-width: clamp(560px, 62%, 880px);
+      margin-left: auto; margin-right: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    /* ═══════ POINTS SCORED / PROBABLE SCORE ═══════ */
+    .score-section { padding: clamp(14px,1.5vh,20px) clamp(18px,1.8vw,28px) clamp(16px,1.8vh,22px); }
+
+    .score-label-row {
+      display: flex; align-items: center; gap: clamp(5px,0.5vw,8px);
+      margin-bottom: clamp(8px,0.9vh,12px); flex-wrap: nowrap;
+    }
+    .score-label-row .lbl  { font-size: clamp(12px,1vw,14px); font-weight: 700; color: #2D3748; white-space: nowrap; }
+    .score-label-row .band { font-size: clamp(12px,1vw,14px); font-weight: 700; color: #C53030; white-space: nowrap; }
+    .score-label-row .band.borderline { color: #C05621; }
+    .score-label-row .band.high       { color: #276749; }
+    .score-label-row .band.very-high  { color: #2C5282; }
+    .score-label-row .fa-circle-info  { font-size: clamp(12px,1vw,14px); color: #A0AEC0; cursor: pointer; }
+    .score-label-row .spacer          { flex: 1; }
+
+    /* simulated badge — appears beside the score when user has checked items */
+    .sim-badge {
+      display: none; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      color: #92400E; border: 1px solid #FCD34D;
+      border-radius: 11px; padding: 2px 9px;
+      font-size: clamp(9px, 0.78vw, 11px); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.4px;
+      animation: simPulse 1.6s ease-in-out infinite;
+    }
+    .sim-badge.active { display: inline-flex; }
+    .sim-badge i { font-size: clamp(8px, 0.7vw, 10px); }
+    @keyframes simPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(252, 211, 77, 0.4); }
+      50%      { box-shadow: 0 0 0 4px rgba(252, 211, 77, 0); }
+    }
+
+    .btn-sim {
+      display: inline-flex; align-items: center; gap: clamp(4px,0.4vw,6px);
+      background: var(--uw-blue); color: #fff;
+      border: none; border-radius: 4px;
+      padding: clamp(4px,0.5vh,7px) clamp(10px,1vw,16px);
+      font-size: clamp(11px,0.9vw,13px); font-weight: 600; cursor: pointer;
+      transition: background .12s; white-space: nowrap;
+    }
+    .btn-sim:hover { background: var(--uw-blue-lt); }
+
+    .fa-rotate-right { color: #A0AEC0; cursor: pointer; font-size: clamp(12px,1vw,14px); }
+
+    .score-arrow-row { margin-bottom: 3px; }
+    .score-arrow-row i { color: #4A5568; font-size: clamp(12px,1vw,14px); }
+
+    /* 4-segment bar */
+    .score-bar { display: flex; height: clamp(26px,3vh,34px); border-radius: 4px; overflow: hidden; width: 100%; }
+    .score-seg {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      font-size: clamp(10.5px,0.85vw,12.5px); font-weight: 500; color: #A0AEC0;
+      background: #F3F5F7; border-right: 1px solid #DDE3EA;
+    }
+    .score-seg:last-child  { border-right: none; }
+    .score-seg.active      { background: #C53030; color: #fff; font-weight: 700; }
+    .score-seg.active.borderline { background: #C05621; }
+    .score-seg.active.high       { background: #276749; }
+    .score-seg.active.very-high  { background: #2C5282; }
+
+    /* ═══════ MIDDLE SECTION ═══════ */
+    .middle-section { display: flex; gap: 0; }
+
+    .circles-col {
+      width: clamp(130px, 12vw, 170px); flex-shrink: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: space-evenly;
+      padding: clamp(12px,1.4vh,18px) clamp(8px,0.8vw,14px);
+      border-right: 1px solid var(--panel-border);
+    }
+
+    .ring-wrap { position: relative; width: clamp(90px,9vw,120px); height: clamp(90px,9vw,120px); }
+    .ring-wrap svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .ring-center {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center; line-height: 1.3;
+    }
+    .ring-center .rpct  { font-size: clamp(17px,1.8vw,22px); font-weight: 700; color: #2D3748; }
+    .ring-center .rlbl  { font-size: clamp(9px,0.8vw,11px); color: #718096; }
+
+    /* stats 2×2 grid */
+    .stats-grid {
+      flex: 1; min-width: 0;
+      display: grid; grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .stat-section {
+      padding: clamp(10px,1.2vh,16px) clamp(12px,1.2vw,22px);
+      border-right: 1px solid var(--panel-border);
+      border-bottom: 1px solid var(--panel-border);
+    }
+    .stat-section:nth-child(2)  { border-right: none; }
+    .stat-section:nth-child(3)  { border-bottom: none; }
+    .stat-section:nth-child(4)  { border-right: none; border-bottom: none; }
+
+    .stat-title { font-size: clamp(11.5px,1vw,13.5px); font-weight: 700; color: var(--uw-blue); margin-bottom: clamp(7px,0.8vh,11px); }
+    .stat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: clamp(4px,0.45vh,7px) 0; border-bottom: 1px solid #F3F5F7;
+      font-size: clamp(11px,0.9vw,13px); color: #4A5568;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-badge {
+      background: #EBF0F7; color: #2D3748; border-radius: 10px;
+      min-width: clamp(26px,2.5vw,36px); height: clamp(18px,1.8vh,24px);
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(10px,0.85vw,12px); font-weight: 700; padding: 0 6px;
+    }
+
+    /* ═══════ BOTTOM SECTION ═══════ */
+    .bottom-section {
+      display: grid; grid-template-columns: 3fr 2fr;
+      gap: clamp(10px,1.2vw,16px); width: 100%;
+    }
+
+    .curve-panel {
+      background: #fff; border: 1px solid var(--panel-border);
+      border-radius: 5px; padding: clamp(10px,1.2vh,16px) clamp(10px,1vw,14px) clamp(6px,0.7vh,10px);
+    }
+
+    .percentile-panel {
+      background: #fff; border: 1px solid var(--panel-border);
+      border-radius: 5px; padding: clamp(10px,1.2vh,16px) clamp(14px,1.4vw,22px);
+    }
+    .ptitle { font-size: clamp(12px,1.05vw,14px); font-weight: 700; color: #1A202C; margin-bottom: clamp(8px,0.9vh,12px); }
+    .p-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: clamp(5px,0.55vh,8px) 0; border-bottom: 1px solid #F3F5F7;
+      font-size: clamp(11px,0.9vw,13px); color: #4A5568;
+    }
+    .p-row:last-child { border-bottom: none; }
+    .p-key { display: flex; align-items: center; gap: 6px; }
+    .dot { width: clamp(8px,0.8vw,11px); height: clamp(8px,0.8vw,11px); border-radius: 50%; flex-shrink: 0; }
+    .dot-green { background: #27AE60; }
+    .dot-blue  { background: var(--uw-blue); }
+    .p-val { font-weight: 700; color: #2D3748; font-size: clamp(11px,0.9vw,13px); }
+
+    /* ═══════ SIMULATOR MODAL ═══════ */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(2px);
+      display: none; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff; border-radius: 10px;
+      width: clamp(480px, 55vw, 720px); max-width: 95vw; max-height: 88vh;
+      display: flex; flex-direction: column;
+      box-shadow: 0 24px 64px rgba(0,0,0,.22);
+      animation: mIn .2s ease;
+    }
+    @keyframes mIn {
+      from { opacity:0; transform: translateY(-14px) scale(.97); }
+      to   { opacity:1; transform: translateY(0)     scale(1);   }
+    }
+
+    .modal-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: clamp(12px,1.3vh,16px) clamp(14px,1.4vw,20px);
+      border-bottom: 1px solid #E2E8F0; flex-shrink: 0;
+    }
+    .modal-head-icon {
+      width: clamp(28px,2.8vw,34px); height: clamp(28px,2.8vw,34px);
+      border-radius: 7px; background: #EBF4FF;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--uw-blue); font-size: clamp(12px,1.1vw,14px);
+    }
+    .modal-head-text { flex: 1; }
+    .modal-head-title { font-size: clamp(13px,1.1vw,15px); font-weight: 700; color: #1A202C; }
+    .modal-head-sub   { font-size: clamp(10px,0.85vw,12px); color: #718096; }
+    .modal-close {
+      background: #F7FAFC; border: none; border-radius: 5px;
+      width: clamp(24px,2.3vw,30px); height: clamp(24px,2.3vw,30px);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #718096; font-size: clamp(11px,0.95vw,13px);
+    }
+    .modal-close:hover { background: #E2E8F0; }
+
+    .modal-body  { flex:1; overflow-y:auto; padding: clamp(12px,1.4vh,18px) clamp(14px,1.4vw,20px); }
+    .modal-foot  {
+      padding: clamp(8px,0.9vh,12px) clamp(14px,1.4vw,20px);
+      border-top: 1px solid #E2E8F0; flex-shrink: 0;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .pot-banner {
+      display: flex; align-items: center; gap: 10px;
+      background: #F0FDF4; border: 1px solid #C6F6D5;
+      border-radius: 6px; padding: clamp(7px,0.8vh,10px) 12px; margin-bottom: clamp(10px,1.2vh,16px);
+    }
+    .pot-banner i    { font-size: clamp(14px,1.4vw,18px); color: #276749; }
+    .pot-banner-txt  { flex:1; font-size: clamp(11px,0.9vw,13px); color: #276749; }
+    .pot-banner-num  { font-size: clamp(18px,2vw,26px); font-weight: 800; color: #276749; line-height: 1; }
+    .pot-banner-lbl  { font-size: clamp(9px,0.8vw,11px); color: #68D391; text-align: right; }
+
+    .sim-cats { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px,0.9vw,12px); }
+
+    .sim-cat { border: 1px solid #E2E8F0; border-radius: 7px; overflow: hidden; }
+
+    .sim-cat-hd {
+      display: flex; align-items: center; gap: 8px;
+      padding: clamp(8px,0.9vh,11px) clamp(9px,0.9vw,13px);
+      cursor: pointer; user-select: none; background: #F8FAFC;
+    }
+    .sim-cat-hd:hover { background: #EDF2F7; }
+    .sim-cat-ic {
+      width: clamp(24px,2.4vw,30px); height: clamp(24px,2.4vw,30px);
+      border-radius: 5px; display: flex; align-items: center; justify-content: center;
+      font-size: clamp(11px,0.95vw,13px); color: #fff; flex-shrink: 0;
+    }
+    .sim-cat-inf { flex:1; min-width: 0; }
+    .sim-cat-nm  { font-size: clamp(11px,0.95vw,13px); font-weight: 700; color: #2D3748; }
+    .sim-cat-sb  { font-size: clamp(9.5px,0.8vw,11px); color: #718096; }
+    .sim-cat-rt  { text-align: right; flex-shrink:0; }
+    .sim-cat-pts { font-size: clamp(10px,0.85vw,12px); font-weight: 700; color: #276749; }
+    .sim-chev    { font-size: clamp(8px,0.7vw,10px); color: #A0AEC0; transition: transform .2s; display:block; margin-top:2px; }
+    .sim-chev.open { transform: rotate(180deg); }
+
+    .sim-bar     { height: 3px; background: #E2E8F0; }
+    .sim-bar-fill{ height: 100%; width: 0; transition: width .4s; border-radius: 2px; }
+
+    .sim-items { display: none; padding: 3px 0; }
+    .sim-items.open { display: block; }
+
+    .sim-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: clamp(4px,0.5vh,7px) clamp(9px,0.9vw,13px); cursor: pointer;
+    }
+    .sim-item:hover { background: #F7FAFC; }
+    .sim-item input { width: 13px; height: 13px; cursor: pointer; flex-shrink:0; accent-color: var(--uw-blue); }
+    .sim-item-nm { flex:1; font-size: clamp(10.5px,0.88vw,12px); color: #4A5568; }
+    .sim-item.done .sim-item-nm { text-decoration: line-through; color: #A0AEC0; }
+    .sim-item-pts { font-size: clamp(9.5px,0.8vw,11px); font-weight: 700; color: #27AE60; flex-shrink:0; }
+
+    .ov-bar-wrap { flex:1; background: #E2E8F0; border-radius: 4px; height: 6px; }
+    .ov-bar      { height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg, var(--uw-blue), #27AE60); transition: width .4s; }
+    .ov-pct      { font-size: clamp(11px,0.9vw,13px); font-weight: 700; color: #2D3748; white-space: nowrap; }
+
+    .btn-reset {
+      background: none; border: 1px solid #E2E8F0; border-radius: 5px;
+      padding: clamp(3px,0.4vh,6px) clamp(8px,0.8vw,12px);
+      font-size: clamp(10.5px,0.88vw,12px); color: #718096; cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .btn-reset:hover { background: #F7FAFC; }
+  </style>
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <img src="../assets/images/UWorld logo icon.png" alt="UWorld" />
+    </div>
+    <div class="brand-name">UWorld</div>
+    <div class="brand-sub">MCAT Comprehensive</div>
+    <div class="brand-user">Santhosh Keesari</div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-item"><i class="icon fa-solid fa-gauge"></i>Dashboard</div>
+    <div class="nav-item"><i class="icon fa-solid fa-calendar-days"></i>Study Planner</div>
+    <div class="nav-item"><i class="icon fa-solid fa-book-open"></i>UBooks + Videos</div>
+    <div class="nav-item"><i class="icon fa-solid fa-database"></i>QBank<i class="arrow fa-solid fa-chevron-down"></i></div>
+    <div class="nav-item sub"><i class="icon fa-solid fa-pen"></i>Create Test</div>
+    <div class="nav-item sub"><i class="icon fa-solid fa-clipboard-list"></i>Previous Tests</div>
+    <div class="nav-item sub"><i class="icon fa-solid fa-chart-bar"></i>Performance<i class="arrow fa-solid fa-chevron-down"></i></div>
+    <div class="nav-item deep active"><i class="icon fa-solid fa-circle-dot"></i>Overall</div>
+    <div class="nav-item deep"><i class="icon fa-solid fa-file-lines"></i>Reports</div>
+    <div class="nav-item deep"><i class="icon fa-solid fa-chart-line"></i>Graphs</div>
+    <div class="nav-item"><i class="icon fa-solid fa-magnifying-glass"></i>Search</div>
+    <div class="nav-item"><i class="icon fa-solid fa-file-pen"></i>Practice Exams<i class="arrow fa-solid fa-chevron-right"></i></div>
+    <div class="nav-item"><i class="icon fa-solid fa-building-columns"></i>AAMC®</div>
+    <div class="nav-item"><i class="icon fa-solid fa-layer-group"></i>Flashcards<i class="arrow fa-solid fa-chevron-right"></i></div>
+    <div class="nav-item"><i class="icon fa-solid fa-book"></i>My Notebook</div>
+    <div class="nav-item"><i class="icon fa-solid fa-rotate"></i>Reset Options</div>
+    <div class="nav-item"><i class="icon fa-solid fa-circle-question"></i>Help</div>
+    <div class="nav-item"><i class="icon fa-solid fa-comments"></i>Forum</div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span>Expiration Date</span>
+    <span>Apr 02, 2027 11:59 PM EDT</span>
+  </div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="topbar-hamburger"><i class="fa-solid fa-bars"></i></button>
+    <span class="topbar-title">Overall Performance</span>
+    <nav class="topbar-nav">
+      <a href="#" class="highlight"><i class="fa-solid fa-star"></i> What's New</a>
+      <span class="sep">|</span>
+      <a href="#">MCAT Comprehensive <i class="fa-solid fa-chevron-down" style="font-size:9px"></i></a>
+      <span class="sep">|</span>
+      <a href="#"><i class="fa-solid fa-calendar-days"></i> Test Date</a>
+      <span class="sep">|</span>
+      <a href="#"><i class="fa-solid fa-house"></i> My Account</a>
+      <span class="sep">|</span>
+      <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Log out</a>
+    </nav>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- heading row -->
+    <div class="sec-header">
+      <h2>Statistics</h2>
+      <button class="btn-print"><i class="fa-solid fa-print"></i> Print</button>
+    </div>
+
+    <!-- ── PROBABLE MCAT SCORE (centered card, not full width) ── -->
+    <div class="panel score-panel">
+      <div class="score-section">
+        <div class="score-label-row">
+          <span class="lbl">Probable MCAT Score :</span>
+          <span class="band" id="bandLabel">474 &nbsp;–&nbsp; Low</span>
+          <span class="sim-badge" id="simBadge"><i class="fa-solid fa-wand-magic-sparkles"></i> Simulated</span>
+          <i class="fa-solid fa-circle-info" title="Estimated score based on your QBank performance"></i>
+          <span class="spacer"></span>
+          <button class="btn-sim" onclick="openSimulator()">
+            <i class="fa-solid fa-sliders"></i> Simulate Score
+          </button>
+          <i class="fa-solid fa-rotate-right" onclick="resetSimulator()" title="Reset simulator"></i>
+        </div>
+        <div class="score-arrow-row" id="arrowRow" style="padding-left:12.5%">
+          <i class="fa-solid fa-caret-down"></i>
+        </div>
+        <div class="score-bar">
+          <div class="score-seg active" id="seg-low">Low</div>
+          <div class="score-seg" id="seg-borderline">Borderline</div>
+          <div class="score-seg" id="seg-high">High</div>
+          <div class="score-seg" id="seg-very-high">Very High</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CIRCLES + STATS ── -->
+    <div class="panel middle-section">
+
+      <div class="circles-col">
+        <!-- 23% Correct -->
+        <div class="ring-wrap">
+          <svg viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="44" stroke="#D6F5E3" stroke-width="9" fill="none"/>
+            <circle cx="55" cy="55" r="44" stroke="#27AE60" stroke-width="9" fill="none"
+              stroke-dasharray="63 276" stroke-linecap="round"/>
+          </svg>
+          <div class="ring-center">
+            <div class="rpct">23%</div>
+            <div class="rlbl">Correct</div>
+          </div>
+        </div>
+        <!-- 3% Used -->
+        <div class="ring-wrap">
+          <svg viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="44" stroke="#DBEAFE" stroke-width="9" fill="none"/>
+            <circle cx="55" cy="55" r="44" stroke="#0B6FBE" stroke-width="9" fill="none"
+              stroke-dasharray="8 276" stroke-linecap="round"/>
+          </svg>
+          <div class="ring-center">
+            <div class="rpct">3%</div>
+            <div class="rlbl">Used</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2×2 stat grid -->
+      <div class="stats-grid">
+        <div class="stat-section">
+          <div class="stat-title">Your Score</div>
+          <div class="stat-row"><span>Total Correct</span><span class="stat-badge">19</span></div>
+          <div class="stat-row"><span>Total Incorrect</span><span class="stat-badge">62</span></div>
+          <div class="stat-row"><span>Total Omitted</span><span class="stat-badge">1</span></div>
+        </div>
+        <div class="stat-section">
+          <div class="stat-title">Answer Changes</div>
+          <div class="stat-row"><span>Correct to Incorrect</span><span class="stat-badge">0</span></div>
+          <div class="stat-row"><span>Incorrect to Correct</span><span class="stat-badge">0</span></div>
+          <div class="stat-row"><span>Incorrect to Incorrect</span><span class="stat-badge">0</span></div>
+        </div>
+        <div class="stat-section">
+          <div class="stat-title">QBank Usage</div>
+          <div class="stat-row"><span>Used Questions</span><span class="stat-badge">90</span></div>
+          <div class="stat-row"><span>Unused Questions</span><span class="stat-badge">2929</span></div>
+          <div class="stat-row"><span>Total Questions</span><span class="stat-badge">3019</span></div>
+        </div>
+        <div class="stat-section">
+          <div class="stat-title">Test Count</div>
+          <div class="stat-row"><span>Tests Created</span><span class="stat-badge">2</span></div>
+          <div class="stat-row"><span>Tests Completed</span><span class="stat-badge">2</span></div>
+          <div class="stat-row"><span>Suspended Tests</span><span class="stat-badge">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BELL CURVE + PERCENTILE RANK ── -->
+    <div class="bottom-section">
+      <div class="curve-panel">
+        <canvas id="bellCurve"></canvas>
+      </div>
+      <div class="percentile-panel">
+        <div class="ptitle">Percentile Rank</div>
+        <div class="p-row">
+          <span class="p-key"><span class="dot dot-green"></span>Your Score (2nd rank)</span>
+          <span class="p-val">23%</span>
+        </div>
+        <div class="p-row">
+          <span class="p-key"><span class="dot dot-blue"></span>Median Score (50th rank)</span>
+          <span class="p-val">60%</span>
+        </div>
+        <div class="p-row">
+          <span class="p-key">Your Avg Time Spent (sec)</span>
+          <span class="p-val">1</span>
+        </div>
+        <div class="p-row">
+          <span class="p-key">Others' Avg Time Spent (sec)</span>
+          <span class="p-val">64</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ════════ SIMULATOR MODAL ════════ -->
+<div class="modal-overlay" id="simOverlay" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-head-icon"><i class="fa-solid fa-sliders"></i></div>
+      <div class="modal-head-text">
+        <div class="modal-head-title">Score Simulator</div>
+        <div class="modal-head-sub">Check off learning items to see your probable score improve in real time</div>
+      </div>
+      <button class="modal-close" onclick="closeSimulator()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="pot-banner">
+        <i class="fa-solid fa-rocket"></i>
+        <div class="pot-banner-txt">Complete all activities to potentially reach</div>
+        <div>
+          <div class="pot-banner-num">519</div>
+          <div class="pot-banner-lbl">Max potential</div>
+        </div>
+      </div>
+      <div class="sim-cats" id="simCats"></div>
+    </div>
+
+    <div class="modal-foot">
+      <i class="fa-solid fa-circle-check" style="color:#27AE60;font-size:13px"></i>
+      <span style="font-size:12px;color:#4A5568">Progress</span>
+      <div class="ov-bar-wrap"><div class="ov-bar" id="ovBar"></div></div>
+      <span class="ov-pct" id="ovPct">0 / 0</span>
+      <button class="btn-reset" onclick="resetSimulator()">
+        <i class="fa-solid fa-rotate"></i> Reset
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATS = [
+  { id:'ubooks', name:'UBooks + Videos', icon:'fa-book-open', color:'#0B6FBE', items:[
+    { name:'Chem & Physics: Atomic Structure',   pts:1.5 },
+    { name:'Chem & Physics: Thermodynamics',     pts:1.5 },
+    { name:'Biology: Cell Biology & Genetics',   pts:2   },
+    { name:'Biology: Organ Systems',             pts:2   },
+    { name:'Biochemistry: Enzymes & Metabolism', pts:2   },
+    { name:'Psychology & Sociology',             pts:2   },
+    { name:'CARS Strategy Videos',               pts:2   },
+  ]},
+  { id:'practice', name:'Practice Exams', icon:'fa-file-pen', color:'#C05621', items:[
+    { name:'Full-Length Practice Exam 1', pts:4 },
+    { name:'Full-Length Practice Exam 2', pts:4 },
+    { name:'Full-Length Practice Exam 3', pts:4 },
+    { name:'Section Test: Chem / Physics', pts:2 },
+    { name:'Section Test: CARS',           pts:2 },
+    { name:'Section Test: Bio / Biochem',  pts:2 },
+  ]},
+  { id:'flashcards', name:'Flashcards', icon:'fa-layer-group', color:'#6B46C1', items:[
+    { name:'Biology & Biochemistry Deck', pts:1.5 },
+    { name:'General Chemistry Deck',      pts:1.5 },
+    { name:'Organic Chemistry Deck',      pts:1.5 },
+    { name:'Physics Deck',                pts:1.5 },
+    { name:'Psychology & Sociology Deck', pts:1.5 },
+    { name:'High-Yield CARS Vocab Deck',  pts:1   },
+  ]},
+  { id:'aamc', name:'AAMC® Materials', icon:'fa-building-columns', color:'#2C7A7B', items:[
+    { name:'AAMC Sample Test',       pts:3 },
+    { name:'AAMC Practice Exam 1',   pts:4 },
+    { name:'AAMC Practice Exam 2',   pts:4 },
+    { name:'AAMC Question Packs',    pts:2 },
+    { name:'AAMC Section Bank',      pts:3 },
+  ]},
+];
+
+const BASE = 474;
+
+const catsEl = document.getElementById('simCats');
+CATS.forEach(cat => {
+  const total = cat.items.reduce((s,i) => s + i.pts, 0);
+  const d = document.createElement('div');
+  d.className = 'sim-cat';
+  d.innerHTML = `
+    <div class="sim-cat-hd" onclick="toggleCat('${cat.id}')">
+      <div class="sim-cat-ic" style="background:${cat.color}"><i class="fa-solid ${cat.icon}"></i></div>
+      <div class="sim-cat-inf">
+        <div class="sim-cat-nm">${cat.name}</div>
+        <div class="sim-cat-sb" id="csub-${cat.id}">0 / ${cat.items.length} completed</div>
+      </div>
+      <div class="sim-cat-rt">
+        <div class="sim-cat-pts">+${total} pts</div>
+        <i class="fa-solid fa-chevron-down sim-chev" id="cchev-${cat.id}"></i>
+      </div>
+    </div>
+    <div class="sim-bar"><div class="sim-bar-fill" id="cbar-${cat.id}" style="background:${cat.color}"></div></div>
+    <div class="sim-items" id="citems-${cat.id}">
+      ${cat.items.map((it,idx) => `
+        <label class="sim-item" id="crow-${cat.id}-${idx}">
+          <input type="checkbox" data-cat="${cat.id}" data-pts="${it.pts}" onchange="onCheck()">
+          <span class="sim-item-nm">${it.name}</span>
+          <span class="sim-item-pts">+${it.pts}</span>
+        </label>`).join('')}
+    </div>`;
+  catsEl.appendChild(d);
+});
+
+function toggleCat(id) {
+  document.getElementById(`citems-${id}`).classList.toggle('open');
+  document.getElementById(`cchev-${id}`).classList.toggle('open');
+}
+
+function getBand(s) {
+  if (s <= 499) return 'low';
+  if (s <= 504) return 'borderline';
+  if (s <= 514) return 'high';
+  return 'very-high';
+}
+function getBandLabel(s) {
+  if (s <= 499) return 'Low';
+  if (s <= 504) return 'Borderline';
+  if (s <= 514) return 'High';
+  return 'Very High';
+}
+
+function onCheck() {
+  let gained = 0;
+  document.querySelectorAll('.sim-item input:checked').forEach(cb => { gained += parseFloat(cb.dataset.pts); });
+  document.querySelectorAll('.sim-item').forEach(row => {
+    row.classList.toggle('done', row.querySelector('input').checked);
+  });
+
+  const score = Math.min(528, Math.round(BASE + gained));
+  const band  = getBand(score);
+  const lbl   = getBandLabel(score);
+
+  const bl = document.getElementById('bandLabel');
+  bl.textContent = score + ' – ' + lbl;
+  bl.className = 'band ' + (band === 'low' ? '' : band);
+
+  // toggle Simulated badge whenever any item is checked
+  document.getElementById('simBadge').classList.toggle('active', gained > 0);
+
+  ['low','borderline','high','very-high'].forEach(b => {
+    const el = document.getElementById('seg-' + b);
+    el.className = 'score-seg' + (b === band ? ' active ' + b : '');
+  });
+
+  const pcts = [12.5, 37.5, 62.5, 87.5];
+  const idx  = ['low','borderline','high','very-high'].indexOf(band);
+  document.getElementById('arrowRow').style.paddingLeft = 'calc(' + pcts[idx] + '% - 6px)';
+
+  CATS.forEach(cat => {
+    const done = [...document.querySelectorAll(`input[data-cat="${cat.id}"]:checked`)].length;
+    const tot  = cat.items.length;
+    document.getElementById(`cbar-${cat.id}`).style.width = (done/tot*100) + '%';
+    document.getElementById(`csub-${cat.id}`).textContent = `${done} / ${tot} completed`;
+  });
+
+  const all  = document.querySelectorAll('.sim-item input').length;
+  const done = document.querySelectorAll('.sim-item input:checked').length;
+  document.getElementById('ovBar').style.width = (done/all*100) + '%';
+  document.getElementById('ovPct').textContent = done + ' / ' + all;
+}
+
+function resetSimulator() {
+  document.querySelectorAll('.sim-item input').forEach(cb => { cb.checked = false; });
+  document.querySelectorAll('.sim-item').forEach(r => r.classList.remove('done'));
+  onCheck();
+}
+
+function openSimulator()  {
+  // always open with all categories collapsed
+  document.querySelectorAll('.sim-items').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.sim-chev').forEach(el => el.classList.remove('open'));
+  document.getElementById('simOverlay').classList.add('open');
+}
+function closeSimulator() { document.getElementById('simOverlay').classList.remove('open'); }
+function overlayClick(e)  { if (e.target === document.getElementById('simOverlay')) closeSimulator(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSimulator(); });
+
+onCheck();
+
+// ═══════════════════════════════
+// BELL CURVE
+// ═══════════════════════════════
+const canvas = document.getElementById('bellCurve');
+const ctx    = canvas.getContext('2d');
+
+function resize() {
+  const parent = canvas.parentElement;
+  canvas.width  = parent.clientWidth - 20;
+  canvas.height = Math.max(150, Math.round(parent.clientHeight * 0.85 || 190));
+  draw();
+}
+
+function bellY(x, mu, sigma) {
+  return Math.exp(-0.5 * ((x - mu) / sigma) ** 2);
+}
+
+function draw() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  const mu=.5, sigma=.15;
+  const pL=44, pR=20, pT=24, pB=30;
+  const pw = W-pL-pR, ph = H-pT-pB;
+
+  const pts = Array.from({length:201},(_,i) => {
+    const t = i/200;
+    return { x: pL + t*pw, y: pT + ph - bellY(t,mu,sigma)*ph*.9 };
+  });
+
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pT+ph);
+  pts.forEach(p => ctx.lineTo(p.x, p.y));
+  ctx.lineTo(pts[200].x, pT+ph);
+  ctx.closePath();
+  const g = ctx.createLinearGradient(0,pT,0,pT+ph);
+  g.addColorStop(0,'rgba(11,111,190,.18)');
+  g.addColorStop(1,'rgba(11,111,190,.03)');
+  ctx.fillStyle = g; ctx.fill();
+
+  ctx.beginPath();
+  pts.forEach((p,i) => i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.strokeStyle='#0B6FBE'; ctx.lineWidth=2.5; ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(pL, pT+ph); ctx.lineTo(pL+pw, pT+ph);
+  ctx.strokeStyle='#DDE3EA'; ctx.lineWidth=1; ctx.stroke();
+
+  const x50 = pL + .5*pw;
+  ctx.beginPath(); ctx.moveTo(x50,pT); ctx.lineTo(x50,pT+ph);
+  ctx.strokeStyle='#0B6FBE'; ctx.lineWidth=1.5;
+  ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#2D3748'; ctx.font='bold 11px sans-serif';
+  ctx.textAlign='center'; ctx.fillText('50th', x50, pT-8);
+
+  const x2 = pL + .14*pw;
+  ctx.beginPath(); ctx.arc(x2, pT+ph-2, 6,0,Math.PI*2);
+  ctx.fillStyle='#27AE60'; ctx.fill();
+  ctx.fillStyle='#27AE60'; ctx.font='bold 11px sans-serif';
+  ctx.textAlign='center'; ctx.fillText('2nd', x2, pT+ph+18);
+}
+
+resize();
+window.addEventListener('resize', resize);
+</script>
+</body>
+</html>
