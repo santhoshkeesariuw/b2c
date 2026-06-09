@@ -465,24 +465,40 @@
   }
 
   /* ═══════════════════════════════════
+     MODAL HELPERS
+     ═══════════════════════════════════ */
+  function showModal(id) {
+    var el = document.getElementById(id);
+    if (el) { el.hidden = false; el.focus(); }
+  }
+
+  function hideModal(id) {
+    var el = document.getElementById(id);
+    if (el) el.hidden = true;
+  }
+
+  /* ═══════════════════════════════════
      END TEST
      ═══════════════════════════════════ */
   function endTest() {
-    var answered  = submitted.filter(Boolean).length;
-    var total     = QUESTIONS.length;
-    var correct   = 0;
+    clearInterval(timerHandle);
+
+    var answered = submitted.filter(Boolean).length;
+    var total    = QUESTIONS.length;
+    var correct  = 0;
     submitted.forEach(function (s, i) {
       if (s && answers[i] === QUESTIONS[i].correct) correct++;
     });
+    var pct = answered ? Math.round((correct / answered) * 100) + '%' : '—';
 
-    var msg = 'Test ended.\n\nSummary:\nAnswered: ' + answered + ' / ' + total +
-              '\nCorrect: ' + correct + ' / ' + answered +
-              (answered ? ' (' + Math.round((correct / answered) * 100) + '%)' : '') +
-              '\nTime: ' + fmtTime(timerSecs);
+    /* Populate results modal */
+    document.getElementById('mr-topic').textContent    = TOPIC;
+    document.getElementById('mr-answered').textContent = answered + ' / ' + total;
+    document.getElementById('mr-correct').textContent  = correct + ' / ' + answered;
+    document.getElementById('mr-pct').textContent      = pct;
+    document.getElementById('mr-time').textContent     = fmtTime(timerSecs);
 
-    clearInterval(timerHandle);
-    alert(msg);
-    window.location.href = 'mcat.html';
+    showModal('modal-results');
   }
 
   /* ═══════════════════════════════════
@@ -520,15 +536,43 @@
       }
     });
 
-    /* End / Suspend */
+    /* End / Suspend — open confirm modals */
     document.getElementById('btn-end').addEventListener('click', function () {
-      if (confirm('End this test and return to the dashboard?')) endTest();
+      showModal('modal-confirm-end');
     });
     document.getElementById('btn-suspend').addEventListener('click', function () {
-      if (confirm('Suspend this test? Your progress will be saved.')) {
-        clearInterval(timerHandle);
-        window.location.href = 'mcat.html';
-      }
+      showModal('modal-confirm-suspend');
+    });
+
+    /* Modal: Confirm End */
+    document.getElementById('mce-cancel').addEventListener('click', function () {
+      hideModal('modal-confirm-end');
+    });
+    document.getElementById('mce-confirm').addEventListener('click', function () {
+      hideModal('modal-confirm-end');
+      endTest();
+    });
+
+    /* Modal: Confirm Suspend */
+    document.getElementById('mcs-cancel').addEventListener('click', function () {
+      hideModal('modal-confirm-suspend');
+    });
+    document.getElementById('mcs-confirm').addEventListener('click', function () {
+      hideModal('modal-confirm-suspend');
+      clearInterval(timerHandle);
+      window.location.href = 'mcat.html';
+    });
+
+    /* Modal: Results — done */
+    document.getElementById('mr-done').addEventListener('click', function () {
+      window.location.href = 'mcat.html';
+    });
+
+    /* Close modals on overlay click */
+    ['modal-confirm-end', 'modal-confirm-suspend'].forEach(function (id) {
+      document.getElementById(id).addEventListener('click', function (e) {
+        if (e.target === this) hideModal(id);
+      });
     });
 
     /* Keyboard shortcuts */
@@ -539,7 +583,11 @@
       if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         if (!e.target.matches('input,textarea,select')) goTo(current - 1);
       }
-      if (e.key === 'Escape') closeNav();
+      if (e.key === 'Escape') {
+        closeNav();
+        hideModal('modal-confirm-end');
+        hideModal('modal-confirm-suspend');
+      }
       /* Number keys 1-4 to select answer */
       var num = parseInt(e.key, 10);
       if (num >= 1 && num <= 4 && !submitted[current]) {

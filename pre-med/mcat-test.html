@@ -140,6 +140,70 @@
 
 </div><!-- /.test-wrap -->
 
+<!-- ════════ MODALS ════════ -->
+
+<!-- Confirm: End Test -->
+<div class="modal-overlay" id="modal-confirm-end" role="dialog" aria-modal="true" aria-labelledby="mce-title" hidden>
+  <div class="modal-card">
+    <div class="modal-icon modal-icon--warn">
+      <i class="fa-light fa-circle-exclamation"></i>
+    </div>
+    <h2 class="modal-title" id="mce-title">End Test?</h2>
+    <p class="modal-body">This will end your session and return you to the dashboard. Unanswered questions will not be scored.</p>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn--ghost" id="mce-cancel">Cancel</button>
+      <button class="modal-btn modal-btn--danger" id="mce-confirm">End Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm: Suspend Test -->
+<div class="modal-overlay" id="modal-confirm-suspend" role="dialog" aria-modal="true" aria-labelledby="mcs-title" hidden>
+  <div class="modal-card">
+    <div class="modal-icon modal-icon--info">
+      <i class="fa-light fa-hourglass"></i>
+    </div>
+    <h2 class="modal-title" id="mcs-title">Suspend Test?</h2>
+    <p class="modal-body">Your progress will be saved and you can resume this session later from the dashboard.</p>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn--ghost" id="mcs-cancel">Cancel</button>
+      <button class="modal-btn modal-btn--primary" id="mcs-confirm">Suspend</button>
+    </div>
+  </div>
+</div>
+
+<!-- Results Summary -->
+<div class="modal-overlay" id="modal-results" role="dialog" aria-modal="true" aria-labelledby="mr-title" hidden>
+  <div class="modal-card modal-card--results">
+    <div class="modal-icon modal-icon--success">
+      <i class="fa-light fa-circle-check"></i>
+    </div>
+    <h2 class="modal-title" id="mr-title">Test Complete</h2>
+    <p class="modal-body">Here's how you did on <strong id="mr-topic"></strong>.</p>
+    <div class="results-grid">
+      <div class="results-stat">
+        <span class="results-stat__value" id="mr-answered">—</span>
+        <span class="results-stat__label">Answered</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat__value" id="mr-correct">—</span>
+        <span class="results-stat__label">Correct</span>
+      </div>
+      <div class="results-stat results-stat--highlight">
+        <span class="results-stat__value" id="mr-pct">—</span>
+        <span class="results-stat__label">Score</span>
+      </div>
+      <div class="results-stat">
+        <span class="results-stat__value" id="mr-time">—</span>
+        <span class="results-stat__label">Time</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn--primary" id="mr-done">Return to Dashboard</button>
+    </div>
+  </div>
+</div>
+
 <script src="../assets/js/test.js"></script>
 </body>
 </html>
