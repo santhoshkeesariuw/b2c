@@ -419,7 +419,7 @@ html, body {
 
 /* ════════ BOTTOM BAR ════════ */
 .test-bottombar {
-  background: #fff;
+  background: #f8fafc;
   border-top: 1px solid #dde3ea;
   height: 52px;
   min-height: 52px;
@@ -478,28 +478,27 @@ html, body {
   flex-shrink: 0;
 }
 
-/* Feedback button */
+/* Feedback button — plain text+icon, no border/pill */
 .tbot-feedback {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   background: transparent;
-  border: 1.5px solid #cbd5e0;
-  border-radius: 20px;
+  border: none;
+  border-radius: 4px;
   font-size: 13px;
   color: #4a5568;
   font-family: var(--font-family);
   cursor: pointer;
-  padding: 6px 16px;
+  padding: 7px 12px;
   font-weight: 500;
-  transition: border-color 120ms, background 120ms, color 120ms;
+  transition: background 120ms, color 120ms;
 }
 .tbot-feedback:hover {
-  border-color: #0b6fbe;
-  background: #eff6ff;
-  color: #0b6fbe;
+  background: #f7fafc;
+  color: #1a202c;
 }
-.tbot-feedback i { font-size: 14px; }
+.tbot-feedback i { font-size: 14px; color: #718096; }
 
 /* Prev / Next */
 .tbot-nav {
@@ -509,17 +508,17 @@ html, body {
   background: transparent;
   border: none;
   font-size: 13px;
-  color: #0b6fbe;
+  color: #2d3748;
   font-family: var(--font-family);
   cursor: pointer;
   padding: 7px 12px;
   border-radius: 4px;
   font-weight: 600;
-  transition: background 120ms;
+  transition: background 120ms, color 120ms;
 }
-.tbot-nav:hover { background: #eff6ff; }
+.tbot-nav:hover { background: #f7fafc; color: #1a202c; }
 .tbot-nav:disabled { color: #cbd5e0; cursor: default; }
-.tbot-nav:disabled:hover { background: transparent; }
+.tbot-nav:disabled:hover { background: transparent; color: #cbd5e0; }
 
 /* ════════ RESPONSIVE ════════ */
 @media (max-width: 768px) {
