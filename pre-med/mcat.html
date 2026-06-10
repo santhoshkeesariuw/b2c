@@ -145,11 +145,20 @@
           <ul class="tyk-suggestions" id="tyk-suggestions" role="listbox" aria-label="Topic suggestions"></ul>
         </div>
         <div class="tyk-form-right">
-          <select class="tyk-select" id="tyk-qcount" aria-label="Number of questions">
-            <option value="5">5 Qs</option>
-            <option value="10" selected>10 Qs</option>
-            <option value="20">20 Qs</option>
-          </select>
+          <!-- M3 custom dropdown -->
+          <div class="tyk-select-wrap" id="tyk-select-wrap">
+            <button type="button" class="tyk-select-trigger" id="tyk-select-trigger"
+                    aria-haspopup="listbox" aria-expanded="false" aria-label="Number of questions">
+              <span class="tyk-select-value" id="tyk-select-value">10 Qs</span>
+              <i class="fa-light fa-chevron-down tyk-select-chevron"></i>
+            </button>
+            <ul class="tyk-select-menu" id="tyk-select-menu" role="listbox">
+              <li class="tyk-select-option" role="option" data-value="5">5 Qs</li>
+              <li class="tyk-select-option tyk-select-option--selected" role="option" data-value="10">10 Qs</li>
+              <li class="tyk-select-option" role="option" data-value="20">20 Qs</li>
+            </ul>
+          </div>
+          <input type="hidden" id="tyk-qcount" value="10" />
           <button type="submit" class="tyk-start-btn" id="tyk-start">
             <i class="fa-light fa-play"></i> Start
           </button>

@@ -454,6 +454,49 @@ var TYK_TOPICS = [
   { cat: 'CARS', label: 'Inference Questions' },
 ];
 
+function initTykSelect() {
+  var trigger   = document.getElementById('tyk-select-trigger');
+  var menu      = document.getElementById('tyk-select-menu');
+  var valueEl   = document.getElementById('tyk-select-value');
+  var hidden    = document.getElementById('tyk-qcount');
+  if (!trigger || !menu) return;
+
+  function openMenu() {
+    menu.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    menu.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+  function selectOption(opt) {
+    menu.querySelectorAll('.tyk-select-option').forEach(function (o) {
+      o.classList.remove('tyk-select-option--selected');
+    });
+    opt.classList.add('tyk-select-option--selected');
+    valueEl.textContent = opt.textContent;
+    if (hidden) hidden.value = opt.getAttribute('data-value');
+    closeMenu();
+  }
+
+  trigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    menu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  menu.querySelectorAll('.tyk-select-option').forEach(function (opt) {
+    opt.addEventListener('click', function (e) {
+      e.stopPropagation();
+      selectOption(opt);
+    });
+  });
+
+  document.addEventListener('click', function () { closeMenu(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+}
+
 function initTykForm() {
   var form    = document.getElementById('tyk-form');
   var input   = document.getElementById('tyk-topic');
@@ -592,6 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebarAccordion();
   initProgressBars();
   initPlannerTabs();
+  initTykSelect();
   initTykForm();
 
   /* Overall performance page (simulator, bell curve) */
