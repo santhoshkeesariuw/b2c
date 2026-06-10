@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<!-- Step 3 CCS — Case Launch Screen -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCS – Case Launch</title>
+  <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      color: #000;
+      background: #dde3ea;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ════ TOP BAR ════ */
+    .topbar {
+      background: #1c4a66;
+      color: #d8eaf5;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      flex-shrink: 0;
+      position: relative;
+      gap: 4px;
+    }
+
+    .topbar__ccs-tab {
+      background: #2d6f9e;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 12px 5px;
+      border: 1px solid #5b9cc4;
+      margin-right: 4px;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .topbar__block-info {
+      font-size: 11px;
+      color: #c5dff0;
+      line-height: 1.3;
+      margin-right: 10px;
+    }
+
+    .topbar__mark-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #1c4a66;
+      border: 1px solid #5b9cc4;
+      color: #fff;
+      font-size: 11px;
+      padding: 4px 9px;
+      cursor: pointer;
+      font-family: Arial;
+    }
+    .topbar__mark-btn i { color: #e74c3c; font-size: 12px; }
+    .topbar__mark-btn:hover { background: #235a7a; }
+
+    /* centered nav */
+    .topbar__nav {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .topbar__nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      background: none;
+      border: none;
+      color: #d8eaf5;
+      cursor: pointer;
+      font-family: Arial;
+      padding: 0 4px;
+    }
+    .topbar__nav-btn i { font-size: 17px; }
+    .topbar__nav-btn span { font-size: 10px; margin-top: 1px; }
+    .topbar__nav-btn:hover { color: #fff; }
+
+    /* right tools */
+    .topbar__tools {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+    .tool-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      background: none;
+      border: none;
+      border-left: 1px solid #3a7a9e;
+      color: #d8eaf5;
+      cursor: pointer;
+      font-family: Arial;
+      padding: 4px 12px;
+      text-align: center;
+      min-width: 54px;
+    }
+    .tool-btn__icon { line-height: 1; }
+    .tool-btn__label { font-size: 9px; white-space: nowrap; }
+    .tool-btn:hover { background: #235a7a; }
+
+    .tool-icon--notes {
+      font-size: 17px;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .tool-icon--calc {
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .tool-icon--reverse {
+      width: 22px;
+      height: 18px;
+      background: #1a1a1a;
+      border: 1px solid #888;
+      display: inline-block;
+    }
+    .tool-icon--zoom {
+      font-weight: bold;
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    /* ════ MAIN ════ */
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      background: linear-gradient(160deg, #ebebeb 0%, #f8f8f8 100%);
+      overflow: hidden;
+    }
+
+    .content {
+      flex: 1;
+      padding: 44px 48px 32px;
+      line-height: 1.75;
+    }
+
+    .content p { margin-bottom: 0; }
+    .content .spacer { height: 14px; }
+
+    .bold { font-weight: bold; }
+
+    .indented {
+      margin-left: 2.2em;
+    }
+
+    .warning-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .warning-row__icon {
+      font-size: 15px;
+      color: #e6a817;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .start-btn {
+      margin-top: 32px;
+      display: inline-block;
+      border: 2px outset #a0a0a0;
+      background: #d0ccc4;
+      color: #000;
+      font-size: 15px;
+      font-family: Arial;
+      padding: 8px 28px;
+      cursor: pointer;
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,0.7);
+    }
+    .start-btn:hover { background: #c4c0b8; }
+    .start-btn:active { border-style: inset; background: #bcb8b0; }
+
+    /* ════ CLOCK ════ */
+    .clock-wrap {
+      flex-shrink: 0;
+      padding: 28px 44px 0 0;
+    }
+
+    /* ════ BOTTOM BAR ════ */
+    .bottombar {
+      background: #1c4a66;
+      color: #c5dff0;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 12px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .bottombar__times span { display: block; line-height: 1.5; }
+    .bottombar__lock {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      cursor: pointer;
+    }
+    .bottombar__lock i { font-size: 19px; color: #f5c518; }
+    .bottombar__lock span { font-size: 9px; color: #c5dff0; margin-top: -1px; }
+  </style>
+</head>
+<body>
+
+<!-- ════ TOP BAR ════ -->
+<header class="topbar">
+  <div class="topbar__ccs-tab">CCS</div>
+  <div class="topbar__block-info">CCS<br>Block: 1 of 2</div>
+  <button class="topbar__mark-btn">
+    <i class="fa-solid fa-flag"></i> Mark
+  </button>
+
+  <!-- centered nav -->
+  <nav class="topbar__nav">
+    <button class="topbar__nav-btn">
+      <i class="fa-solid fa-play fa-flip-horizontal"></i>
+      <span>Previous</span>
+    </button>
+    <button class="topbar__nav-btn">
+      <i class="fa-solid fa-play"></i>
+      <span>Next</span>
+    </button>
+  </nav>
+
+  <!-- tools -->
+  <div class="topbar__tools">
+    <button class="tool-btn">
+      <div class="tool-btn__icon tool-icon--notes">ABC</div>
+      <div class="tool-btn__label">Notes</div>
+    </button>
+    <button class="tool-btn">
+      <div class="tool-btn__icon tool-icon--calc">0.25</div>
+      <div class="tool-btn__label">Calculator</div>
+    </button>
+    <button class="tool-btn">
+      <div class="tool-btn__icon"><span class="tool-icon--reverse"></span></div>
+      <div class="tool-btn__label">Reverse Color</div>
+    </button>
+    <button class="tool-btn">
+      <div class="tool-btn__icon tool-icon--zoom">A A</div>
+      <div class="tool-btn__label">Text Zoom</div>
+    </button>
+  </div>
+</header>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+  <div class="content">
+    <p>Case: <span class="bold" id="case-label">1 of 1</span></p>
+    <div class="spacer"></div>
+    <p>Maximum Time: <span class="bold" id="max-time">10 Min</span></p>
+    <div class="spacer"></div>
+    <p>Maximum allotted case time:</p>
+    <p class="indented bold" id="case-time-detail">8 minutes + 2 minutes</p>
+    <p>for case-end orders. Note that cases may end in less than the maximum allotted time, depending on your actions in<br>
+    the case. The case may require up to 30 seconds to load.</p>
+    <div class="warning-row">
+      <span class="warning-row__icon">⚠</span>
+      <p><strong>Warning</strong>: Selecting anything on this screen other than Start Case or hitting any key may result in
+      unrecoverable data and time loss.</p>
+    </div>
+
+    <button class="start-btn" id="start-btn">Start Case</button>
+  </div>
+
+  <div class="clock-wrap">
+    <svg id="clock" viewBox="0 0 270 270" width="230" height="230"></svg>
+  </div>
+</main>
+
+<!-- ════ BOTTOM BAR ════ -->
+<footer class="bottombar">
+  <div class="bottombar__times">
+    <span>Block Time Remaining: &nbsp; untimed</span>
+    <span>Day Time Remaining: &nbsp;&nbsp; untimed</span>
+  </div>
+  <div class="bottombar__lock">
+    <i class="fa-solid fa-lock"></i>
+    <span>Lock</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var params   = new URLSearchParams(window.location.search);
+  var caseNum  = parseInt(params.get('case')     || '1');
+  var totalMin = parseInt(params.get('duration') || '10');
+
+  /* time split: 10-min → 8+2, 20-min → 16+4 */
+  var mainMin  = totalMin === 10 ? 8 : 16;
+  var endMin   = totalMin - mainMin;
+
+  document.getElementById('case-label').textContent   = caseNum + ' of 1';
+  document.getElementById('max-time').textContent     = totalMin + ' Min';
+  document.getElementById('case-time-detail').textContent =
+    mainMin + ' minutes + ' + endMin + ' minutes';
+
+  document.getElementById('start-btn').onclick = function () {
+    window.location.href = 'step3-ccs-test.html?case=' + caseNum + '&duration=' + totalMin;
+  };
+
+  /* ── Draw clock ── */
+  var svg = document.getElementById('clock');
+  var cx = 135, cy = 135, R = 118;
+
+  function polar(angleDeg, r) {
+    var rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  function sector(startDeg, endDeg, fill) {
+    var s = polar(startDeg, R - 6);
+    var e = polar(endDeg,   R - 6);
+    var large = (endDeg - startDeg > 180) ? 1 : 0;
+    return '<path d="M ' + cx + ' ' + cy +
+      ' L ' + s.x.toFixed(2) + ' ' + s.y.toFixed(2) +
+      ' A ' + (R - 6) + ' ' + (R - 6) + ' 0 ' + large + ' 1 ' +
+      e.x.toFixed(2) + ' ' + e.y.toFixed(2) + ' Z" fill="' + fill + '"/>';
+  }
+
+  var yellowEnd = (mainMin / 60) * 360;
+  var redEnd    = ((mainMin + endMin) / 60) * 360;
+
+  var html = '';
+
+  /* sectors */
+  html += sector(0, yellowEnd, '#FFD700');
+  html += sector(yellowEnd, redEnd, '#F08080');
+
+  /* rim */
+  html += '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="none" stroke="#111" stroke-width="9"/>';
+
+  /* tick marks */
+  for (var m = 0; m < 60; m++) {
+    var deg   = m * 6;
+    var major = m % 5 === 0;
+    var inner = major ? R - 20 : R - 11;
+    var s     = polar(deg, inner);
+    var e     = polar(deg, R - 1);
+    html += '<line x1="' + s.x.toFixed(2) + '" y1="' + s.y.toFixed(2) +
+            '" x2="' + e.x.toFixed(2) + '" y2="' + e.y.toFixed(2) +
+            '" stroke="#111" stroke-width="' + (major ? 2.2 : 1) + '"/>';
+  }
+
+  /* minute labels (0, 5, 10 … 55) */
+  [0,5,10,15,20,25,30,35,40,45,50,55].forEach(function (n) {
+    var p = polar(n * 6, R - 36);
+    html += '<text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '"' +
+            ' text-anchor="middle" dominant-baseline="central"' +
+            ' font-family="Arial" font-size="13.5" font-weight="bold">' + n + '</text>';
+  });
+
+  /* hand pointing at redEnd */
+  var handTip = polar(redEnd, R - 22);
+  html += '<line x1="' + cx + '" y1="' + cy +
+          '" x2="' + handTip.x.toFixed(2) + '" y2="' + handTip.y.toFixed(2) +
+          '" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round"/>';
+
+  /* center dot */
+  html += '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="#333"/>';
+
+  svg.innerHTML = html;
+})();
+</script>
+</body>
+</html>
