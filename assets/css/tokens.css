@@ -37,7 +37,7 @@
   --color-info-bg:          #EBF4FF;
 
   /* ── Typography ── */
-  --font-family:            'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-family:            "proxima-nova", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 
   --text-xs:    0.6875rem;
   --text-sm:    0.75rem;
@@ -199,7 +199,7 @@
   --md-elev-3: 0 1px 3px rgba(0,0,0,0.30), 0 4px 8px 3px rgba(0,0,0,0.15);
 
   /* ════ M3 Typography ════ */
-  --md-font: 'Roboto', sans-serif;
+  --md-font: "proxima-nova", sans-serif;
 
   /* Label sizes */
   --md-label-lg:   14px;
