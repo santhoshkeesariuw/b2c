@@ -702,10 +702,9 @@ body {
 .tyk-input {
   width: 100%;
   height: 40px;
-  background: var(--md-surface-container-highest);
-  border: none;
-  border-bottom: 1px solid var(--md-outline);
-  border-radius: var(--md-shape-xs) var(--md-shape-xs) 0 0;
+  background: transparent;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-full);
   padding: 0 12px 0 36px;
   font-size: var(--md-body-md);
   font-family: var(--md-font);
@@ -714,8 +713,9 @@ body {
   transition: border-color 200ms;
 }
 .tyk-input:focus {
-  border-bottom: 2px solid var(--md-primary);
-  background: var(--md-surface-container-high);
+  border-color: var(--md-primary);
+  border-width: 2px;
+  background: transparent;
 }
 .tyk-input::placeholder { color: var(--md-on-surface-variant); }
 
