@@ -582,7 +582,7 @@ body {
 }
 
 .stat-card {
-  background: var(--md-surface-container-low);
+  background: #ffffff;
   border: none;
   border-radius: var(--md-shape-lg);
   box-shadow: var(--md-elev-1);
