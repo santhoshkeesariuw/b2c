@@ -37,7 +37,7 @@
   --color-info-bg:          #EBF4FF;
 
   /* ── Typography ── */
-  --font-family:            -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family:            'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 
   --text-xs:    0.6875rem;
   --text-sm:    0.75rem;
@@ -152,4 +152,69 @@
   /* ── Stagger — overridden per-card by theme.js ── */
   --stagger-index: 0;
   --stagger-step:  40ms;
+
+  /* ════ M3 Color System (seed: #0B6FBE UWorld blue) ════ */
+  --md-primary:                  #0B6FBE;
+  --md-on-primary:               #FFFFFF;
+  --md-primary-container:        #D3E4FF;
+  --md-on-primary-container:     #001D35;
+  --md-secondary:                #535E72;
+  --md-on-secondary:             #FFFFFF;
+  --md-secondary-container:      #D7E3F7;
+  --md-on-secondary-container:   #0F1C2D;
+  --md-tertiary:                 #6B5778;
+  --md-on-tertiary:              #FFFFFF;
+  --md-tertiary-container:       #F2DAFF;
+  --md-error:                    #BA1A1A;
+  --md-on-error:                 #FFFFFF;
+  --md-error-container:          #FFDAD6;
+  --md-on-error-container:       #410002;
+  --md-surface:                  #F8FAFD;
+  --md-on-surface:               #191C20;
+  --md-surface-variant:          #DFE3EB;
+  --md-on-surface-variant:       #42474E;
+  --md-surface-container-lowest: #FFFFFF;
+  --md-surface-container-low:    #F2F5F9;
+  --md-surface-container:        #ECEEF2;
+  --md-surface-container-high:   #E6E9ED;
+  --md-surface-container-highest:#E1E3E7;
+  --md-inverse-surface:          #2E3135;
+  --md-inverse-on-surface:       #F0F1F5;
+  --md-inverse-primary:          #A3C9FF;
+  --md-outline:                  #73777F;
+  --md-outline-variant:          #C3C7CF;
+  --md-scrim:                    rgba(0,0,0,0.32);
+
+  /* ════ M3 Shape ════ */
+  --md-shape-xs:   4px;
+  --md-shape-sm:   8px;
+  --md-shape-md:   12px;
+  --md-shape-lg:   16px;
+  --md-shape-xl:   28px;
+  --md-shape-full: 9999px;
+
+  /* ════ M3 Elevation ════ */
+  --md-elev-1: 0 1px 2px rgba(0,0,0,0.30), 0 1px 3px 1px rgba(0,0,0,0.15);
+  --md-elev-2: 0 1px 2px rgba(0,0,0,0.30), 0 2px 6px 2px rgba(0,0,0,0.15);
+  --md-elev-3: 0 1px 3px rgba(0,0,0,0.30), 0 4px 8px 3px rgba(0,0,0,0.15);
+
+  /* ════ M3 Typography ════ */
+  --md-font: 'Roboto', sans-serif;
+
+  /* Label sizes */
+  --md-label-lg:   14px;
+  --md-label-md:   12px;
+  --md-label-sm:   11px;
+
+  /* Body sizes */
+  --md-body-lg:    16px;
+  --md-body-md:    14px;
+  --md-body-sm:    12px;
+
+  /* Title / Headline sizes */
+  --md-title-lg:   22px;
+  --md-title-md:   16px;
+  --md-title-sm:   14px;
+  --md-headline-sm: 24px;
+  --md-headline-md: 28px;
 }

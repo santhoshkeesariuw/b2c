@@ -55,8 +55,10 @@ body {
 }
 .sidebar__nav-item:hover { background: var(--sidebar-active); color: #fff; }
 .sidebar__nav-item--active {
-  background: var(--sidebar-active); color: #fff;
+  background: rgba(163, 201, 255, 0.15);
+  color: #fff;
   border-left-color: var(--color-brand-blue-dim);
+  border-radius: 0 var(--md-shape-full) var(--md-shape-full) 0;
 }
 
 .sidebar__nav-item__icon {
@@ -178,12 +180,21 @@ body {
 }
 
 .topbar__hamburger {
-  background: var(--color-brand-blue); color: #fff;
-  border: none; border-radius: var(--radius-xs);
-  width: clamp(26px,2.5vw,32px); height: clamp(24px,2.2vh,30px);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: clamp(12px,1.1vw,15px); flex-shrink: 0;
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  border: none;
+  border-radius: var(--md-shape-sm);
+  width: clamp(26px,2.5vw,32px);
+  height: clamp(24px,2.2vh,30px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: clamp(12px,1.1vw,15px);
+  flex-shrink: 0;
+  transition: background 200ms;
 }
+.topbar__hamburger:hover { background: var(--md-primary); filter: brightness(1.1); }
 
 .topbar__title {
   font-size: clamp(14px,1.3vw,18px); font-weight: var(--fw-bold);
@@ -571,16 +582,19 @@ body {
 }
 
 .stat-card {
-  background: #fff;
-  border: 1px solid #DDE3EA;
-  border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
-  padding: clamp(12px,1.4vh,18px) clamp(14px,1.4vw,20px);
+  background: var(--md-surface-container-low);
+  border: none;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
+  padding: clamp(14px,1.5vh,20px) clamp(16px,1.6vw,24px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(10px,1vw,14px);
+  flex: 1;
+  min-width: 0;
+  transition: box-shadow 200ms;
 }
+.stat-card:hover { box-shadow: var(--md-elev-2); }
 
 .stat-card__label {
   font-size: clamp(11px,0.9vw,13px);
@@ -613,10 +627,10 @@ body {
 
 /* ── Test Your Knowledge card ── */
 .tyk-card {
-  background: #fff;
-  border: 1px solid #DDE3EA;
-  border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  background: var(--md-surface-container-lowest);
+  border: none;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
   padding: clamp(14px,1.6vh,20px) clamp(16px,1.6vw,24px);
   margin-bottom: clamp(10px,1.2vh,16px);
   display: flex;
@@ -672,6 +686,7 @@ body {
   flex: 1;
   min-width: clamp(180px, 24vw, 360px);
   position: relative;
+  border-radius: var(--md-shape-xs) var(--md-shape-xs) 0 0;
 }
 
 .tyk-input-icon {
@@ -686,24 +701,23 @@ body {
 
 .tyk-input {
   width: 100%;
-  height: clamp(34px,3.8vh,42px);
-  padding: 0 12px 0 32px;
-  border: 1.5px solid #CBD5E0;
-  border-radius: var(--radius-xs);
-  font-size: clamp(12px,1vw,13.5px);
-  color: #2D3748;
-  background: #FAFBFC;
-  font-family: var(--font-family);
-  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
-  box-sizing: border-box;
+  height: 40px;
+  background: var(--md-surface-container-highest);
+  border: none;
+  border-bottom: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-xs) var(--md-shape-xs) 0 0;
+  padding: 0 12px 0 36px;
+  font-size: var(--md-body-md);
+  font-family: var(--md-font);
+  color: var(--md-on-surface);
+  outline: none;
+  transition: border-color 200ms;
 }
 .tyk-input:focus {
-  outline: none;
-  border-color: var(--color-brand-blue);
-  box-shadow: 0 0 0 3px rgba(11,111,190,0.12);
-  background: #fff;
+  border-bottom: 2px solid var(--md-primary);
+  background: var(--md-surface-container-high);
 }
-.tyk-input::placeholder { color: #A0AEC0; }
+.tyk-input::placeholder { color: var(--md-on-surface-variant); }
 
 .tyk-form-right {
   display: flex;
@@ -713,44 +727,53 @@ body {
 }
 
 .tyk-select {
-  height: clamp(34px,3.8vh,42px);
-  padding: 0 10px;
-  border: 1.5px solid #CBD5E0;
-  border-radius: var(--radius-xs);
-  font-size: clamp(11.5px,0.96vw,13px);
-  color: #4A5568;
-  background: #FAFBFC;
-  font-family: var(--font-family);
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--md-outline);
+  border-radius: var(--md-shape-xs);
+  padding: 0 32px 0 12px;
+  font-size: var(--md-label-lg);
+  font-weight: 500;
+  font-family: var(--md-font);
+  color: var(--md-on-surface);
   cursor: pointer;
-  transition: border-color var(--dur-fast);
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A0AEC0'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2373777F'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 9px center;
-  padding-right: 28px;
+  background-position: right 8px center;
+  background-size: 20px;
+  transition: border-color 200ms;
+  min-width: 90px;
 }
-.tyk-select:focus { outline: none; border-color: var(--color-brand-blue); }
+.tyk-select:hover  { border-color: var(--md-on-surface); }
+.tyk-select:focus  { outline: none; border-color: var(--md-primary); border-width: 2px; }
 
 .tyk-start-btn {
-  height: clamp(34px,3.8vh,42px);
-  padding: 0 clamp(16px,1.6vw,22px);
-  background: var(--color-brand-blue);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-xs);
-  font-size: clamp(12px,1vw,13.5px);
-  font-weight: var(--fw-semibold);
-  font-family: var(--font-family);
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  gap: 8px;
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+  border: none;
+  border-radius: var(--md-shape-full);
+  height: 40px;
+  padding: 0 24px;
+  font-size: var(--md-label-lg);
+  font-weight: 500;
+  font-family: var(--md-font);
+  cursor: pointer;
+  letter-spacing: 0.1px;
   white-space: nowrap;
-  transition: background var(--dur-fast), transform 80ms;
   flex-shrink: 0;
+  transition: box-shadow 200ms, background 200ms;
 }
-.tyk-start-btn:hover  { background: var(--color-brand-blue-hover); }
+.tyk-start-btn:hover  {
+  background: var(--md-primary);
+  box-shadow: var(--md-elev-1);
+  filter: brightness(1.08);
+}
 .tyk-start-btn:active { transform: scale(0.97); }
 .tyk-start-btn i      { font-size: 11px; }
 
@@ -837,10 +860,10 @@ body {
 
 /* ── Study Planner card ── */
 .planner-card {
-  background: #fff;
-  border: 1px solid #DDE3EA;
-  border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  background: var(--md-surface-container-lowest);
+  border: none;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -886,35 +909,39 @@ body {
 }
 
 .planner-tab {
-  font-size: clamp(11px,0.92vw,13px);
-  color: #718096;
-  padding: clamp(6px,0.7vh,9px) clamp(10px,1vw,14px);
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-family: var(--font-family);
-  border-bottom: 2px solid transparent;
-  transition: color var(--dur-base), border-color var(--dur-base);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: -1px;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-full);
+  padding: 6px 16px;
+  font-size: var(--md-label-md);
+  font-weight: 500;
+  font-family: var(--md-font);
+  color: var(--md-on-surface-variant);
+  cursor: pointer;
+  transition: background 200ms, border-color 200ms, color 200ms;
 }
-.planner-tab:hover { color: var(--color-brand-blue); }
+.planner-tab:hover {
+  background: rgba(11,111,190,0.08);
+}
 .planner-tab--active {
-  color: var(--color-brand-blue);
-  border-bottom-color: var(--color-brand-blue);
-  font-weight: var(--fw-semibold);
+  background: var(--md-secondary-container);
+  border-color: transparent;
+  color: var(--md-on-secondary-container);
+  font-weight: 500;
 }
 
 .planner-badge {
-  background: #FC8181;
-  color: #fff;
-  border-radius: var(--radius-full);
+  background: var(--md-error);
+  color: var(--md-on-error);
+  border-radius: var(--md-shape-full);
+  font-size: 10px;
+  font-weight: 500;
   padding: 1px 6px;
-  font-size: clamp(9px,0.75vw,10.5px);
-  font-weight: var(--fw-bold);
-  line-height: 1.4;
+  min-width: 18px;
+  text-align: center;
 }
 
 .planner-view-link {
@@ -977,10 +1004,10 @@ body {
 
 /* ── Study Plan Progress card ── */
 .study-progress-card {
-  background: #fff;
-  border: 1px solid #DDE3EA;
-  border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  background: var(--md-surface-container-lowest);
+  border: none;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
   padding: clamp(12px,1.4vh,18px) clamp(14px,1.4vw,18px);
   display: flex;
   flex-direction: column;
@@ -1085,10 +1112,10 @@ body {
 
 /* ── UBook Progress section ── */
 .ubook-section {
-  background: #fff;
-  border: 1px solid #DDE3EA;
-  border-radius: var(--radius-2xl);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  background: var(--md-surface-container-lowest);
+  border: none;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
   overflow: hidden;
   margin-bottom: clamp(10px,1.2vh,16px);
 }
