@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- MCAT QBank — Performance › Overall -->
+<!-- Step 3 CCS — Performance › Overall -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UWorld – Overall Performance</title>
+  <title>UWorld – Step 3 CCS Performance</title>
   <link rel="stylesheet" href="https://use.typekit.net/pmo3mlo.css" />
   <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
   <link rel="stylesheet" href="../assets/css/tokens.css?v=7" />
@@ -21,12 +21,12 @@
       <img src="../assets/images/UWorld logo icon.png" alt="UWorld" />
     </div>
     <div class="sidebar__name">UWorld</div>
-    <div class="sidebar__subbrand">MCAT QBank</div>
+    <div class="sidebar__subbrand">Step 3 CCS</div>
     <div class="sidebar__user">Santhosh Keesari</div>
   </div>
 
   <nav class="sidebar__nav">
-    <a href="mcat.html" class="sidebar__nav-item">
+    <a href="step3-ccs.html" class="sidebar__nav-item">
       <i class="sidebar__nav-item__icon fa-light fa-house"></i>Dashboard
     </a>
     <div class="sidebar__nav-item">
@@ -36,31 +36,31 @@
       <i class="sidebar__nav-item__icon fa-light fa-book-open"></i>UBooks + Videos
     </div>
 
-    <!-- QBank — pre-opened -->
+    <!-- CCS Cases — pre-opened -->
     <div class="sidebar__nav-item sidebar__nav-item--has-sub sidebar__nav-item--open"
-         data-sub="qbank-sub">
-      <i class="sidebar__nav-item__icon fa-light fa-file-lines"></i>
-      QBank
+         data-sub="ccs-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-stethoscope"></i>
+      CCS Cases
       <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
     </div>
-    <div class="sidebar__sub-menu sidebar__sub-menu--open" id="qbank-sub">
+    <div class="sidebar__sub-menu sidebar__sub-menu--open" id="ccs-sub">
 
       <div class="sidebar__sub-item">
-        <i class="sidebar__sub-item__icon fa-light fa-pen-to-square"></i>Create Test
+        <i class="sidebar__sub-item__icon fa-light fa-pen-to-square"></i>Create Case
       </div>
       <div class="sidebar__sub-item">
-        <i class="sidebar__sub-item__icon fa-light fa-table-list"></i>Previous Tests
+        <i class="sidebar__sub-item__icon fa-light fa-table-list"></i>Previous Cases
       </div>
 
       <!-- Performance — pre-opened -->
       <div class="sidebar__sub-item sidebar__sub-item--has-sub sidebar__sub-item--open"
-           data-sub="perf-sub">
+           data-sub="ccs-perf-sub">
         <i class="sidebar__sub-item__icon fa-light fa-chart-bar"></i>
         Performance
         <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
       </div>
       <div class="sidebar__sub-menu sidebar__sub-menu--nested sidebar__sub-menu--open"
-           id="perf-sub">
+           id="ccs-perf-sub">
         <!-- Overall — active -->
         <div class="sidebar__sub-item sidebar__sub-item--nested sidebar__sub-item--active">
           <i class="sidebar__sub-item__icon fa-light fa-clipboard-check"></i>Overall
@@ -76,7 +76,7 @@
       <div class="sidebar__sub-item">
         <i class="sidebar__sub-item__icon fa-light fa-magnifying-glass"></i>Search
       </div>
-    </div><!-- /qbank-sub -->
+    </div><!-- /ccs-sub -->
 
     <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="exams-sub">
       <i class="sidebar__nav-item__icon fa-light fa-list-check"></i>
@@ -127,7 +127,7 @@
       </a>
       <span class="topbar__sep">|</span>
       <a href="#" class="topbar__nav-link">
-        MCAT QBank <i class="fa-solid fa-chevron-down icon--xs"></i>
+        Step 3 CCS <i class="fa-solid fa-chevron-down icon--xs"></i>
       </a>
       <span class="topbar__sep">|</span>
       <a href="#" class="topbar__nav-link">
@@ -135,7 +135,7 @@
       </a>
       <span class="topbar__sep">|</span>
       <a href="#" class="topbar__nav-link">
-        <i class="fa-light fa-calendar-days"></i> Test Date : Nov 7, 2026
+        <i class="fa-light fa-calendar-days"></i> Exam Date : Nov 7, 2026
       </a>
       <span class="topbar__sep">|</span>
       <button class="topbar__avatar" aria-label="Account">
@@ -155,12 +155,12 @@
       </button>
     </div>
 
-    <!-- Projection banner (visible while drawer is open or plan is saved) -->
+    <!-- Projection banner -->
     <div class="proj-banner" id="proj-banner">
       <i class="fa-light fa-arrow-trend-up"></i>
       Simulating: your plan would move you to
       <strong id="banner-band" style="margin: 0 4px;">High</strong>
-      band (<span id="banner-pct">67</span>th %ile)
+      band (<span id="banner-pct">72</span>th %ile)
     </div>
 
     <!-- ══════════════════════════════════════
@@ -174,7 +174,7 @@
           <div class="ps-head">
             <div class="ps-title">
               <span>Projected:</span>
-              <span class="ps-band-label">Low</span>
+              <span class="ps-band-label">Borderline</span>
               <span class="ps-info-icon">i</span>
             </div>
             <button class="improve-btn" id="improve-btn">
@@ -184,21 +184,21 @@
 
           <!-- Band -->
           <div class="ps-band">
-            <div class="ps-cell active"  data-i="0">Low</div>
-            <div class="ps-cell"         data-i="1">Borderline</div>
-            <div class="ps-cell"         data-i="2">High</div>
-            <div class="ps-cell"         data-i="3">Very High</div>
+            <div class="ps-cell"          data-i="0">Low</div>
+            <div class="ps-cell active"   data-i="1">Borderline</div>
+            <div class="ps-cell"          data-i="2">High</div>
+            <div class="ps-cell"          data-i="3">Very High</div>
           </div>
 
-          <!-- Saved plan footer (hidden until plan is saved) -->
+          <!-- Saved plan footer -->
           <div class="ps-plan-foot" id="ps-plan-foot">
             <span class="plan-pill">
               <i class="fa-light fa-arrow-trend-up"></i>
               Active plan · target <strong id="plan-band">High</strong>
               <span class="sep">·</span>
-              <span id="plan-hrs">87</span> hrs
+              <span id="plan-hrs">60</span> hrs
               <span class="sep">·</span>
-              <span id="plan-week">3.3</span> hrs/week
+              <span id="plan-week">2.3</span> hrs/week
             </span>
             <span class="plan-actions">
               <button class="ghost-btn" id="edit-plan-btn">
@@ -210,18 +210,18 @@
         </div>
       </div>
 
-      <!-- ── Row 1: 23% Correct donut + Your Score + Answer Changes ── -->
+      <!-- ── Row 1: 42% Correct donut + Your Score + Answer Changes ── -->
       <div class="stats-row">
         <div class="donut-block">
           <div class="donut">
             <svg viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="42" fill="none" stroke="#FBEAF0" stroke-width="9"/>
-              <!-- 23% of circumference ≈ 60.7 of 263.9 -->
+              <!-- 42% of circumference ≈ 110.8 of 263.9 -->
               <circle cx="50" cy="50" r="42" fill="none" stroke="#1D9E75" stroke-width="9"
-                      stroke-dasharray="60.7 263.9" stroke-linecap="butt"/>
+                      stroke-dasharray="110.8 263.9" stroke-linecap="butt"/>
             </svg>
             <div class="donut-center">
-              <div class="donut-pct">23%</div>
+              <div class="donut-pct">42%</div>
               <div class="donut-lbl">Correct</div>
             </div>
           </div>
@@ -231,15 +231,15 @@
           <h3>Your Score</h3>
           <div class="stat-row">
             <span class="s-label">Total Correct</span>
-            <span class="s-val">19</span>
+            <span class="s-val">15</span>
           </div>
           <div class="stat-row">
             <span class="s-label">Total Incorrect</span>
-            <span class="s-val">62</span>
+            <span class="s-val">21</span>
           </div>
           <div class="stat-row">
             <span class="s-label">Total Omitted</span>
-            <span class="s-val">1</span>
+            <span class="s-val">0</span>
           </div>
         </div>
 
@@ -247,11 +247,11 @@
           <h3>Answer Changes</h3>
           <div class="stat-row">
             <span class="s-label">Correct to Incorrect</span>
-            <span class="s-val">0</span>
+            <span class="s-val">1</span>
           </div>
           <div class="stat-row">
             <span class="s-label">Incorrect to Correct</span>
-            <span class="s-val">0</span>
+            <span class="s-val">2</span>
           </div>
           <div class="stat-row">
             <span class="s-label">Incorrect to Incorrect</span>
@@ -260,52 +260,52 @@
         </div>
       </div><!-- /stats-row 1 -->
 
-      <!-- ── Row 2: 3% Used donut + QBank Usage + Test Count ── -->
+      <!-- ── Row 2: 12% Used donut + Case Bank Usage + Session Count ── -->
       <div class="stats-row">
         <div class="donut-block">
           <div class="donut">
             <svg viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="42" fill="none" stroke="#f1efe8" stroke-width="9"/>
-              <!-- 3% of circumference ≈ 7.9 of 263.9 -->
+              <!-- 12% of circumference ≈ 31.7 of 263.9 -->
               <circle cx="50" cy="50" r="42" fill="none" stroke="#0B6FBE" stroke-width="9"
-                      stroke-dasharray="7.9 263.9" stroke-linecap="butt"/>
+                      stroke-dasharray="31.7 263.9" stroke-linecap="butt"/>
             </svg>
             <div class="donut-center">
-              <div class="donut-pct">3%</div>
+              <div class="donut-pct">12%</div>
               <div class="donut-lbl">Used</div>
             </div>
           </div>
         </div>
 
         <div class="stats-list">
-          <h3>QBank Usage</h3>
+          <h3>Case Bank Usage</h3>
           <div class="stat-row">
-            <span class="s-label">Used Questions</span>
-            <span class="s-val">90</span>
+            <span class="s-label">Used Cases</span>
+            <span class="s-val">36</span>
           </div>
           <div class="stat-row">
-            <span class="s-label">Unused Questions</span>
-            <span class="s-val">2,929</span>
+            <span class="s-label">Unused Cases</span>
+            <span class="s-val">264</span>
           </div>
           <div class="stat-row">
-            <span class="s-label">Total Questions</span>
-            <span class="s-val">3,019</span>
+            <span class="s-label">Total Cases</span>
+            <span class="s-val">300</span>
           </div>
         </div>
 
         <div class="stats-list">
-          <h3>Test Count</h3>
+          <h3>Session Count</h3>
           <div class="stat-row">
-            <span class="s-label">Tests Created</span>
-            <span class="s-val">2</span>
+            <span class="s-label">Sessions Created</span>
+            <span class="s-val">8</span>
           </div>
           <div class="stat-row">
-            <span class="s-label">Tests Completed</span>
-            <span class="s-val">2</span>
+            <span class="s-label">Sessions Completed</span>
+            <span class="s-val">5</span>
           </div>
           <div class="stat-row">
-            <span class="s-label">Suspended Tests</span>
-            <span class="s-val">0</span>
+            <span class="s-label">Suspended Sessions</span>
+            <span class="s-val">3</span>
           </div>
         </div>
       </div><!-- /stats-row 2 -->
@@ -319,20 +319,17 @@
             <line x1="0" y1="200" x2="600" y2="200" stroke="#d3d1c7" stroke-width="1"/>
           </svg>
 
-          <!-- User marker (2nd percentile) -->
           <div class="bell-marker bm-user" id="bell-user">
-            <span class="bm-lbl">2nd</span>
+            <span class="bm-lbl">35th</span>
             <span class="bm-dot"></span>
           </div>
 
-          <!-- Median marker (50th) -->
           <div class="bell-marker bm-median" id="bell-median">
             <span class="bm-lbl">50th</span>
             <span class="bm-dot"></span>
             <span class="bell-vline" style="color: var(--color-brand-blue);"></span>
           </div>
 
-          <!-- Projected marker (shown when drawer open or plan saved) -->
           <div class="bell-marker bm-proj" id="bell-proj">
             <span class="bm-lbl">Simulated</span>
             <span class="bm-dot"></span>
@@ -344,30 +341,30 @@
           <div class="perc-row">
             <div class="perc-label">
               <span class="perc-swatch" style="background:#1D9E75;"></span>
-              Your Score (<span id="perc-rank">2nd</span> rank)
+              Your Score (<span id="perc-rank">35th</span> rank)
             </div>
-            <span class="p-val" id="perc-score">23%</span>
+            <span class="p-val" id="perc-score">42%</span>
           </div>
           <div class="perc-row">
             <div class="perc-label">
               <span class="perc-swatch" style="background: var(--color-brand-blue);"></span>
               Median Score (50th rank)
             </div>
-            <span class="p-val">60%</span>
+            <span class="p-val">58%</span>
           </div>
           <div class="perc-row">
             <div class="perc-label">
               <i class="fa-light fa-clock" style="font-size:13px; color:#888780;"></i>
-              Your Average Time Spent (sec)
+              Your Average Time per Case (min)
             </div>
-            <span class="p-val">1</span>
+            <span class="p-val">8</span>
           </div>
           <div class="perc-row">
             <div class="perc-label">
               <i class="fa-light fa-clock" style="font-size:13px; color:#888780;"></i>
-              Others' Average Time Spent (sec)
+              Others' Average Time per Case (min)
             </div>
-            <span class="p-val">64</span>
+            <span class="p-val">10</span>
           </div>
         </div>
       </div><!-- /bell-row -->
@@ -404,32 +401,30 @@
         <div class="proj-block pb-current">
           <div class="pk-kicker">Current</div>
           <div class="pk-num">
-            <span class="pk-big">2</span>
-            <span class="pk-meta">nd %ile · Low</span>
+            <span class="pk-big">35</span>
+            <span class="pk-meta">th %ile · Borderline</span>
           </div>
         </div>
         <div class="proj-arrow">→</div>
         <div class="proj-block pb-projected">
           <div class="pk-kicker">Simulated</div>
           <div class="pk-num">
-            <span class="pk-big" id="proj-num">67</span>
+            <span class="pk-big" id="proj-num">72</span>
             <span class="pk-meta">
-              <span id="proj-suffix">th</span> %ile ·
+              <span id="proj-suffix">nd</span> %ile ·
               <span id="proj-band-name">High</span>
             </span>
           </div>
         </div>
       </div>
 
-      <!-- Band cells -->
       <div class="dband" id="dband">
-        <div class="dc dc-cur"  data-i="0">Low</div>
-        <div class="dc"         data-i="1">Borderline</div>
-        <div class="dc"         data-i="2">High</div>
-        <div class="dc"         data-i="3">Very High</div>
+        <div class="dc"          data-i="0">Low</div>
+        <div class="dc dc-cur"   data-i="1">Borderline</div>
+        <div class="dc"          data-i="2">High</div>
+        <div class="dc"          data-i="3">Very High</div>
       </div>
 
-      <!-- Track bar -->
       <div class="sim-track">
         <div class="sim-connect" id="sim-connect"></div>
         <div class="sim-mark sm-cur"></div>
@@ -443,14 +438,14 @@
     <!-- ── Budget / date ── -->
     <div class="budget-row">
       <div>
-        <div class="br-kicker">Test date</div>
+        <div class="br-kicker">Exam date</div>
         <div class="br-value">Nov 7, 2026 · 26 weeks left</div>
       </div>
       <div class="br-right">
         <div class="br-kicker">This plan</div>
         <div class="br-value">
-          <span id="total-hrs">87</span> hrs ·
-          <span id="per-week">3.3</span> hrs/week
+          <span id="total-hrs">60</span> hrs ·
+          <span id="per-week">2.3</span> hrs/week
         </div>
       </div>
     </div>
@@ -464,185 +459,185 @@
 
       <div class="subj-grid">
 
-        <!-- Biology -->
+        <!-- Internal Medicine -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">Biology</div>
-            <div class="subj-meta"><span class="hrs-bio">15</span> hrs</div>
+            <div class="subj-name">Internal Medicine</div>
+            <div class="subj-meta"><span class="hrs-intmed">20</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-bio-q">200</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-intmed-q">50</span> / 120</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="200"
-                   data-pct="0.025" data-hr="0.025" data-subj="bio" data-kind="q" />
+                   min="0" max="120" step="5" value="50"
+                   data-pct="0.04" data-hr="0.25" data-subj="intmed" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-bio-v">10</span> hrs</span>
+              <span class="sr-val"><span class="v-intmed-v">8</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="10"
-                   data-pct="0.8" data-hr="1" data-subj="bio" data-kind="v" />
+                   min="0" max="30" step="1" value="8"
+                   data-pct="0.8" data-hr="1" data-subj="intmed" data-kind="v" />
           </div>
         </div>
 
-        <!-- Biochemistry -->
+        <!-- Surgery -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">Biochemistry</div>
-            <div class="subj-meta"><span class="hrs-biochem">10</span> hrs</div>
+            <div class="subj-name">Surgery</div>
+            <div class="subj-meta"><span class="hrs-surg">10</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-biochem-q">150</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-surg-q">25</span> / 60</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="150"
-                   data-pct="0.025" data-hr="0.025" data-subj="biochem" data-kind="q" />
+                   min="0" max="60" step="5" value="25"
+                   data-pct="0.04" data-hr="0.25" data-subj="surg" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-biochem-v">6</span> hrs</span>
+              <span class="sr-val"><span class="v-surg-v">4</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="6"
-                   data-pct="0.8" data-hr="1" data-subj="biochem" data-kind="v" />
+                   min="0" max="20" step="1" value="4"
+                   data-pct="0.8" data-hr="1" data-subj="surg" data-kind="v" />
           </div>
         </div>
 
-        <!-- General Chemistry -->
+        <!-- Pediatrics -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">General Chemistry</div>
-            <div class="subj-meta"><span class="hrs-genchem">8</span> hrs</div>
+            <div class="subj-name">Pediatrics</div>
+            <div class="subj-meta"><span class="hrs-peds">8</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-genchem-q">120</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-peds-q">20</span> / 50</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="120"
-                   data-pct="0.025" data-hr="0.025" data-subj="genchem" data-kind="q" />
+                   min="0" max="50" step="5" value="20"
+                   data-pct="0.04" data-hr="0.25" data-subj="peds" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-genchem-v">5</span> hrs</span>
+              <span class="sr-val"><span class="v-peds-v">3</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="5"
-                   data-pct="0.8" data-hr="1" data-subj="genchem" data-kind="v" />
+                   min="0" max="20" step="1" value="3"
+                   data-pct="0.8" data-hr="1" data-subj="peds" data-kind="v" />
           </div>
         </div>
 
-        <!-- Organic Chemistry -->
+        <!-- OB/GYN -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">Organic Chemistry</div>
-            <div class="subj-meta"><span class="hrs-orgchem">8</span> hrs</div>
+            <div class="subj-name">OB / GYN</div>
+            <div class="subj-meta"><span class="hrs-obgyn">7</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-orgchem-q">100</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-obgyn-q">18</span> / 40</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="100"
-                   data-pct="0.025" data-hr="0.025" data-subj="orgchem" data-kind="q" />
+                   min="0" max="40" step="2" value="18"
+                   data-pct="0.04" data-hr="0.25" data-subj="obgyn" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-orgchem-v">5</span> hrs</span>
+              <span class="sr-val"><span class="v-obgyn-v">3</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="5"
-                   data-pct="0.8" data-hr="1" data-subj="orgchem" data-kind="v" />
+                   min="0" max="15" step="1" value="3"
+                   data-pct="0.8" data-hr="1" data-subj="obgyn" data-kind="v" />
           </div>
         </div>
 
-        <!-- Physics -->
+        <!-- Psychiatry -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">Physics</div>
-            <div class="subj-meta"><span class="hrs-phys">6</span> hrs</div>
+            <div class="subj-name">Psychiatry</div>
+            <div class="subj-meta"><span class="hrs-psych">6</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-phys-q">80</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-psych-q">15</span> / 40</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="80"
-                   data-pct="0.025" data-hr="0.025" data-subj="phys" data-kind="q" />
+                   min="0" max="40" step="2" value="15"
+                   data-pct="0.04" data-hr="0.25" data-subj="psych" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-phys-v">4</span> hrs</span>
+              <span class="sr-val"><span class="v-psych-v">3</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="4"
-                   data-pct="0.8" data-hr="1" data-subj="phys" data-kind="v" />
+                   min="0" max="15" step="1" value="3"
+                   data-pct="0.8" data-hr="1" data-subj="psych" data-kind="v" />
           </div>
         </div>
 
-        <!-- Behavioral Sciences -->
+        <!-- Family Medicine -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">Behavioral Sciences</div>
-            <div class="subj-meta"><span class="hrs-behsci">7</span> hrs</div>
+            <div class="subj-name">Family Medicine</div>
+            <div class="subj-meta"><span class="hrs-fammed">5</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-behsci-q">100</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-fammed-q">12</span> / 30</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="100"
-                   data-pct="0.025" data-hr="0.025" data-subj="behsci" data-kind="q" />
+                   min="0" max="30" step="2" value="12"
+                   data-pct="0.04" data-hr="0.25" data-subj="fammed" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-behsci-v">4</span> hrs</span>
+              <span class="sr-val"><span class="v-fammed-v">2</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="4"
-                   data-pct="0.8" data-hr="1" data-subj="behsci" data-kind="v" />
+                   min="0" max="10" step="1" value="2"
+                   data-pct="0.8" data-hr="1" data-subj="fammed" data-kind="v" />
           </div>
         </div>
 
-        <!-- CARS -->
+        <!-- Emergency Medicine -->
         <div class="subj-card">
           <div class="subj-head">
-            <div class="subj-name">Critical Analysis &amp; Reasoning Skills</div>
-            <div class="subj-meta"><span class="hrs-cars">7</span> hrs</div>
+            <div class="subj-name">Emergency Medicine</div>
+            <div class="subj-meta"><span class="hrs-em">4</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
-              <span class="sr-val"><span class="v-cars-q">120</span> / 500</span>
+              <span class="sr-lbl">CCS cases</span>
+              <span class="sr-val"><span class="v-em-q">10</span> / 20</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="120"
-                   data-pct="0.025" data-hr="0.025" data-subj="cars" data-kind="q" />
+                   min="0" max="20" step="2" value="10"
+                   data-pct="0.04" data-hr="0.25" data-subj="em" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
               <span class="sr-lbl">UBooks &amp; videos</span>
-              <span class="sr-val"><span class="v-cars-v">4</span> hrs</span>
+              <span class="sr-val"><span class="v-em-v">2</span> hrs</span>
             </div>
             <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="4"
-                   data-pct="0.8" data-hr="1" data-subj="cars" data-kind="v" />
+                   min="0" max="10" step="1" value="2"
+                   data-pct="0.8" data-hr="1" data-subj="em" data-kind="v" />
           </div>
         </div>
 
@@ -654,8 +649,8 @@
           </div>
           <div class="stepper">
             <button id="exam-step-down" aria-label="Decrease">−</button>
-            <span class="st-num" id="exam-num">3</span>
-            <button id="exam-step-up"   aria-label="Increase">+</button>
+            <span class="st-num" id="exam-num">2</span>
+            <button id="exam-step-up" aria-label="Increase">+</button>
           </div>
         </div>
 
@@ -667,7 +662,7 @@
   <div class="drawer-foot">
     <span class="proj-pill" id="foot-pill">
       <i class="fa-light fa-arrow-trend-up"></i>
-      Simulated: <strong id="foot-band">67</strong>th %ile
+      Simulated: <strong id="foot-band">72</strong>nd %ile
     </span>
     <button class="save-plan-btn" id="save-plan-btn">Save plan</button>
   </div>

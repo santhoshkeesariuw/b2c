@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!-- Step 3 CCS — Dashboard -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Step 3 CCS</title>
+  <link rel="stylesheet" href="https://use.typekit.net/pmo3mlo.css" />
+  <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=7" />
+  <link rel="stylesheet" href="../assets/css/base.css?v=4" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css?v=6" />
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <img src="../assets/images/UWorld logo icon.png" alt="UWorld" />
+    </div>
+    <div class="sidebar__name">UWorld</div>
+    <div class="sidebar__subbrand">STEP3 CCS</div>
+    <div class="sidebar__user">Santhosh Keesari</div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <!-- Overview — expandable, pre-opened -->
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub sidebar__nav-item--open" data-sub="overview-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-house"></i>
+      Overview
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu sidebar__sub-menu--open" id="overview-sub">
+      <div class="sidebar__sub-item sidebar__sub-item--active">
+        <i class="sidebar__sub-item__icon fa-light fa-circle-check"></i>Welcome
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-circle-info"></i>General Info
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-list-check"></i>General Approach
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-table-list"></i>List of Cases
+      </div>
+    </div>
+
+    <!-- Practice Cases — expandable -->
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="cases-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-stethoscope"></i>
+      Practice Cases
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="cases-sub">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Interactive Cases — expandable -->
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="interactive-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-laptop-medical"></i>
+      Interactive Cases
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="interactive-sub">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-circle-question"></i>Help
+    </div>
+  </nav>
+
+  <div class="sidebar__footer">
+    <span>Expiration Date</span>
+    <span>Dec 07, 2026 11:59 PM EDT</span>
+  </div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="dash-main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="topbar__hamburger" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+    <span class="topbar__title">Welcome</span>
+    <nav class="topbar__nav">
+      <a href="#" class="topbar__nav-link">STEP3 CCS <i class="fa-solid fa-chevron-down icon--xs"></i></a>
+      <span class="topbar__sep">|</span>
+      <a href="#" class="topbar__nav-link"><i class="fa-light fa-house"></i> My Account</a>
+      <span class="topbar__sep">|</span>
+      <a href="../index.html" class="topbar__nav-link"><i class="fa-light fa-arrow-right-from-bracket"></i> Log out</a>
+    </nav>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="ccs-welcome-card">
+      <h2 class="ccs-welcome-card__title">Welcome to the Step 3 CCS Course</h2>
+
+      <p class="ccs-welcome-card__body">
+        UWorld's Step 3 CCS course intends to provide Step 3 candidates with optimum guidance for clinical case simulations.
+        This course includes all the most common clinical cases. Each case in this course has been solved step by step in a
+        systematic manner compatible with the actual exam software. Physical findings, investigations, and management options
+        are detailed with the most updated information. After studying these cases carefully, the candidate will have learnt
+        precisely what knowledge and strategy is needed to confidently and successfully complete each examination. This course
+        also provides first hand helpful information that no other course does.
+      </p>
+
+      <p class="ccs-welcome-card__body">
+        This unique CCS course has an incredibly low subscription fee, making sure that every student who wants the extra
+        coaching can afford it.
+      </p>
+
+      <p class="ccs-welcome-card__body">
+        Although we have attempted to make this course as complete as possible, your motivation and the time spent in
+        preparing for the exam play an equal role in determining your success on the real examination.
+      </p>
+
+      <ul class="ccs-welcome-card__list">
+        <li><strong>41</strong> classic STEP3 CCS cases</li>
+        <li>Continuous updates to the cases to comply with the exact Clinical Case Simulation (CCS) software keywords</li>
+        <li>Detailed Explanation for each case based on the most current evidence</li>
+        <li>Continuous addition of cases as needed based on the feed back</li>
+        <li>Key to Success and tips for the exam</li>
+      </ul>
+    </div>
+
+    <div class="dash-footer-copy">Copyright © UWorld. All rights reserved.</div>
+
+  </div><!-- /content -->
+</div><!-- /dash-main -->
+
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/dashboard.js?v=2"></script>
+<script>
+(function () {
+  var TOTAL = 41;
+
+  function buildCaseItems(containerId, activeCase) {
+    var menu = document.getElementById(containerId);
+    if (!menu) return;
+    var html = '';
+    for (var i = 1; i <= TOTAL; i++) {
+      var active = i === activeCase ? ' sidebar__sub-item--active' : '';
+      html += '<div class="sidebar__sub-item' + active + '">' +
+        '<i class="sidebar__sub-item__icon fa-light fa-file-medical"></i>Case' + i +
+        '</div>';
+    }
+    menu.innerHTML = html;
+  }
+
+  buildCaseItems('cases-sub', null);
+  buildCaseItems('interactive-sub', 25);
+})();
+</script>
+</body>
+</html>

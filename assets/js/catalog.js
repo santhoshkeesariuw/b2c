@@ -14,7 +14,14 @@ const CATALOG = [
     icon: 'fa-stethoscope',
     color: '#B45309',
     desc: 'USMLE Step 1, Step 2 CK, and Step 3 licensing exam preparation.',
-    items: [],
+    items: [
+      {
+        id: 'step3-ccs', name: 'USMLE Step 3 CCS', icon: 'fa-stethoscope', color: '#B45309',
+        desc: '300+ clinical case simulations, score simulator, and performance analytics for Step 3.',
+        available: true, url: 'medical/step3-ccs.html',
+        stats: [{ v: '300+', l: 'Cases' }, { v: '7', l: 'Subjects' }, { v: 'CCS', l: 'Format' }],
+      },
+    ],
   },
   {
     id: 'nursing',

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!-- Step 3 CCS — Interactive Cases List -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Interactive Cases List</title>
+  <link rel="stylesheet" href="https://use.typekit.net/pmo3mlo.css" />
+  <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=7" />
+  <link rel="stylesheet" href="../assets/css/base.css?v=4" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css?v=7" />
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <img src="../assets/images/UWorld logo icon.png" alt="UWorld" />
+    </div>
+    <div class="sidebar__name">UWorld</div>
+    <div class="sidebar__subbrand">STEP3 CCS</div>
+    <div class="sidebar__user">Santhosh Keesari</div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="overview-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-house"></i>
+      Overview
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="overview-sub">
+      <a href="step3-ccs.html" class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-circle-check"></i>Welcome
+      </a>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-circle-info"></i>General Info
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-list-check"></i>General Approach
+      </div>
+      <div class="sidebar__sub-item">
+        <i class="sidebar__sub-item__icon fa-light fa-table-list"></i>List of Cases
+      </div>
+    </div>
+
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub" data-sub="cases-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-stethoscope"></i>
+      Practice Cases
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
+    </div>
+    <div class="sidebar__sub-menu" id="cases-sub"></div>
+
+    <div class="sidebar__nav-item sidebar__nav-item--active">
+      <i class="sidebar__nav-item__icon fa-light fa-laptop-medical"></i>Interactive Cases
+    </div>
+
+    <div class="sidebar__nav-item">
+      <i class="sidebar__nav-item__icon fa-light fa-circle-question"></i>Help
+    </div>
+  </nav>
+
+  <div class="sidebar__footer">
+    <span>Expiration Date</span>
+    <span>Dec 07, 2026 11:59 PM EDT</span>
+  </div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="dash-main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="topbar__hamburger" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+    <span class="topbar__title">Interactive Cases List</span>
+    <nav class="topbar__nav">
+      <a href="#" class="topbar__nav-link">STEP3 CCS <i class="fa-solid fa-chevron-down icon--xs"></i></a>
+      <span class="topbar__sep">|</span>
+      <a href="#" class="topbar__nav-link"><i class="fa-light fa-house"></i> My Account</a>
+      <span class="topbar__sep">|</span>
+      <a href="../index.html" class="topbar__nav-link"><i class="fa-light fa-arrow-right-from-bracket"></i> Log out</a>
+    </nav>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="cases-table-wrap">
+
+      <!-- Filter bar -->
+      <div class="cases-filter-bar">
+        <span class="cases-filter-label">Filter:</span>
+        <input type="text" class="cases-filter-input" id="cases-filter" placeholder="Search cases…" />
+      </div>
+
+      <!-- Table -->
+      <div class="cases-table-scroll">
+        <table class="cases-table" id="cases-table">
+          <thead>
+            <tr>
+              <th class="cases-th sortable" data-col="0">Case No <i class="fa-solid fa-sort"></i></th>
+              <th class="cases-th sortable" data-col="1">Location <i class="fa-solid fa-sort"></i></th>
+              <th class="cases-th sortable" data-col="2">Duration <i class="fa-solid fa-sort"></i></th>
+              <th class="cases-th sortable" data-col="3">Specialty <i class="fa-solid fa-sort"></i></th>
+              <th class="cases-th sortable" data-col="4">Sub-Specialty <i class="fa-solid fa-sort"></i></th>
+              <th class="cases-th"></th>
+            </tr>
+          </thead>
+          <tbody id="cases-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="dash-footer-copy">Copyright © UWorld. All rights reserved.</div>
+
+  </div><!-- /content -->
+</div><!-- /dash-main -->
+
+<script src="../assets/js/theme.js"></script>
+<script src="../assets/js/dashboard.js?v=2"></script>
+<script>
+(function () {
+
+  /* ── Case data ── */
+  var CASES = [
+    [1,  'Office',               '20 Minutes', 'Internal Medicine', 'Genitourinary/OBGYN'],
+    [2,  'Office',               '20 Minutes', 'OBGYN',             'Preventative medicine'],
+    [3,  'Office',               '20 Minutes', 'Internal Medicine', 'Gastroenterology'],
+    [4,  'Office',               '20 Minutes', 'OBGYN',             'General'],
+    [5,  'Office',               '20 Minutes', 'Internal Medicine', 'Gastroenterology'],
+    [6,  'Office',               '20 Minutes', 'Psychiatry',        'Psychiatry'],
+    [7,  'Office',               '20 Minutes', 'OBGYN',             'Gynecology'],
+    [8,  'Office',               '20 Minutes', 'Internal Medicine', 'Neurology'],
+    [9,  'Emergency Department', '10 Minutes', 'Internal Medicine', 'Pulmonology'],
+    [10, 'Office',               '20 Minutes', 'OBGYN',             'Gynecology'],
+    [11, 'Emergency Department', '10 Minutes', 'Internal Medicine', 'Cardiology'],
+    [12, 'Emergency Department', '20 Minutes', 'Pediatrics',        'Pulmonology'],
+    [13, 'Emergency Department', '10 Minutes', 'Psychiatry',        'Psychiatry'],
+    [14, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Neurology'],
+    [15, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Infectious diseases'],
+    [16, 'Office',               '20 Minutes', 'Pediatrics',        'Hematology'],
+    [17, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Cardiology'],
+    [18, 'Emergency Department', '20 Minutes', 'Pediatrics',        'Infectious Disease'],
+    [19, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Pulmonology'],
+    [20, 'Office',               '20 Minutes', 'Internal Medicine', 'Gastroenterology'],
+    [21, 'Office',               '20 Minutes', 'Surgery',           'General surgery'],
+    [22, 'Office',               '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [23, 'Office',               '20 Minutes', 'OBGYN',             'Gynecology'],
+    [24, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Cardiology'],
+    [25, 'Emergency Department', '20 Minutes', 'Surgery',           'General surgery'],
+    [26, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Infectious diseases'],
+    [27, 'Office',               '10 Minutes', 'Internal Medicine', 'Rheumatology'],
+    [28, 'Office',               '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [29, 'Office',               '20 Minutes', 'Internal Medicine', 'Oncology'],
+    [30, 'Emergency Department', '20 Minutes', 'Surgery',           'General surgery'],
+    [31, 'Office',               '10 Minutes', 'Pediatrics',        'Genetics'],
+    [32, 'Office',               '20 Minutes', 'Internal Medicine', 'Cardiology'],
+    [33, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [34, 'Emergency Department', '10 Minutes', 'Pediatrics',        'Developmental/behavioral pediatrics'],
+    [35, 'Office',               '10 Minutes', 'OBGYN',             'Gynecology'],
+    [36, 'Office',               '20 Minutes', 'Internal Medicine', 'Internal Medicine'],
+    [37, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Emergency Medicine'],
+    [38, 'Office',               '20 Minutes', 'Surgery',           'General Surgery'],
+    [39, 'Emergency Department', '10 Minutes', 'Psychiatry',        'Psychiatry'],
+    [40, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [41, 'Office',               '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [42, 'Emergency Department', '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [43, 'Office',               '20 Minutes', 'Internal Medicine', 'Rheumatology'],
+    [44, 'Office',               '20 Minutes', 'Internal Medicine', 'Rheumatology'],
+    [45, 'Emergency Department', '10 Minutes', 'OBGYN',             'Gynecology'],
+    [46, 'Office',               '20 Minutes', 'OBGYN',             'Gynecology'],
+    [47, 'Emergency Department', '10 Minutes', 'Surgery',           'Surgery'],
+    [48, 'Emergency Department', '20 Minutes', 'Surgery',           'Surgery'],
+    [49, 'Office',               '20 Minutes', 'Internal Medicine', 'Infectious disease'],
+    [50, 'Emergency Department', '10 Minutes', 'Surgery',           'Vascular surgery'],
+    [51, 'Emergency Department', '10 Minutes', 'Pediatrics',        'Surgery'],
+  ];
+
+  function renderRows(data) {
+    var tbody = document.getElementById('cases-tbody');
+    tbody.innerHTML = data.map(function (c) {
+      return '<tr>' +
+        '<td class="cases-td">' + c[0] + '</td>' +
+        '<td class="cases-td">' + c[1] + '</td>' +
+        '<td class="cases-td">' + c[2] + '</td>' +
+        '<td class="cases-td">' + c[3] + '</td>' +
+        '<td class="cases-td">' + c[4] + '</td>' +
+        '<td class="cases-td cases-td--actions">' +
+          '<button class="cases-btn cases-btn--launch">LAUNCH</button>' +
+          '<button class="cases-btn cases-btn--explain">EXPLANATION</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  /* ── Initial render ── */
+  renderRows(CASES);
+
+  /* ── Filter ── */
+  document.getElementById('cases-filter').addEventListener('input', function () {
+    var q = this.value.toLowerCase();
+    var filtered = CASES.filter(function (c) {
+      return c.join(' ').toLowerCase().indexOf(q) !== -1;
+    });
+    renderRows(filtered);
+  });
+
+  /* ── Sort ── */
+  var sortDir = {};
+  document.querySelectorAll('.cases-th.sortable').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var col = parseInt(th.dataset.col);
+      sortDir[col] = !sortDir[col];
+      var sorted = CASES.slice().sort(function (a, b) {
+        var av = col === 0 ? a[col] : String(a[col]).toLowerCase();
+        var bv = col === 0 ? b[col] : String(b[col]).toLowerCase();
+        return sortDir[col] ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+      });
+      renderRows(sorted);
+    });
+  });
+
+  /* ── Sidebar practice cases ── */
+  var menu = document.getElementById('cases-sub');
+  if (menu) {
+    var html = '';
+    for (var i = 1; i <= 51; i++) {
+      html += '<div class="sidebar__sub-item"><i class="sidebar__sub-item__icon fa-light fa-file-medical"></i>Case' + i + '</div>';
+    }
+    menu.innerHTML = html;
+  }
+})();
+</script>
+</body>
+</html>

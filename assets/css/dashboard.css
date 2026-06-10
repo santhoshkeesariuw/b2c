@@ -1304,11 +1304,173 @@ body {
 }
 
 /* ── Dashboard footer copy ── */
+/* ════════ CCS WELCOME CARD ════════ */
+.ccs-welcome-card {
+  background: #fff;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
+  padding: clamp(24px, 2.5vw, 40px);
+  max-width: 900px;
+}
+
+.ccs-welcome-card__title {
+  font-size: var(--text-xl);
+  font-weight: var(--fw-semibold);
+  color: var(--md-on-surface);
+  margin-bottom: var(--sp-4);
+}
+
+.ccs-welcome-card__body {
+  font-size: var(--text-base);
+  color: var(--md-on-surface-variant);
+  line-height: var(--lh-relaxed);
+  margin-bottom: var(--sp-4);
+}
+
+.ccs-welcome-card__list {
+  list-style: disc;
+  padding-left: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ccs-welcome-card__list li {
+  font-size: var(--text-base);
+  color: var(--md-on-surface-variant);
+  line-height: var(--lh-relaxed);
+}
+
+/* ════════ FOOTER ════════ */
 .dash-footer-copy {
   text-align: center;
   font-size: clamp(10.5px,0.88vw,12px);
   color: #A0AEC0;
   padding: clamp(12px,1.4vh,20px) 0 clamp(8px,1vh,12px);
+}
+
+/* ════════ INTERACTIVE CASES TABLE ════════ */
+.cases-table-wrap {
+  background: #fff;
+  border-radius: var(--md-shape-lg);
+  box-shadow: var(--md-elev-1);
+  overflow: hidden;
+}
+
+.cases-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 0.6vw, 10px);
+  padding: clamp(10px, 1.2vh, 14px) clamp(14px, 1.4vw, 20px);
+  border-bottom: 1px solid #DDE3EA;
+  background: #F8FAFC;
+  justify-content: flex-end;
+}
+
+.cases-filter-label {
+  font-size: clamp(11.5px, 0.96vw, 13px);
+  font-weight: var(--fw-semibold);
+  color: #4A5568;
+  white-space: nowrap;
+}
+
+.cases-filter-input {
+  height: 34px;
+  border: 1px solid var(--md-outline-variant);
+  border-radius: var(--md-shape-full);
+  padding: 0 14px;
+  font-size: clamp(11.5px, 0.96vw, 13px);
+  font-family: var(--font-family);
+  color: var(--md-on-surface);
+  outline: none;
+  width: clamp(180px, 22vw, 280px);
+  transition: border-color 200ms;
+  background: #fff;
+}
+.cases-filter-input:focus {
+  border-color: var(--md-primary);
+  border-width: 2px;
+}
+.cases-filter-input::placeholder { color: var(--md-on-surface-variant); }
+
+.cases-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cases-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.cases-th {
+  padding: clamp(9px, 1vh, 13px) clamp(12px, 1.2vw, 18px);
+  background: #F8FAFC;
+  border-bottom: 2px solid #DDE3EA;
+  font-size: clamp(11px, 0.92vw, 13px);
+  font-weight: var(--fw-semibold);
+  color: #4A5568;
+  text-align: left;
+  white-space: nowrap;
+}
+.cases-th.sortable { cursor: pointer; user-select: none; }
+.cases-th.sortable:hover { color: var(--color-brand-blue); }
+.cases-th i { margin-left: 4px; font-size: 10px; color: #A0AEC0; }
+
+.cases-td {
+  padding: clamp(8px, 0.9vh, 12px) clamp(12px, 1.2vw, 18px);
+  border-bottom: 1px solid #F3F5F7;
+  font-size: clamp(11.5px, 0.96vw, 13.5px);
+  color: #2D3748;
+  vertical-align: middle;
+}
+.cases-table tbody tr:last-child .cases-td { border-bottom: none; }
+.cases-table tbody tr:hover .cases-td { background: #F8FAFC; }
+
+.cases-td--actions {
+  white-space: nowrap;
+  display: flex;
+  gap: clamp(5px, 0.5vw, 8px);
+  align-items: center;
+  padding-block: clamp(6px, 0.7vh, 10px);
+}
+
+.cases-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(26px, 2.6vh, 32px);
+  padding: 0 clamp(8px, 0.9vw, 14px);
+  border: none;
+  border-radius: var(--md-shape-full);
+  font-size: clamp(10px, 0.85vw, 11.5px);
+  font-weight: var(--fw-semibold);
+  font-family: var(--font-family);
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition: background 200ms, box-shadow 200ms;
+}
+
+.cases-btn--launch {
+  background: var(--color-brand-blue);
+  color: #fff;
+}
+.cases-btn--launch:hover {
+  background: var(--color-brand-blue-hover);
+  box-shadow: var(--md-elev-1);
+}
+
+.cases-btn--explain {
+  background: var(--color-brand-blue);
+  color: #fff;
+  opacity: 0.82;
+}
+.cases-btn--explain:hover {
+  opacity: 1;
+  background: var(--color-brand-blue-hover);
+  box-shadow: var(--md-elev-1);
 }
 
 /* ── Responsive additions ── */
