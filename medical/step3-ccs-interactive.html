@@ -7,9 +7,9 @@
   <title>UWorld – Interactive Cases List</title>
   <link rel="stylesheet" href="https://use.typekit.net/pmo3mlo.css" />
   <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
-  <link rel="stylesheet" href="../assets/css/tokens.css?v=7" />
+  <link rel="stylesheet" href="../assets/css/tokens.css?v=8" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
-  <link rel="stylesheet" href="../assets/css/dashboard.css?v=7" />
+  <link rel="stylesheet" href="../assets/css/dashboard.css?v=8" />
 </head>
 <body>
 
@@ -52,9 +52,12 @@
     </div>
     <div class="sidebar__sub-menu" id="cases-sub"></div>
 
-    <div class="sidebar__nav-item sidebar__nav-item--active">
-      <i class="sidebar__nav-item__icon fa-light fa-laptop-medical"></i>Interactive Cases
+    <div class="sidebar__nav-item sidebar__nav-item--has-sub sidebar__nav-item--open" data-sub="interactive-sub">
+      <i class="sidebar__nav-item__icon fa-light fa-laptop-medical"></i>
+      Interactive Cases
+      <i class="sidebar__nav-item__chevron fa-light fa-chevron-down"></i>
     </div>
+    <div class="sidebar__sub-menu sidebar__sub-menu--open" id="interactive-sub"></div>
 
     <div class="sidebar__nav-item">
       <i class="sidebar__nav-item__icon fa-light fa-circle-question"></i>Help
@@ -221,15 +224,22 @@
     });
   });
 
-  /* ── Sidebar practice cases ── */
-  var menu = document.getElementById('cases-sub');
-  if (menu) {
+  /* ── Sidebar case lists ── */
+  var TOTAL_CASES = 51;
+  function buildSidebarCases(containerId, activeCase) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
     var html = '';
-    for (var i = 1; i <= 51; i++) {
-      html += '<div class="sidebar__sub-item"><i class="sidebar__sub-item__icon fa-light fa-file-medical"></i>Case' + i + '</div>';
+    for (var i = 1; i <= TOTAL_CASES; i++) {
+      var active = i === activeCase ? ' sidebar__sub-item--active' : '';
+      html += '<div class="sidebar__sub-item' + active + '">' +
+        '<i class="sidebar__sub-item__icon fa-light fa-file-medical"></i>Case ' + i +
+        '</div>';
     }
-    menu.innerHTML = html;
+    el.innerHTML = html;
   }
+  buildSidebarCases('cases-sub', null);
+  buildSidebarCases('interactive-sub', null);
 })();
 </script>
 </body>

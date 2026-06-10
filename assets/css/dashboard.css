@@ -111,7 +111,7 @@ body {
   transition: max-height var(--dur-slow) var(--ease-expo);
   background: #12202E;
 }
-.sidebar__sub-menu--open { max-height: 600px; }
+.sidebar__sub-menu--open { max-height: 3000px; }
 
 /* Sub-item */
 .sidebar__sub-item {
