@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css?v=11" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
   <link rel="stylesheet" href="../assets/css/dashboard.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/performance.css?v=9" />
+  <link rel="stylesheet" href="../assets/css/performance.css?v=10" />
 </head>
 <body>
 
@@ -429,8 +429,11 @@
         <div class="dc"         data-i="3">Very High</div>
       </div>
 
-      <!-- Track bar -->
+      <!-- Track bar (master slider overlaid) -->
       <div class="sim-track">
+        <input type="range" class="master-range" id="master-range"
+               min="2" max="96" step="1" value="67"
+               aria-label="Set target percentile" />
         <div class="sim-connect" id="sim-connect"></div>
         <div class="sim-mark sm-cur"></div>
         <div class="sim-mark sm-proj" id="proj-mark"></div>
@@ -801,6 +804,6 @@
 </div>
 
 <script src="../assets/js/theme.js"></script>
-<script src="../assets/js/performance.js?v=6"></script>
+<script src="../assets/js/performance.js?v=7"></script>
 </body>
 </html>

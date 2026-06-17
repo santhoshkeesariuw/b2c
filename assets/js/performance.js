@@ -137,7 +137,7 @@
     var pct = BASE, hrs = 0;
     var bySubj = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
 
-    document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
+    document.querySelectorAll('.sim-drawer input[type="range"].sim-range').forEach(function (s) {
       var v    = parseFloat(s.value);
       var subj = s.dataset.subj;
       var kind = s.dataset.kind;
@@ -190,6 +190,10 @@
     var pill = document.getElementById('foot-pill');
     if (pill) { pill.style.background = c.bg; pill.style.color = c.fg; }
 
+    /* keep master range thumb in sync with projected pct */
+    var masterRange = document.getElementById('master-range');
+    if (masterRange) masterRange.value = pct;
+
     /* projected big number color */
     var bigEl = document.querySelector('.pb-projected .pk-big');
     if (bigEl) bigEl.style.color = c.fg;
@@ -222,6 +226,26 @@
   /* ═══════════════════════════════════
      DRAWER OPEN / CLOSE / SAVE
      ═══════════════════════════════════ */
+  /* Scale all subject sliders proportionally so the projected pct hits targetPct */
+  function scaleSlidersToTarget(targetPct) {
+    var commonContrib = uWorldCount * 4 + aamcExamCount * 3 + aamcQsCount * 1;
+    var need = Math.max(0, targetPct - BASE - commonContrib);
+
+    /* Total capacity = sum(max * data-pct) across all subject sliders */
+    var totalCap = 0;
+    document.querySelectorAll('.sim-drawer input[type="range"].sim-range').forEach(function (s) {
+      totalCap += parseFloat(s.max) * parseFloat(s.dataset.pct);
+    });
+
+    var scale = totalCap > 0 ? Math.min(1, Math.max(0, need / totalCap)) : 0;
+
+    document.querySelectorAll('.sim-drawer input[type="range"].sim-range').forEach(function (s) {
+      s.value = Math.round(parseFloat(s.max) * scale);
+    });
+
+    recalc();
+  }
+
   function openDrawer() {
     drawerOpen = true;
     document.getElementById('sim-drawer').classList.add('open');
@@ -258,7 +282,7 @@
     var qPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
     var fPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
     var vPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
-    document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
+    document.querySelectorAll('.sim-drawer input[type="range"].sim-range').forEach(function (s) {
       var subj = s.dataset.subj;
       var kind = s.dataset.kind;
       var val  = parseFloat(s.value);
@@ -451,7 +475,7 @@
     makeBellPath();
 
     /* bind slider inputs */
-    document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
+    document.querySelectorAll('.sim-drawer input[type="range"].sim-range').forEach(function (s) {
       s.addEventListener('input', recalc);
     });
 
@@ -464,6 +488,11 @@
 
     var closeBtn = document.getElementById('drawer-close');
     if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+
+    var masterRangeEl = document.getElementById('master-range');
+    if (masterRangeEl) masterRangeEl.addEventListener('input', function () {
+      scaleSlidersToTarget(parseInt(this.value, 10));
+    });
 
     var simBtn = document.getElementById('simulate-btn');
     if (simBtn) simBtn.addEventListener('click', simulateOnly);
