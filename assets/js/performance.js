@@ -18,9 +18,10 @@
   var uWorldCount  = 3;
   var aamcExamCount = 2;
   var aamcQsCount  = 3;
-  var drawerOpen   = false;
-  var hasSavedPlan = false;
-  var lastProjPct  = 67;
+  var drawerOpen    = false;
+  var hasSavedPlan  = false;
+  var hasSimulation = false;
+  var lastProjPct   = 67;
 
   /* Current (baseline) study plan — reflects what is already in the study planner */
   var CURRENT_PLAN = {
@@ -209,7 +210,7 @@
     setText('plan-week', perWeek);
 
     /* bell curve */
-    positionBellMarkers(pct, drawerOpen || hasSavedPlan);
+    positionBellMarkers(pct, drawerOpen || hasSavedPlan || hasSimulation);
     lastProjPct = pct;
   }
 
@@ -233,14 +234,23 @@
     drawerOpen = false;
     document.getElementById('sim-drawer').classList.remove('open');
     document.getElementById('sim-overlay').classList.remove('open');
-    document.getElementById('proj-banner').classList.remove('show');
-    if (!hasSavedPlan) {
+    if (!hasSavedPlan && !hasSimulation) {
+      document.getElementById('proj-banner').classList.remove('show');
       document.querySelectorAll('.ps-band .ps-cell').forEach(function (el) {
         el.classList.remove('proj-tint');
       });
       var projEl = document.getElementById('bell-proj');
       if (projEl) projEl.classList.remove('visible');
     }
+  }
+
+  function simulateOnly() {
+    hasSimulation = true;
+    drawerOpen = false;
+    document.getElementById('sim-drawer').classList.remove('open');
+    document.getElementById('sim-overlay').classList.remove('open');
+    document.getElementById('proj-banner').classList.add('show');
+    positionBellMarkers(lastProjPct, true);
   }
 
   /* Read new plan values from the simulator sliders */
@@ -400,7 +410,8 @@
 
   function discardPlan() {
     if (!confirm('Discard your saved study plan? The projection will be removed from your dashboard.')) return;
-    hasSavedPlan = false;
+    hasSavedPlan  = false;
+    hasSimulation = false;
     document.getElementById('ps-plan-foot').classList.remove('show');
     var improveBtn = document.getElementById('improve-btn');
     if (improveBtn) improveBtn.style.display = '';
@@ -454,8 +465,31 @@
     var closeBtn = document.getElementById('drawer-close');
     if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
 
+    var simBtn = document.getElementById('simulate-btn');
+    if (simBtn) simBtn.addEventListener('click', simulateOnly);
+
     var saveBtn = document.getElementById('save-plan-btn');
     if (saveBtn) saveBtn.addEventListener('click', openPlanComparison);
+
+    /* inject current progress indicators below each subject slider */
+    document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
+      var subj = s.dataset.subj;
+      var kind = s.dataset.kind;
+      if (!subj || !kind || !CURRENT_PLAN[subj]) return;
+      var curVal = kind === 'q' ? CURRENT_PLAN[subj].q
+                 : kind === 'f' ? CURRENT_PLAN[subj].f
+                 :                CURRENT_PLAN[subj].v;
+      var maxVal = parseInt(s.max, 10);
+      var fillPct = maxVal > 0 ? Math.min(100, Math.round((curVal / maxVal) * 100)) : 0;
+      var unit = kind === 'q' ? 'questions' : kind === 'f' ? 'flashcards' : 'hrs';
+      var el = document.createElement('div');
+      el.className = 'sim-progress';
+      el.innerHTML =
+        '<span class="sp-label">Completed</span>' +
+        '<span class="sp-val">' + curVal + ' ' + unit + '</span>' +
+        '<div class="sp-bar"><div class="sp-fill" style="width:' + fillPct + '%"></div></div>';
+      s.parentNode.insertBefore(el, s.nextSibling);
+    });
 
     var pcmClose  = document.getElementById('pcm-close');
     var pcmCancel = document.getElementById('pcm-cancel');

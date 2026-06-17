@@ -959,6 +959,74 @@ input[type="range"].sim-range::-moz-range-thumb {
   transform: translateX(-50%) translateY(0);
 }
 
+/* ── Drawer fixed (non-scrolling) section ── */
+.drawer-fixed {
+  flex-shrink: 0;
+}
+
+/* ── Footer actions wrapper ── */
+.drawer-foot-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* ── Simulate button (secondary) ── */
+.simulate-btn {
+  background: var(--color-info-bg);
+  border: 1px solid var(--color-brand-blue);
+  color: var(--color-brand-blue);
+  padding: clamp(8px, 1vh, 10px) clamp(12px, 1.2vw, 16px);
+  border-radius: var(--radius-xs);
+  font-size: clamp(12px, 1vw, 13px);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  font-family: var(--font-family);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background var(--dur-fast);
+  align-self: flex-end;
+}
+.simulate-btn:hover { background: rgba(11,111,190,0.15); }
+
+/* ── Current progress indicator below each slider ── */
+.sim-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+.sp-label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sp-val {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sp-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  min-width: 40px;
+}
+.sp-fill {
+  height: 100%;
+  background: var(--color-brand-blue);
+  border-radius: var(--radius-full);
+  opacity: 0.5;
+}
+
 /* ════════ RESPONSIVE ════════ */
 @media (max-width: 1024px) {
   .stats-row {

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css?v=11" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
   <link rel="stylesheet" href="../assets/css/dashboard.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/performance.css?v=8" />
+  <link rel="stylesheet" href="../assets/css/performance.css?v=9" />
 </head>
 <body>
 
@@ -396,7 +396,7 @@
     </button>
   </div>
 
-  <div class="drawer-body">
+  <div class="drawer-fixed">
 
     <!-- ── Projection + band ── -->
     <div class="proj-section">
@@ -454,6 +454,10 @@
         </div>
       </div>
     </div>
+
+  </div><!-- /.drawer-fixed -->
+
+  <div class="drawer-body">
 
     <!-- ── Activities by subject ── -->
     <div class="sim-activities">
@@ -735,11 +739,16 @@
       <i class="fa-light fa-arrow-trend-up"></i>
       Simulated: <strong id="foot-band">67</strong>th %ile
     </span>
-    <div>
-      <div class="drawer-next-label">Next Step</div>
-      <button class="save-plan-btn" id="save-plan-btn">
-        <i class="fa-light fa-calendar-check"></i> Update Study Planner
+    <div class="drawer-foot-actions">
+      <button class="simulate-btn" id="simulate-btn">
+        <i class="fa-light fa-chart-line"></i> Simulate
       </button>
+      <div>
+        <div class="drawer-next-label">Next Step</div>
+        <button class="save-plan-btn" id="save-plan-btn">
+          <i class="fa-light fa-calendar-check"></i> Update Study Planner
+        </button>
+      </div>
     </div>
   </div>
 
@@ -792,6 +801,6 @@
 </div>
 
 <script src="../assets/js/theme.js"></script>
-<script src="../assets/js/performance.js?v=5"></script>
+<script src="../assets/js/performance.js?v=6"></script>
 </body>
 </html>
