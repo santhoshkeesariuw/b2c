@@ -1122,7 +1122,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 /* ── Step 2: Collapsible subject rows ── */
 .pcs-head {
   display: grid;
-  grid-template-columns: 20px 1fr 72px 72px 56px;
+  grid-template-columns: 20px 1fr 100px 100px 56px;
   gap: 8px;
   padding: 8px 0;
   border-bottom: 2px solid var(--color-border);
@@ -1135,7 +1135,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 .pcs-head span:nth-child(n+3) { text-align: right; }
 .pcs-subj-row {
   display: grid;
-  grid-template-columns: 20px 1fr 72px 72px 56px;
+  grid-template-columns: 20px 1fr 100px 100px 56px;
   gap: 8px;
   padding: 10px 0;
   border-bottom: 1px solid var(--color-border-subtle);
@@ -1175,7 +1175,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 .pcs-detail.open { display: block; }
 .pcs-ct-row {
   display: grid;
-  grid-template-columns: 16px 1fr 90px 90px 56px;
+  grid-template-columns: 16px 1fr 100px 100px 56px;
   gap: 8px;
   align-items: center;
   padding: 6px 0;
@@ -1218,7 +1218,7 @@ input[type="range"].sim-range::-moz-range-thumb {
 }
 .pcs-common-row {
   display: grid;
-  grid-template-columns: 20px 1fr 72px 72px 56px;
+  grid-template-columns: 20px 1fr 100px 100px 56px;
   gap: 8px;
   align-items: center;
   padding: 8px 0;
