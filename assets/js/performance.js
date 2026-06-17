@@ -383,17 +383,14 @@
     }
 
     /* ── Step 1: Weekday rows (Mon–Sun with % distribution) ── */
-    var DAYS        = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    var DAY_WEIGHTS = [0.12,     0.12,      0.12,        0.12,       0.12,     0.20,       0.20];
-    var WEEKEND_IDX = [5, 6];
+    var DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    var dayRowsHtml = DAYS.map(function (day, i) {
-      var curD = (curWeekHrs * DAY_WEIGHTS[i]).toFixed(1);
-      var newD = (newWeekHrs * DAY_WEIGHTS[i]).toFixed(1);
+    var dayRowsHtml = DAYS.map(function (day) {
+      var curD = (curWeekHrs / 7).toFixed(1);
+      var newD = (newWeekHrs / 7).toFixed(1);
       var diff = parseFloat((newD - curD).toFixed(1));
-      var isWknd = WEEKEND_IDX.indexOf(i) !== -1;
       return '<div class="pov-day-row">' +
-        '<span class="pov-day-name' + (isWknd ? ' weekend' : '') + '">' + day + '</span>' +
+        '<span class="pov-day-name">' + day + '</span>' +
         '<span class="pov-day-val">' + curD + ' hrs</span>' +
         '<span class="pov-day-val pov-new-val">' + newD + ' hrs</span>' +
         '<span class="pcm-delta ' + deltaClass(diff) + '">' + (diff >= 0 ? '+' : '') + diff + '</span>' +
