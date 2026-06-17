@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css?v=11" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
   <link rel="stylesheet" href="../assets/css/dashboard.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/performance.css?v=6" />
+  <link rel="stylesheet" href="../assets/css/performance.css?v=7" />
 </head>
 <body>
 
@@ -459,7 +459,7 @@
     <div class="sim-activities">
       <div class="activities-head">
         <div class="ah-title">Activities by subject</div>
-        <div class="ah-meta" id="section-count">7 subjects</div>
+        <div class="ah-meta">7 subjects · 3 common</div>
       </div>
 
       <div class="subj-grid">
@@ -468,24 +468,30 @@
         <div class="subj-card">
           <div class="subj-head">
             <div class="subj-name">Biology</div>
-            <div class="subj-meta"><span class="hrs-bio">15</span> hrs</div>
+            <div class="subj-meta"><span class="hrs-bio">20</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-bio-q">200</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="200"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="200"
                    data-pct="0.025" data-hr="0.025" data-subj="bio" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-bio-f">100</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="100"
+                   data-pct="0.008" data-hr="0.016" data-subj="bio" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-bio-v">10</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="10"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="10"
                    data-pct="0.8" data-hr="1" data-subj="bio" data-kind="v" />
           </div>
         </div>
@@ -494,24 +500,30 @@
         <div class="subj-card">
           <div class="subj-head">
             <div class="subj-name">Biochemistry</div>
-            <div class="subj-meta"><span class="hrs-biochem">10</span> hrs</div>
+            <div class="subj-meta"><span class="hrs-biochem">11</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-biochem-q">150</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="150"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="150"
                    data-pct="0.025" data-hr="0.025" data-subj="biochem" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-biochem-f">80</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="80"
+                   data-pct="0.008" data-hr="0.016" data-subj="biochem" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-biochem-v">6</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="6"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="6"
                    data-pct="0.8" data-hr="1" data-subj="biochem" data-kind="v" />
           </div>
         </div>
@@ -520,24 +532,30 @@
         <div class="subj-card">
           <div class="subj-head">
             <div class="subj-name">General Chemistry</div>
-            <div class="subj-meta"><span class="hrs-genchem">8</span> hrs</div>
+            <div class="subj-meta"><span class="hrs-genchem">9</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-genchem-q">120</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="120"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="120"
                    data-pct="0.025" data-hr="0.025" data-subj="genchem" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-genchem-f">60</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="60"
+                   data-pct="0.008" data-hr="0.016" data-subj="genchem" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-genchem-v">5</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="5"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="5"
                    data-pct="0.8" data-hr="1" data-subj="genchem" data-kind="v" />
           </div>
         </div>
@@ -546,24 +564,30 @@
         <div class="subj-card">
           <div class="subj-head">
             <div class="subj-name">Organic Chemistry</div>
-            <div class="subj-meta"><span class="hrs-orgchem">8</span> hrs</div>
+            <div class="subj-meta"><span class="hrs-orgchem">9</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-orgchem-q">100</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="100"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="100"
                    data-pct="0.025" data-hr="0.025" data-subj="orgchem" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-orgchem-f">60</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="60"
+                   data-pct="0.008" data-hr="0.016" data-subj="orgchem" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-orgchem-v">5</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="5"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="5"
                    data-pct="0.8" data-hr="1" data-subj="orgchem" data-kind="v" />
           </div>
         </div>
@@ -572,24 +596,30 @@
         <div class="subj-card">
           <div class="subj-head">
             <div class="subj-name">Physics</div>
-            <div class="subj-meta"><span class="hrs-phys">6</span> hrs</div>
+            <div class="subj-meta"><span class="hrs-phys">7</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-phys-q">80</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="80"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="80"
                    data-pct="0.025" data-hr="0.025" data-subj="phys" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-phys-f">40</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="40"
+                   data-pct="0.008" data-hr="0.016" data-subj="phys" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-phys-v">4</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="4"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="4"
                    data-pct="0.8" data-hr="1" data-subj="phys" data-kind="v" />
           </div>
         </div>
@@ -598,24 +628,30 @@
         <div class="subj-card">
           <div class="subj-head">
             <div class="subj-name">Behavioral Sciences</div>
-            <div class="subj-meta"><span class="hrs-behsci">7</span> hrs</div>
+            <div class="subj-meta"><span class="hrs-behsci">8</span> hrs</div>
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-behsci-q">100</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="100"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="100"
                    data-pct="0.025" data-hr="0.025" data-subj="behsci" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-behsci-f">60</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="60"
+                   data-pct="0.008" data-hr="0.016" data-subj="behsci" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-behsci-v">4</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="4"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="4"
                    data-pct="0.8" data-hr="1" data-subj="behsci" data-kind="v" />
           </div>
         </div>
@@ -628,34 +664,64 @@
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">QBank questions</span>
+              <span class="sr-lbl">Practice Questions</span>
               <span class="sr-val"><span class="v-cars-q">120</span> / 500</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="500" step="10" value="120"
+            <input type="range" class="sim-range" min="0" max="500" step="10" value="120"
                    data-pct="0.025" data-hr="0.025" data-subj="cars" data-kind="q" />
           </div>
           <div class="srow">
             <div class="sr-top">
-              <span class="sr-lbl">UBooks &amp; videos</span>
+              <span class="sr-lbl">Review Flashcards</span>
+              <span class="sr-val"><span class="v-cars-f">0</span> cards</span>
+            </div>
+            <input type="range" class="sim-range" min="0" max="200" step="10" value="0"
+                   data-pct="0.008" data-hr="0.016" data-subj="cars" data-kind="f" />
+          </div>
+          <div class="srow">
+            <div class="sr-top">
+              <span class="sr-lbl">Review UBooks &amp; Videos</span>
               <span class="sr-val"><span class="v-cars-v">4</span> hrs</span>
             </div>
-            <input type="range" class="sim-range"
-                   min="0" max="30" step="1" value="4"
+            <input type="range" class="sim-range" min="0" max="30" step="1" value="4"
                    data-pct="0.8" data-hr="1" data-subj="cars" data-kind="v" />
           </div>
         </div>
 
-        <!-- Practice exams row -->
+        <!-- Common activities -->
         <div class="exam-row">
           <div>
-            <div class="subj-name">Practice exams</div>
+            <div class="subj-name">UWorld Practice Exam</div>
             <div class="subj-meta">Full-length · 7 hrs each (test + review)</div>
           </div>
           <div class="stepper">
-            <button id="exam-step-down" aria-label="Decrease">−</button>
-            <span class="st-num" id="exam-num">3</span>
-            <button id="exam-step-up"   aria-label="Increase">+</button>
+            <button id="uworld-step-down" aria-label="Decrease">−</button>
+            <span class="st-num" id="uworld-num">3</span>
+            <button id="uworld-step-up" aria-label="Increase">+</button>
+          </div>
+        </div>
+
+        <div class="exam-row">
+          <div>
+            <div class="subj-name">AAMC Practice Exam</div>
+            <div class="subj-meta">Full-length · 6 hrs each (test + review)</div>
+          </div>
+          <div class="stepper">
+            <button id="aamc-step-down" aria-label="Decrease">−</button>
+            <span class="st-num" id="aamc-num">2</span>
+            <button id="aamc-step-up" aria-label="Increase">+</button>
+          </div>
+        </div>
+
+        <div class="exam-row">
+          <div>
+            <div class="subj-name">AAMC Question Sets</div>
+            <div class="subj-meta">Section-specific · 2 hrs each</div>
+          </div>
+          <div class="stepper">
+            <button id="aamcqs-step-down" aria-label="Decrease">−</button>
+            <span class="st-num" id="aamcqs-num">3</span>
+            <button id="aamcqs-step-up" aria-label="Increase">+</button>
           </div>
         </div>
 
@@ -726,6 +792,6 @@
 </div>
 
 <script src="../assets/js/theme.js"></script>
-<script src="../assets/js/performance.js?v=3"></script>
+<script src="../assets/js/performance.js?v=4"></script>
 </body>
 </html>

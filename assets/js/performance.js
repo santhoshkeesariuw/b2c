@@ -15,21 +15,25 @@
   var CAP   = 96;   // max simulated percentile
   var WEEKS = 26;   // weeks until exam
 
-  var examCount    = 3;
+  var uWorldCount  = 3;
+  var aamcExamCount = 2;
+  var aamcQsCount  = 3;
   var drawerOpen   = false;
   var hasSavedPlan = false;
   var lastProjPct  = 67;
 
   /* Current (baseline) study plan — reflects what is already in the study planner */
   var CURRENT_PLAN = {
-    bio:     { q: 61,  v: 5  },
-    biochem: { q: 42,  v: 4  },
-    genchem: { q: 41,  v: 7  },
-    orgchem: { q: 30,  v: 3  },
-    phys:    { q: 20,  v: 2  },
-    behsci:  { q: 48,  v: 4  },
-    cars:    { q: 36,  v: 3  },
-    exams:   1
+    bio:     { q: 61,  f: 30, v: 5  },
+    biochem: { q: 42,  f: 20, v: 4  },
+    genchem: { q: 41,  f: 20, v: 7  },
+    orgchem: { q: 30,  f: 15, v: 3  },
+    phys:    { q: 20,  f: 10, v: 2  },
+    behsci:  { q: 48,  f: 25, v: 4  },
+    cars:    { q: 36,  f: 0,  v: 3  },
+    uworld:  1,
+    aamc:    0,
+    aamcQs:  1
   };
 
   var SUBJ_LABELS = {
@@ -143,8 +147,8 @@
       if (valEl) valEl.textContent = s.value;
     });
 
-    pct += examCount * 3;
-    hrs += examCount * 7;
+    pct += uWorldCount * 4 + aamcExamCount * 3 + aamcQsCount * 1;
+    hrs += uWorldCount * 7 + aamcExamCount * 6 + aamcQsCount * 2;
     pct = Math.min(CAP, Math.round(pct));
     hrs = Math.round(hrs);
     var perWeek = (hrs / WEEKS).toFixed(1);
@@ -242,19 +246,18 @@
   /* Read new plan values from the simulator sliders */
   function getNewPlan() {
     var qPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
+    var fPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
     var vPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
     document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
       var subj = s.dataset.subj;
       var kind = s.dataset.kind;
       var val  = parseFloat(s.value);
       if (qPlan[subj] === undefined) return;
-      if (kind === 'q') {
-        qPlan[subj] = val;
-      } else {
-        vPlan[subj] = val;
-      }
+      if (kind === 'q')      qPlan[subj] = val;
+      else if (kind === 'f') fPlan[subj] = val;
+      else                   vPlan[subj] = val;
     });
-    return { q: qPlan, v: vPlan, exams: examCount };
+    return { q: qPlan, f: fPlan, v: vPlan, uworld: uWorldCount, aamc: aamcExamCount, aamcQs: aamcQsCount };
   }
 
   function deltaClass(diff) {
@@ -275,74 +278,77 @@
     document.getElementById('proj-banner').classList.remove('show');
 
     var newPlan = getNewPlan();
-    var subjects = Object.keys(CURRENT_PLAN).filter(function (k) { return k !== 'exams'; });
+    var subjects = Object.keys(CURRENT_PLAN).filter(function (k) {
+      return k !== 'uworld' && k !== 'aamc' && k !== 'aamcQs';
+    });
 
-    /* Calculate total hours: questions at 0.025 hr each, videos direct */
+    /* Total hours: q×0.025 + f×0.016 + v per subject, plus common items */
     var curTotalHrs = 0, newTotalHrs = 0;
     subjects.forEach(function (k) {
-      curTotalHrs += Math.round(CURRENT_PLAN[k].q * 0.025) + CURRENT_PLAN[k].v;
-      newTotalHrs += Math.round(newPlan.q[k] * 0.025) + newPlan.v[k];
+      curTotalHrs += Math.round(CURRENT_PLAN[k].q * 0.025) + Math.round(CURRENT_PLAN[k].f * 0.016) + CURRENT_PLAN[k].v;
+      newTotalHrs += Math.round(newPlan.q[k] * 0.025) + Math.round(newPlan.f[k] * 0.016) + newPlan.v[k];
     });
-    curTotalHrs += CURRENT_PLAN.exams * 7;
-    newTotalHrs += newPlan.exams * 7;
+    curTotalHrs += CURRENT_PLAN.uworld * 7 + CURRENT_PLAN.aamc * 6 + CURRENT_PLAN.aamcQs * 2;
+    newTotalHrs += newPlan.uworld * 7 + newPlan.aamc * 6 + newPlan.aamcQs * 2;
 
-    /* Build table rows with content-type breakdown */
+    /* Helper to build a content-type row */
+    function ctRow(icon, curVal, newVal, diffVal, unit) {
+      return '<span class="pcm-ct-row">' +
+          '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+          '<span class="pcm-cur-val">' + curVal + ' ' + unit + '</span>' +
+        '</span>' +
+        '||' +
+        '<span class="pcm-ct-row">' +
+          '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+          '<span class="pcm-new-val">' + newVal + ' ' + unit +
+            (diffVal !== 0 ? '<span class="pcm-delta ' + deltaClass(diffVal) + '">' + deltaText(diffVal) + '</span>' : '') +
+          '</span>' +
+        '</span>';
+    }
+
+    /* Build subject rows — 3 content types each */
     var rows = subjects.map(function (k) {
-      var curQ  = CURRENT_PLAN[k].q;
-      var newQ  = Math.round(newPlan.q[k]);
-      var curV  = CURRENT_PLAN[k].v;
-      var newV  = Math.round(newPlan.v[k]);
-      var diffQ = newQ - curQ;
-      var diffV = newV - curV;
+      var curQ = CURRENT_PLAN[k].q,  newQ = Math.round(newPlan.q[k]);
+      var curF = CURRENT_PLAN[k].f,  newF = Math.round(newPlan.f[k]);
+      var curV = CURRENT_PLAN[k].v,  newV = Math.round(newPlan.v[k]);
+      var qParts = ctRow('fa-file-lines', curQ, newQ, newQ - curQ, 'questions').split('||');
+      var fParts = ctRow('fa-bolt',       curF, newF, newF - curF, 'flashcards').split('||');
+      var vParts = ctRow('fa-book-open',  curV, newV, newV - curV, 'hrs videos').split('||');
       return '<tr>' +
         '<td class="pcmt-label">' + SUBJ_LABELS[k] + '</td>' +
+        '<td class="pcmt-current">' + qParts[0] + fParts[0] + vParts[0] + '</td>' +
+        '<td class="pcmt-new">'     + qParts[1] + fParts[1] + vParts[1] + '</td>' +
+      '</tr>';
+    });
+
+    /* Common activities rows */
+    function commonRow(label, icon, curN, curHrEach, newN, newHrEach) {
+      var diff = newN - curN;
+      return '<tr>' +
+        '<td class="pcmt-label">' + label + '</td>' +
         '<td class="pcmt-current">' +
           '<span class="pcm-ct-row">' +
-            '<span class="pcm-ct-icon"><i class="fa-light fa-file-lines"></i></span>' +
-            '<span class="pcm-cur-val">' + curQ + ' questions</span>' +
-          '</span>' +
-          '<span class="pcm-ct-row">' +
-            '<span class="pcm-ct-icon"><i class="fa-light fa-book-open"></i></span>' +
-            '<span class="pcm-cur-val">' + curV + ' hrs videos</span>' +
+            '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+            '<span class="pcm-cur-val">' + curN + ' · ' + (curN * curHrEach) + ' hrs</span>' +
           '</span>' +
         '</td>' +
         '<td class="pcmt-new">' +
           '<span class="pcm-ct-row">' +
-            '<span class="pcm-ct-icon"><i class="fa-light fa-file-lines"></i></span>' +
-            '<span class="pcm-new-val">' + newQ + ' questions' +
-              (diffQ !== 0 ? '<span class="pcm-delta ' + deltaClass(diffQ) + '">' + deltaText(diffQ) + '</span>' : '') +
-            '</span>' +
-          '</span>' +
-          '<span class="pcm-ct-row">' +
-            '<span class="pcm-ct-icon"><i class="fa-light fa-book-open"></i></span>' +
-            '<span class="pcm-new-val">' + newV + ' hrs videos' +
-              (diffV !== 0 ? '<span class="pcm-delta ' + deltaClass(diffV) + '">' + deltaText(diffV) + ' hrs</span>' : '') +
+            '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+            '<span class="pcm-new-val">' + newN + ' · ' + (newN * newHrEach) + ' hrs' +
+              (diff !== 0 ? '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' : '') +
             '</span>' +
           '</span>' +
         '</td>' +
       '</tr>';
-    });
+    }
 
-    /* Exams row */
-    var curExams = CURRENT_PLAN.exams, newExams = newPlan.exams;
-    var examDiff = newExams - curExams;
-    rows.push('<tr>' +
-      '<td class="pcmt-label">Practice Exams</td>' +
-      '<td class="pcmt-current">' +
-        '<span class="pcm-ct-row">' +
-          '<span class="pcm-ct-icon"><i class="fa-light fa-list-check"></i></span>' +
-          '<span class="pcm-cur-val">' + curExams + ' full-length · ' + (curExams * 7) + ' hrs</span>' +
-        '</span>' +
-      '</td>' +
-      '<td class="pcmt-new">' +
-        '<span class="pcm-ct-row">' +
-          '<span class="pcm-ct-icon"><i class="fa-light fa-list-check"></i></span>' +
-          '<span class="pcm-new-val">' + newExams + ' full-length · ' + (newExams * 7) + ' hrs' +
-            (examDiff !== 0 ? '<span class="pcm-delta ' + deltaClass(examDiff) + '">' + deltaText(examDiff) + '</span>' : '') +
-          '</span>' +
-        '</span>' +
-      '</td>' +
-    '</tr>');
+    rows.push(commonRow('UWorld Practice Exam', 'fa-graduation-cap',
+      CURRENT_PLAN.uworld, 7, newPlan.uworld, 7));
+    rows.push(commonRow('AAMC Practice Exam', 'fa-school',
+      CURRENT_PLAN.aamc, 6, newPlan.aamc, 6));
+    rows.push(commonRow('AAMC Question Sets', 'fa-list-check',
+      CURRENT_PLAN.aamcQs, 2, newPlan.aamcQs, 2));
 
     document.getElementById('pcm-tbody').innerHTML = rows.join('');
 
@@ -400,12 +406,6 @@
     });
     var projEl = document.getElementById('bell-proj');
     if (projEl) projEl.classList.remove('visible');
-  }
-
-  function stepExam(delta) {
-    examCount = Math.max(0, Math.min(8, examCount + delta));
-    setText('exam-num', examCount);
-    recalc();
   }
 
   /* ═══════════════════════════════════
@@ -471,10 +471,15 @@
     var discardBtn = document.getElementById('discard-plan-btn');
     if (discardBtn) discardBtn.addEventListener('click', discardPlan);
 
-    var stepUp   = document.getElementById('exam-step-up');
-    var stepDown = document.getElementById('exam-step-down');
-    if (stepUp)   stepUp.addEventListener('click',   function () { stepExam(1);  });
-    if (stepDown) stepDown.addEventListener('click',  function () { stepExam(-1); });
+    function wireStep(downId, upId, numId, getter, setter, min, max) {
+      var up = document.getElementById(upId);
+      var dn = document.getElementById(downId);
+      if (up) up.addEventListener('click', function () { setter(Math.min(max, getter() + 1)); setText(numId, getter()); recalc(); });
+      if (dn) dn.addEventListener('click', function () { setter(Math.max(min, getter() - 1)); setText(numId, getter()); recalc(); });
+    }
+    wireStep('uworld-step-down',  'uworld-step-up',  'uworld-num',  function () { return uWorldCount;   }, function (v) { uWorldCount   = v; }, 0, 8);
+    wireStep('aamc-step-down',    'aamc-step-up',    'aamc-num',    function () { return aamcExamCount; }, function (v) { aamcExamCount = v; }, 0, 5);
+    wireStep('aamcqs-step-down',  'aamcqs-step-up',  'aamcqs-num',  function () { return aamcQsCount;   }, function (v) { aamcQsCount   = v; }, 0, 10);
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
