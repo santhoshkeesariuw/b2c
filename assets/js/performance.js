@@ -22,13 +22,13 @@
 
   /* Current (baseline) study plan — reflects what is already in the study planner */
   var CURRENT_PLAN = {
-    bio:     { hrs: 5,  q: 61  },
-    biochem: { hrs: 4,  q: 42  },
-    genchem: { hrs: 7,  q: 41  },
-    orgchem: { hrs: 3,  q: 30  },
-    phys:    { hrs: 2,  q: 20  },
-    behsci:  { hrs: 4,  q: 48  },
-    cars:    { hrs: 3,  q: 36  },
+    bio:     { q: 61,  v: 5  },
+    biochem: { q: 42,  v: 4  },
+    genchem: { q: 41,  v: 7  },
+    orgchem: { q: 30,  v: 3  },
+    phys:    { q: 20,  v: 2  },
+    behsci:  { q: 48,  v: 4  },
+    cars:    { q: 36,  v: 3  },
     exams:   1
   };
 
@@ -241,21 +241,20 @@
 
   /* Read new plan values from the simulator sliders */
   function getNewPlan() {
-    var plan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
     var qPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
+    var vPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
     document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
       var subj = s.dataset.subj;
       var kind = s.dataset.kind;
-      var v = parseFloat(s.value);
-      if (plan[subj] === undefined) return;
+      var val  = parseFloat(s.value);
+      if (qPlan[subj] === undefined) return;
       if (kind === 'q') {
-        qPlan[subj] += v;
-        plan[subj]  += v * parseFloat(s.dataset.hr);
+        qPlan[subj] = val;
       } else {
-        plan[subj] += v;
+        vPlan[subj] = val;
       }
     });
-    return { hrs: plan, q: qPlan, exams: examCount };
+    return { q: qPlan, v: vPlan, exams: examCount };
   }
 
   function deltaClass(diff) {
@@ -278,47 +277,69 @@
     var newPlan = getNewPlan();
     var subjects = Object.keys(CURRENT_PLAN).filter(function (k) { return k !== 'exams'; });
 
+    /* Calculate total hours: questions at 0.025 hr each, videos direct */
     var curTotalHrs = 0, newTotalHrs = 0;
     subjects.forEach(function (k) {
-      curTotalHrs += CURRENT_PLAN[k].hrs;
-      newTotalHrs += Math.round(newPlan.hrs[k]);
+      curTotalHrs += Math.round(CURRENT_PLAN[k].q * 0.025) + CURRENT_PLAN[k].v;
+      newTotalHrs += Math.round(newPlan.q[k] * 0.025) + newPlan.v[k];
     });
     curTotalHrs += CURRENT_PLAN.exams * 7;
     newTotalHrs += newPlan.exams * 7;
 
-    /* Build table rows */
+    /* Build table rows with content-type breakdown */
     var rows = subjects.map(function (k) {
-      var curHrs  = CURRENT_PLAN[k].hrs;
-      var newHrs  = Math.round(newPlan.hrs[k]);
-      var curQ    = CURRENT_PLAN[k].q;
-      var newQ    = Math.round(newPlan.q[k]);
-      var diffHrs = newHrs - curHrs;
+      var curQ  = CURRENT_PLAN[k].q;
+      var newQ  = Math.round(newPlan.q[k]);
+      var curV  = CURRENT_PLAN[k].v;
+      var newV  = Math.round(newPlan.v[k]);
+      var diffQ = newQ - curQ;
+      var diffV = newV - curV;
       return '<tr>' +
         '<td class="pcmt-label">' + SUBJ_LABELS[k] + '</td>' +
         '<td class="pcmt-current">' +
-          '<span class="pcm-cur-val">' + curHrs + ' hrs</span>' +
-          '<span class="pcm-cur-sub">' + curQ + ' questions</span>' +
+          '<span class="pcm-ct-row">' +
+            '<span class="pcm-ct-icon"><i class="fa-light fa-file-lines"></i></span>' +
+            '<span class="pcm-cur-val">' + curQ + ' questions</span>' +
+          '</span>' +
+          '<span class="pcm-ct-row">' +
+            '<span class="pcm-ct-icon"><i class="fa-light fa-book-open"></i></span>' +
+            '<span class="pcm-cur-val">' + curV + ' hrs videos</span>' +
+          '</span>' +
         '</td>' +
         '<td class="pcmt-new">' +
-          '<span class="pcm-new-val">' + newHrs + ' hrs' +
-            '<span class="pcm-delta ' + deltaClass(diffHrs) + '">' + deltaText(diffHrs) + ' hrs</span>' +
+          '<span class="pcm-ct-row">' +
+            '<span class="pcm-ct-icon"><i class="fa-light fa-file-lines"></i></span>' +
+            '<span class="pcm-new-val">' + newQ + ' questions' +
+              (diffQ !== 0 ? '<span class="pcm-delta ' + deltaClass(diffQ) + '">' + deltaText(diffQ) + '</span>' : '') +
+            '</span>' +
           '</span>' +
-          '<span class="pcm-new-sub">' + newQ + ' questions</span>' +
+          '<span class="pcm-ct-row">' +
+            '<span class="pcm-ct-icon"><i class="fa-light fa-book-open"></i></span>' +
+            '<span class="pcm-new-val">' + newV + ' hrs videos' +
+              (diffV !== 0 ? '<span class="pcm-delta ' + deltaClass(diffV) + '">' + deltaText(diffV) + ' hrs</span>' : '') +
+            '</span>' +
+          '</span>' +
         '</td>' +
       '</tr>';
     });
 
     /* Exams row */
-    var curExamHrs = CURRENT_PLAN.exams * 7, newExamHrs = newPlan.exams * 7;
-    var examDiff = newExamHrs - curExamHrs;
+    var curExams = CURRENT_PLAN.exams, newExams = newPlan.exams;
+    var examDiff = newExams - curExams;
     rows.push('<tr>' +
       '<td class="pcmt-label">Practice Exams</td>' +
       '<td class="pcmt-current">' +
-        '<span class="pcm-cur-val">' + CURRENT_PLAN.exams + ' exam · ' + curExamHrs + ' hrs</span>' +
+        '<span class="pcm-ct-row">' +
+          '<span class="pcm-ct-icon"><i class="fa-light fa-list-check"></i></span>' +
+          '<span class="pcm-cur-val">' + curExams + ' full-length · ' + (curExams * 7) + ' hrs</span>' +
+        '</span>' +
       '</td>' +
       '<td class="pcmt-new">' +
-        '<span class="pcm-new-val">' + newPlan.exams + ' exam · ' + newExamHrs + ' hrs' +
-          (examDiff !== 0 ? '<span class="pcm-delta ' + deltaClass(examDiff) + '">' + deltaText(examDiff) + ' hrs</span>' : '') +
+        '<span class="pcm-ct-row">' +
+          '<span class="pcm-ct-icon"><i class="fa-light fa-list-check"></i></span>' +
+          '<span class="pcm-new-val">' + newExams + ' full-length · ' + (newExams * 7) + ' hrs' +
+            (examDiff !== 0 ? '<span class="pcm-delta ' + deltaClass(examDiff) + '">' + deltaText(examDiff) + '</span>' : '') +
+          '</span>' +
         '</span>' +
       '</td>' +
     '</tr>');

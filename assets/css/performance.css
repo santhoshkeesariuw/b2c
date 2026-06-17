@@ -832,12 +832,23 @@ input[type="range"].sim-range::-moz-range-thumb {
   color: var(--color-brand-blue);
   font-weight: var(--fw-medium);
 }
-.pcm-cur-sub,
-.pcm-new-sub {
-  display: block;
-  font-size: 11px;
+
+/* Content-type rows inside each subject cell */
+.pcm-ct-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+}
+.pcm-ct-row + .pcm-ct-row {
+  border-top: 1px solid var(--color-border-subtle);
+}
+.pcm-ct-icon {
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
   color: var(--color-text-muted);
-  margin-top: 2px;
+  font-size: 12px;
 }
 .pcm-delta {
   display: inline-block;
