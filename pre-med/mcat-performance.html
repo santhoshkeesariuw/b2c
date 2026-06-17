@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css?v=11" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
   <link rel="stylesheet" href="../assets/css/dashboard.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/performance.css?v=11" />
+  <link rel="stylesheet" href="../assets/css/performance.css?v=12" />
 </head>
 <body>
 
@@ -784,7 +784,7 @@
       </div>
     </div>
 
-    <!-- ── Step 1: Overview ── -->
+    <!-- ── Step 1: Plan cards + weekday schedule ── -->
     <div class="pcm-body pcm-step-panel" id="pcm-step-1">
       <div class="pov-cards">
         <div class="pov-card pov-card--current">
@@ -804,63 +804,36 @@
           <div class="pov-card-week" id="pov-new-week-card">— hrs / week</div>
         </div>
       </div>
-      <div class="pov-subj-section">
-        <div class="pov-subj-head">
-          <span>Subject / Activity</span>
+      <div class="pov-days-section">
+        <div class="pov-days-head">
+          <span>Day</span>
           <span>Current</span>
           <span>New</span>
           <span>Change</span>
         </div>
-        <div id="pov-subj-rows"></div>
+        <div id="pov-days-rows"></div>
+        <div class="pov-days-total">
+          <span>Total / week</span>
+          <span id="pov-cur-total-week"></span>
+          <span id="pov-new-total-week"></span>
+          <span id="pov-week-delta"></span>
+        </div>
       </div>
     </div>
 
-    <!-- ── Step 2: Activity breakdown + weekly schedule ── -->
+    <!-- ── Step 2: Subjects (expand/collapse) + common activities ── -->
     <div class="pcm-body pcm-step-panel" id="pcm-step-2" hidden>
-      <table class="pcm-table">
-        <thead>
-          <tr>
-            <th class="pcmt-label"></th>
-            <th class="pcmt-current pcmt-current-head">Current Plan</th>
-            <th class="pcmt-new pcmt-new-head">New Plan</th>
-          </tr>
-        </thead>
-        <tbody id="pcm-tbody"></tbody>
-      </table>
-
-      <div class="pcm-weekly-section">
-        <div class="pcws-title">Weekly Schedule</div>
-        <table class="pcm-table">
-          <thead>
-            <tr>
-              <th class="pcmt-label"></th>
-              <th class="pcmt-current pcmt-current-head">Current Plan</th>
-              <th class="pcmt-new pcmt-new-head">New Plan</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="pcmt-label">Total / week</td>
-              <td class="pcmt-current pcm-cur-val" id="pcm-cur-week"></td>
-              <td class="pcmt-new pcm-new-val" id="pcm-new-week"></td>
-            </tr>
-            <tr>
-              <td class="pcmt-label">Weekday avg <span class="pcmt-sub">Mon–Fri</span></td>
-              <td class="pcmt-current pcm-cur-val" id="pcm-cur-weekday"></td>
-              <td class="pcmt-new pcm-new-val" id="pcm-new-weekday"></td>
-            </tr>
-            <tr>
-              <td class="pcmt-label">Weekend avg <span class="pcmt-sub">Sat–Sun</span></td>
-              <td class="pcmt-current pcm-cur-val" id="pcm-cur-weekend"></td>
-              <td class="pcmt-new pcm-new-val" id="pcm-new-weekend"></td>
-            </tr>
-            <tr class="pcm-total-row">
-              <td class="pcmt-label">Total hours</td>
-              <td class="pcmt-current pcm-cur-val" id="pcm-cur-total"></td>
-              <td class="pcmt-new pcm-new-val" id="pcm-new-total"></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="pcs-head">
+        <span></span>
+        <span>Subject</span>
+        <span>Current</span>
+        <span>New</span>
+        <span>Change</span>
+      </div>
+      <div id="pcs-subjects"></div>
+      <div class="pcs-common-section">
+        <div class="pcs-common-title">Common Activities</div>
+        <div id="pcs-common-rows"></div>
       </div>
     </div>
 
@@ -884,6 +857,6 @@
 </div>
 
 <script src="../assets/js/theme.js"></script>
-<script src="../assets/js/performance.js?v=8"></script>
+<script src="../assets/js/performance.js?v=9"></script>
 </body>
 </html>

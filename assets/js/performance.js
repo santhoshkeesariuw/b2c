@@ -382,96 +382,83 @@
       deltaEl.className   = 'pov-hrs-delta' + (totalDiff < 0 ? ' down' : '');
     }
 
-    /* ── Step 1: Compact subject rows ── */
-    var subjRows = subjects.map(function (k) {
+    /* ── Step 1: Weekday rows (Mon–Sun with % distribution) ── */
+    var DAYS        = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    var DAY_WEIGHTS = [0.12,     0.12,      0.12,        0.12,       0.12,     0.20,       0.20];
+    var WEEKEND_IDX = [5, 6];
+
+    var dayRowsHtml = DAYS.map(function (day, i) {
+      var curD = (curWeekHrs * DAY_WEIGHTS[i]).toFixed(1);
+      var newD = (newWeekHrs * DAY_WEIGHTS[i]).toFixed(1);
+      var diff = parseFloat((newD - curD).toFixed(1));
+      var isWknd = WEEKEND_IDX.indexOf(i) !== -1;
+      return '<div class="pov-day-row">' +
+        '<span class="pov-day-name' + (isWknd ? ' weekend' : '') + '">' + day + '</span>' +
+        '<span class="pov-day-val">' + curD + ' hrs</span>' +
+        '<span class="pov-day-val pov-new-val">' + newD + ' hrs</span>' +
+        '<span class="pcm-delta ' + deltaClass(diff) + '">' + (diff >= 0 ? '+' : '') + diff + '</span>' +
+      '</div>';
+    }).join('');
+
+    document.getElementById('pov-days-rows').innerHTML = dayRowsHtml;
+    setText('pov-cur-total-week', curWeekHrs + ' hrs/wk');
+    var newWkEl = document.getElementById('pov-new-total-week');
+    if (newWkEl) newWkEl.innerHTML = newWeekHrs + ' hrs/wk';
+    var wkDeltaEl = document.getElementById('pov-week-delta');
+    if (wkDeltaEl) {
+      wkDeltaEl.textContent = (weekDiff >= 0 ? '+' : '') + weekDiff;
+      wkDeltaEl.className   = 'pcm-delta ' + deltaClass(weekDiff);
+    }
+
+    /* ── Step 2: Collapsible subject rows ── */
+    function pcsCtRow(icon, label, curVal, newVal, diff, unit) {
+      return '<div class="pcs-ct-row">' +
+        '<span class="pcs-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+        '<span class="pcs-ct-name">' + label + '</span>' +
+        '<span class="pcs-ct-val">' + curVal + ' ' + unit + '</span>' +
+        '<span class="pcs-ct-val pcs-new-val">' + newVal + ' ' + unit + '</span>' +
+        '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
+      '</div>';
+    }
+
+    var subjHtml = subjects.map(function (k) {
       var curH = Math.round(CURRENT_PLAN[k].q * 0.025 + CURRENT_PLAN[k].f * 0.016 + CURRENT_PLAN[k].v);
       var newH = Math.round(newPlan.q[k] * 0.025 + newPlan.f[k] * 0.016 + newPlan.v[k]);
       var diff = newH - curH;
-      return '<div class="pov-subj-row">' +
-        '<span class="pov-subj-name">' + SUBJ_LABELS[k] + '</span>' +
-        '<span class="pov-subj-val">' + curH + ' hrs</span>' +
-        '<span class="pov-subj-val pov-new-val">' + newH + ' hrs</span>' +
-        '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
-      '</div>';
-    });
-    /* common items as compact rows */
-    subjRows.push('<hr class="pov-subj-divider">');
-    function compactCommon(label, curN, newN, unit) {
-      var diff = newN - curN;
-      return '<div class="pov-subj-row">' +
-        '<span class="pov-subj-name">' + label + '</span>' +
-        '<span class="pov-subj-val">' + curN + ' ' + unit + '</span>' +
-        '<span class="pov-subj-val pov-new-val">' + newN + ' ' + unit + '</span>' +
-        '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
-      '</div>';
-    }
-    subjRows.push(compactCommon('UWorld Practice Exam', CURRENT_PLAN.uworld,   newPlan.uworld,   'exam'));
-    subjRows.push(compactCommon('AAMC Practice Exam',   CURRENT_PLAN.aamc,     newPlan.aamc,     'exam'));
-    subjRows.push(compactCommon('AAMC Question Sets',   CURRENT_PLAN.aamcQs,   newPlan.aamcQs,   'set'));
-
-    document.getElementById('pov-subj-rows').innerHTML = subjRows.join('');
-
-    /* ── Step 2: Detailed activity table ── */
-    function ctRow(icon, label, curVal, newVal, diffVal, curUnit, newUnit) {
-      newUnit = newUnit || curUnit;
-      return '<span class="pcm-ct-row">' +
-          '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-          '<span class="pcm-ct-label">' + label + '</span>' +
-          '<span class="pcm-cur-val">' + curVal + ' ' + curUnit + '</span>' +
-        '</span>' +
-        '||' +
-        '<span class="pcm-ct-row">' +
-          '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-          '<span class="pcm-ct-label">' + label + '</span>' +
-          '<span class="pcm-new-val">' + newVal + ' ' + newUnit +
-            (diffVal !== 0 ? '<span class="pcm-delta ' + deltaClass(diffVal) + '">' + deltaText(diffVal) + '</span>' : '') +
-          '</span>' +
-        '</span>';
-    }
-
-    var rows = subjects.map(function (k) {
       var curQ = CURRENT_PLAN[k].q, newQ = Math.round(newPlan.q[k]);
       var curF = CURRENT_PLAN[k].f, newF = Math.round(newPlan.f[k]);
       var curV = CURRENT_PLAN[k].v, newV = Math.round(newPlan.v[k]);
-      var qP = ctRow('fa-file-lines', 'Practice Questions',         curQ, newQ, newQ - curQ, 'questions').split('||');
-      var fP = ctRow('fa-bolt',       'Review Flashcards',          curF, newF, newF - curF, 'flashcards').split('||');
-      var vP = ctRow('fa-book-open',  'Review UBooks &amp; Videos', curV, newV, newV - curV, 'hrs').split('||');
-      return '<tr>' +
-        '<td class="pcmt-label">' + SUBJ_LABELS[k] + '</td>' +
-        '<td class="pcmt-current">' + qP[0] + fP[0] + vP[0] + '</td>' +
-        '<td class="pcmt-new">'     + qP[1] + fP[1] + vP[1] + '</td>' +
-      '</tr>';
-    });
+      return '<div class="pcs-subj-row" data-subj="' + k + '">' +
+          '<span class="pcs-chevron"><i class="fa-light fa-chevron-right"></i></span>' +
+          '<span class="pcs-name">' + SUBJ_LABELS[k] + '</span>' +
+          '<span class="pcs-val">' + curH + ' hrs</span>' +
+          '<span class="pcs-val pcs-new-val">' + newH + ' hrs</span>' +
+          '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
+        '</div>' +
+        '<div class="pcs-detail" id="pcs-detail-' + k + '">' +
+          pcsCtRow('fa-file-lines', 'Practice Questions',    curQ, newQ, newQ - curQ, 'questions') +
+          pcsCtRow('fa-bolt',       'Review Flashcards',     curF, newF, newF - curF, 'flashcards') +
+          pcsCtRow('fa-book-open',  'Review UBooks & Videos',curV, newV, newV - curV, 'hrs') +
+        '</div>';
+    }).join('');
+    document.getElementById('pcs-subjects').innerHTML = subjHtml;
 
-    function commonRow(label, sublabel, icon, curN, hrEach, newN) {
+    /* common activities in step 2 */
+    function commonRow2(icon, label, sub, curN, newN, hrEach) {
       var diff = newN - curN;
-      var unit = function(n) { return n === 1 ? ' exam' : ' exams'; };
-      return '<tr>' +
-        '<td class="pcmt-label">' + label + '<span class="pcm-common-sub">' + sublabel + '</span></td>' +
-        '<td class="pcmt-current"><span class="pcm-ct-row"><span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-          '<span class="pcm-cur-val">' + curN + unit(curN) + ' · ' + (curN * hrEach) + ' hrs</span></span></td>' +
-        '<td class="pcmt-new"><span class="pcm-ct-row"><span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-          '<span class="pcm-new-val">' + newN + unit(newN) + ' · ' + (newN * hrEach) + ' hrs' +
-            (diff !== 0 ? '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' : '') +
-          '</span></span></td>' +
-      '</tr>';
+      var u = function(n) { return n === 1 ? 'exam' : 'exams'; };
+      return '<div class="pcs-common-row">' +
+        '<span class="pcs-common-icon"><i class="fa-light ' + icon + '"></i></span>' +
+        '<span class="pcs-common-name">' + label + '<span class="pcs-common-sub">' + sub + '</span></span>' +
+        '<span class="pcs-common-val">' + curN + ' ' + u(curN) + ' · ' + (curN * hrEach) + ' hrs</span>' +
+        '<span class="pcs-common-val pcs-new-val">' + newN + ' ' + u(newN) + ' · ' + (newN * hrEach) + ' hrs</span>' +
+        '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
+      '</div>';
     }
-    rows.push(commonRow('UWorld Practice Exam', 'Full-length · 7 hrs each',       'fa-graduation-cap', CURRENT_PLAN.uworld, 7, newPlan.uworld));
-    rows.push(commonRow('AAMC Practice Exam',   'Full-length · 6 hrs each',       'fa-school',         CURRENT_PLAN.aamc,   6, newPlan.aamc));
-    rows.push(commonRow('AAMC Question Sets',   'Section-specific · 2 hrs each',  'fa-list-check',     CURRENT_PLAN.aamcQs, 2, newPlan.aamcQs));
-    document.getElementById('pcm-tbody').innerHTML = rows.join('');
-
-    /* ── Step 2: Weekly schedule rows ── */
-    document.getElementById('pcm-cur-week').textContent    = curWeekHrs + ' hrs/week';
-    document.getElementById('pcm-new-week').innerHTML      = newWeekHrs + ' hrs/week' +
-      '<span class="pcm-delta ' + deltaClass(weekDiff) + '">' + (weekDiff >= 0 ? '+' : '') + weekDiff + '</span>';
-    document.getElementById('pcm-cur-weekday').textContent = curWkday + ' hrs/day';
-    document.getElementById('pcm-new-weekday').textContent = newWkday + ' hrs/day';
-    document.getElementById('pcm-cur-weekend').textContent = curWkend + ' hrs/day';
-    document.getElementById('pcm-new-weekend').textContent = newWkend + ' hrs/day';
-    document.getElementById('pcm-cur-total').textContent   = curTotalHrs + ' hrs';
-    document.getElementById('pcm-new-total').innerHTML     = newTotalHrs + ' hrs' +
-      '<span class="pcm-delta ' + deltaClass(totalDiff) + '">' + deltaText(totalDiff) + ' hrs</span>';
+    document.getElementById('pcs-common-rows').innerHTML =
+      commonRow2('fa-graduation-cap', 'UWorld Practice Exam', 'Full-length · 7 hrs each',      CURRENT_PLAN.uworld, newPlan.uworld, 7) +
+      commonRow2('fa-school',         'AAMC Practice Exam',   'Full-length · 6 hrs each',      CURRENT_PLAN.aamc,   newPlan.aamc,   6) +
+      commonRow2('fa-list-check',     'AAMC Question Sets',   'Section-specific · 2 hrs each', CURRENT_PLAN.aamcQs, newPlan.aamcQs, 2);
 
     showPcmStep(1);
     document.getElementById('plan-cmp-overlay').classList.add('open');
@@ -602,6 +589,16 @@
     if (pcmNext)   pcmNext.addEventListener('click',   function () { showPcmStep(2); });
     if (pcmBack)   pcmBack.addEventListener('click',   function () { showPcmStep(1); });
     if (pcmApply)  pcmApply.addEventListener('click',  applyPlan);
+
+    /* expand/collapse subject rows in step 2 */
+    document.getElementById('pcs-subjects').addEventListener('click', function (e) {
+      var row = e.target.closest('.pcs-subj-row');
+      if (!row) return;
+      var detail = document.getElementById('pcs-detail-' + row.dataset.subj);
+      if (!detail) return;
+      var open = row.classList.toggle('expanded');
+      detail.classList.toggle('open', open);
+    });
 
     /* initial footer state */
     showPcmStep(1);

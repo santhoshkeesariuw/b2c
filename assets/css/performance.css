@@ -1071,11 +1071,58 @@ input[type="range"].sim-range::-moz-range-thumb {
 }
 .pov-hrs-delta.down { background: #FEF2F2; color: #991B1B; }
 
-/* ── Step 1: Compact subject list ── */
-.pov-subj-section { margin-top: 0; }
-.pov-subj-head {
+/* ── Step 1: Weekday schedule table ── */
+.pov-days-section { margin-top: 0; }
+.pov-days-head,
+.pov-day-row,
+.pov-days-total {
   display: grid;
-  grid-template-columns: 1fr 72px 72px 56px;
+  grid-template-columns: 1fr 80px 80px 60px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+}
+.pov-days-head {
+  border-bottom: 2px solid var(--color-border);
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+.pov-days-head span:not(:first-child),
+.pov-day-row .pov-day-val,
+.pov-days-total span:not(:first-child) { text-align: right; }
+.pov-day-row {
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.pov-day-row:last-child { border-bottom: none; }
+.pov-day-name {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.pov-day-name.weekend { color: var(--color-brand-blue); font-weight: var(--fw-medium); }
+.pov-day-val {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.pov-day-val.pov-new-val {
+  color: var(--color-brand-blue);
+  font-weight: var(--fw-medium);
+}
+.pov-days-total {
+  border-top: 2px solid var(--color-border);
+  margin-top: 2px;
+  font-weight: var(--fw-semibold);
+  font-size: 13px;
+  color: var(--color-text-primary);
+  padding-top: 10px;
+}
+
+/* ── Step 2: Collapsible subject rows ── */
+.pcs-head {
+  display: grid;
+  grid-template-columns: 20px 1fr 72px 72px 56px;
   gap: 8px;
   padding: 8px 0;
   border-bottom: 2px solid var(--color-border);
@@ -1085,56 +1132,104 @@ input[type="range"].sim-range::-moz-range-thumb {
   letter-spacing: 0.5px;
   color: var(--color-text-muted);
 }
-.pov-subj-head span:not(:first-child),
-.pov-subj-row .pov-subj-val { text-align: right; }
-.pov-subj-row {
+.pcs-head span:nth-child(n+3) { text-align: right; }
+.pcs-subj-row {
   display: grid;
-  grid-template-columns: 1fr 72px 72px 56px;
+  grid-template-columns: 20px 1fr 72px 72px 56px;
   gap: 8px;
-  padding: 9px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--color-border-subtle);
   align-items: center;
+  cursor: pointer;
+  user-select: none;
 }
-.pov-subj-row:last-child { border-bottom: none; }
-.pov-subj-name {
+.pcs-subj-row:hover { background: var(--color-surface-raised); margin: 0 -4px; padding-left: 4px; padding-right: 4px; }
+.pcs-chevron {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  transition: transform var(--dur-base);
+  text-align: center;
+}
+.pcs-subj-row.expanded .pcs-chevron { transform: rotate(90deg); }
+.pcs-name {
   font-size: 13px;
+  font-weight: var(--fw-medium);
   color: var(--color-text-secondary);
 }
-.pov-subj-val {
+.pcs-val {
   font-size: 13px;
   color: var(--color-text-secondary);
+  text-align: right;
 }
-.pov-subj-val.pov-new-val {
+.pcs-val.pcs-new-val {
   color: var(--color-brand-blue);
   font-weight: var(--fw-medium);
 }
-.pov-subj-divider {
-  grid-column: 1 / -1;
-  border: none;
-  border-top: 1px solid var(--color-border);
-  margin: 2px 0;
+.pcs-detail {
+  display: none;
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 4px;
 }
-
-/* ── Step 2: Weekly schedule section ── */
-.pcm-weekly-section {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 2px solid var(--color-border);
+.pcs-detail.open { display: block; }
+.pcs-ct-row {
+  display: grid;
+  grid-template-columns: 16px 1fr 90px 90px 56px;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
-.pcws-title {
+.pcs-ct-row:last-child { border-bottom: none; }
+.pcs-ct-icon {
+  color: var(--color-text-muted);
   font-size: 11px;
+  text-align: center;
+}
+.pcs-ct-name {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+.pcs-ct-val {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+.pcs-ct-val.pcs-new-val {
+  color: var(--color-brand-blue);
+  font-weight: var(--fw-medium);
+}
+.pcs-ct-row .pcm-delta { text-align: right; justify-self: end; }
+
+/* Common activities in step 2 */
+.pcs-common-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+.pcs-common-title {
+  font-size: 10px;
   font-weight: var(--fw-semibold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--color-text-muted);
   margin-bottom: 4px;
 }
-.pcmt-sub {
-  font-size: 11px;
-  font-weight: var(--fw-normal);
-  color: var(--color-text-muted);
-  margin-left: 4px;
+.pcs-common-row {
+  display: grid;
+  grid-template-columns: 20px 1fr 72px 72px 56px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
+.pcs-common-row:last-child { border-bottom: none; }
+.pcs-common-icon { color: var(--color-text-muted); font-size: 12px; text-align: center; }
+.pcs-common-name { font-size: 13px; color: var(--color-text-secondary); }
+.pcs-common-sub  { display: block; font-size: 10px; color: var(--color-text-muted); margin-top: 1px; }
+.pcs-common-val  { font-size: 13px; color: var(--color-text-secondary); text-align: right; }
+.pcs-common-val.pcs-new-val { color: var(--color-brand-blue); font-weight: var(--fw-medium); }
 
 /* Applied success toast */
 .pcm-toast {
