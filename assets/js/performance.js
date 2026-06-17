@@ -291,16 +291,19 @@
     curTotalHrs += CURRENT_PLAN.uworld * 7 + CURRENT_PLAN.aamc * 6 + CURRENT_PLAN.aamcQs * 2;
     newTotalHrs += newPlan.uworld * 7 + newPlan.aamc * 6 + newPlan.aamcQs * 2;
 
-    /* Helper to build a content-type row */
-    function ctRow(icon, curVal, newVal, diffVal, unit) {
+    /* Helper to build a content-type row with explicit label */
+    function ctRow(icon, label, curVal, newVal, diffVal, curUnit, newUnit) {
+      newUnit = newUnit || curUnit;
       return '<span class="pcm-ct-row">' +
           '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-          '<span class="pcm-cur-val">' + curVal + ' ' + unit + '</span>' +
+          '<span class="pcm-ct-label">' + label + '</span>' +
+          '<span class="pcm-cur-val">' + curVal + ' ' + curUnit + '</span>' +
         '</span>' +
         '||' +
         '<span class="pcm-ct-row">' +
           '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-          '<span class="pcm-new-val">' + newVal + ' ' + unit +
+          '<span class="pcm-ct-label">' + label + '</span>' +
+          '<span class="pcm-new-val">' + newVal + ' ' + newUnit +
             (diffVal !== 0 ? '<span class="pcm-delta ' + deltaClass(diffVal) + '">' + deltaText(diffVal) + '</span>' : '') +
           '</span>' +
         '</span>';
@@ -311,9 +314,9 @@
       var curQ = CURRENT_PLAN[k].q,  newQ = Math.round(newPlan.q[k]);
       var curF = CURRENT_PLAN[k].f,  newF = Math.round(newPlan.f[k]);
       var curV = CURRENT_PLAN[k].v,  newV = Math.round(newPlan.v[k]);
-      var qParts = ctRow('fa-file-lines', curQ, newQ, newQ - curQ, 'questions').split('||');
-      var fParts = ctRow('fa-bolt',       curF, newF, newF - curF, 'flashcards').split('||');
-      var vParts = ctRow('fa-book-open',  curV, newV, newV - curV, 'hrs videos').split('||');
+      var qParts = ctRow('fa-file-lines', 'Practice Questions',     curQ, newQ, newQ - curQ, 'questions').split('||');
+      var fParts = ctRow('fa-bolt',       'Review Flashcards',      curF, newF, newF - curF, 'flashcards').split('||');
+      var vParts = ctRow('fa-book-open',  'Review UBooks &amp; Videos', curV, newV, newV - curV, 'hrs').split('||');
       return '<tr>' +
         '<td class="pcmt-label">' + SUBJ_LABELS[k] + '</td>' +
         '<td class="pcmt-current">' + qParts[0] + fParts[0] + vParts[0] + '</td>' +
@@ -322,20 +325,20 @@
     });
 
     /* Common activities rows */
-    function commonRow(label, icon, curN, curHrEach, newN, newHrEach) {
+    function commonRow(label, sublabel, icon, curN, curHrEach, newN, newHrEach) {
       var diff = newN - curN;
       return '<tr>' +
-        '<td class="pcmt-label">' + label + '</td>' +
+        '<td class="pcmt-label">' + label + '<span class="pcm-common-sub">' + sublabel + '</span></td>' +
         '<td class="pcmt-current">' +
           '<span class="pcm-ct-row">' +
             '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-            '<span class="pcm-cur-val">' + curN + ' · ' + (curN * curHrEach) + ' hrs</span>' +
+            '<span class="pcm-cur-val">' + curN + (curN === 1 ? ' exam' : ' exams') + ' · ' + (curN * curHrEach) + ' hrs</span>' +
           '</span>' +
         '</td>' +
         '<td class="pcmt-new">' +
           '<span class="pcm-ct-row">' +
             '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-            '<span class="pcm-new-val">' + newN + ' · ' + (newN * newHrEach) + ' hrs' +
+            '<span class="pcm-new-val">' + newN + (newN === 1 ? ' exam' : ' exams') + ' · ' + (newN * newHrEach) + ' hrs' +
               (diff !== 0 ? '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' : '') +
             '</span>' +
           '</span>' +
@@ -343,11 +346,11 @@
       '</tr>';
     }
 
-    rows.push(commonRow('UWorld Practice Exam', 'fa-graduation-cap',
+    rows.push(commonRow('UWorld Practice Exam', 'Full-length · 7 hrs each', 'fa-graduation-cap',
       CURRENT_PLAN.uworld, 7, newPlan.uworld, 7));
-    rows.push(commonRow('AAMC Practice Exam', 'fa-school',
+    rows.push(commonRow('AAMC Practice Exam', 'Full-length · 6 hrs each', 'fa-school',
       CURRENT_PLAN.aamc, 6, newPlan.aamc, 6));
-    rows.push(commonRow('AAMC Question Sets', 'fa-list-check',
+    rows.push(commonRow('AAMC Question Sets', 'Section-specific · 2 hrs each', 'fa-list-check',
       CURRENT_PLAN.aamcQs, 2, newPlan.aamcQs, 2));
 
     document.getElementById('pcm-tbody').innerHTML = rows.join('');

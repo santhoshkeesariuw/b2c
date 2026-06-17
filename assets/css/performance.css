@@ -838,17 +838,25 @@ input[type="range"].sim-range::-moz-range-thumb {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 0;
+  padding: 4px 0;
 }
 .pcm-ct-row + .pcm-ct-row {
   border-top: 1px solid var(--color-border-subtle);
 }
 .pcm-ct-icon {
-  width: 16px;
+  width: 14px;
   text-align: center;
   flex-shrink: 0;
   color: var(--color-text-muted);
-  font-size: 12px;
+  font-size: 11px;
+}
+.pcm-ct-label {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pcm-delta {
   display: inline-block;
@@ -863,6 +871,14 @@ input[type="range"].sim-range::-moz-range-thumb {
 .pcm-delta.same { background: var(--color-surface-raised); color: var(--color-text-muted); }
 
 /* Total / weekly rows */
+.pcm-common-sub {
+  display: block;
+  font-size: 10px;
+  color: var(--color-text-muted);
+  font-weight: var(--fw-normal);
+  margin-top: 2px;
+}
+
 .pcm-total-row td {
   border-top: 2px solid var(--color-border);
   font-weight: var(--fw-semibold);
