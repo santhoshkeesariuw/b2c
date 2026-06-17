@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css?v=11" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
   <link rel="stylesheet" href="../assets/css/dashboard.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/performance.css?v=10" />
+  <link rel="stylesheet" href="../assets/css/performance.css?v=11" />
 </head>
 <body>
 
@@ -760,12 +760,63 @@
 <!-- ════════ PLAN COMPARISON MODAL ════════ -->
 <div class="plan-cmp-overlay" id="plan-cmp-overlay">
   <div class="plan-cmp-modal" role="dialog" aria-modal="true" aria-label="Compare study plans">
+
     <div class="pcm-hd">
-      <div class="pcm-title">Update Study Planner</div>
-      <div class="pcm-subtitle">Review changes before applying to your study planner</div>
-      <button class="pcm-close" id="pcm-close" aria-label="Close"><i class="fa-light fa-xmark"></i></button>
+      <div class="pcm-hd-row">
+        <div>
+          <div class="pcm-title">Update Study Planner</div>
+          <div class="pcm-subtitle" id="pcm-subtitle-text">Review changes before applying to your study planner</div>
+        </div>
+        <div class="pcm-hd-meta">
+          <div class="pcm-steps">
+            <div class="pcm-step-item active" data-step="1">
+              <span class="psi-dot"></span>
+              <span class="psi-label">Overview</span>
+            </div>
+            <div class="pcm-step-line"></div>
+            <div class="pcm-step-item" data-step="2">
+              <span class="psi-dot"></span>
+              <span class="psi-label">Details</span>
+            </div>
+          </div>
+          <button class="pcm-close" id="pcm-close" aria-label="Close"><i class="fa-light fa-xmark"></i></button>
+        </div>
+      </div>
     </div>
-    <div class="pcm-body">
+
+    <!-- ── Step 1: Overview ── -->
+    <div class="pcm-body pcm-step-panel" id="pcm-step-1">
+      <div class="pov-cards">
+        <div class="pov-card pov-card--current">
+          <div class="pov-card-label">Current Plan</div>
+          <div class="pov-card-band" id="pov-cur-band">Low</div>
+          <div class="pov-card-hrs" id="pov-cur-hrs">—</div>
+          <div class="pov-card-week" id="pov-cur-week-card">— hrs / week</div>
+        </div>
+        <div class="pov-arrow">
+          <i class="fa-light fa-arrow-right-long"></i>
+          <span class="pov-hrs-delta" id="pov-hrs-delta"></span>
+        </div>
+        <div class="pov-card pov-card--new">
+          <div class="pov-card-label">New Plan</div>
+          <div class="pov-card-band" id="pov-new-band">—</div>
+          <div class="pov-card-hrs" id="pov-new-hrs">—</div>
+          <div class="pov-card-week" id="pov-new-week-card">— hrs / week</div>
+        </div>
+      </div>
+      <div class="pov-subj-section">
+        <div class="pov-subj-head">
+          <span>Subject / Activity</span>
+          <span>Current</span>
+          <span>New</span>
+          <span>Change</span>
+        </div>
+        <div id="pov-subj-rows"></div>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Activity breakdown + weekly schedule ── -->
+    <div class="pcm-body pcm-step-panel" id="pcm-step-2" hidden>
       <table class="pcm-table">
         <thead>
           <tr>
@@ -775,26 +826,55 @@
           </tr>
         </thead>
         <tbody id="pcm-tbody"></tbody>
-        <tfoot>
-          <tr class="pcm-total-row">
-            <td class="pcmt-label">Total hours</td>
-            <td class="pcmt-current pcm-cur-val" id="pcm-cur-total"></td>
-            <td class="pcmt-new pcm-new-val" id="pcm-new-total"></td>
-          </tr>
-          <tr class="pcm-week-row">
-            <td class="pcmt-label">Per week</td>
-            <td class="pcmt-current pcm-cur-val" id="pcm-cur-week"></td>
-            <td class="pcmt-new pcm-new-val" id="pcm-new-week"></td>
-          </tr>
-        </tfoot>
       </table>
+
+      <div class="pcm-weekly-section">
+        <div class="pcws-title">Weekly Schedule</div>
+        <table class="pcm-table">
+          <thead>
+            <tr>
+              <th class="pcmt-label"></th>
+              <th class="pcmt-current pcmt-current-head">Current Plan</th>
+              <th class="pcmt-new pcmt-new-head">New Plan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="pcmt-label">Total / week</td>
+              <td class="pcmt-current pcm-cur-val" id="pcm-cur-week"></td>
+              <td class="pcmt-new pcm-new-val" id="pcm-new-week"></td>
+            </tr>
+            <tr>
+              <td class="pcmt-label">Weekday avg <span class="pcmt-sub">Mon–Fri</span></td>
+              <td class="pcmt-current pcm-cur-val" id="pcm-cur-weekday"></td>
+              <td class="pcmt-new pcm-new-val" id="pcm-new-weekday"></td>
+            </tr>
+            <tr>
+              <td class="pcmt-label">Weekend avg <span class="pcmt-sub">Sat–Sun</span></td>
+              <td class="pcmt-current pcm-cur-val" id="pcm-cur-weekend"></td>
+              <td class="pcmt-new pcm-new-val" id="pcm-new-weekend"></td>
+            </tr>
+            <tr class="pcm-total-row">
+              <td class="pcmt-label">Total hours</td>
+              <td class="pcmt-current pcm-cur-val" id="pcm-cur-total"></td>
+              <td class="pcmt-new pcm-new-val" id="pcm-new-total"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
     <div class="pcm-foot">
       <button class="pcm-cancel" id="pcm-cancel">Cancel</button>
-      <button class="pcm-apply" id="pcm-apply">
-        <i class="fa-light fa-circle-check"></i> Apply to Study Planner
-      </button>
+      <div class="pcm-foot-actions">
+        <button class="pcm-back" id="pcm-back">← Back</button>
+        <button class="pcm-next" id="pcm-next">See Activity Details</button>
+        <button class="pcm-apply" id="pcm-apply">
+          <i class="fa-light fa-circle-check"></i> Apply to Study Planner
+        </button>
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -804,6 +884,6 @@
 </div>
 
 <script src="../assets/js/theme.js"></script>
-<script src="../assets/js/performance.js?v=7"></script>
+<script src="../assets/js/performance.js?v=8"></script>
 </body>
 </html>

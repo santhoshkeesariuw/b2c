@@ -22,6 +22,7 @@
   var hasSavedPlan  = false;
   var hasSimulation = false;
   var lastProjPct   = 67;
+  var pcmStep       = 1;
 
   /* Current (baseline) study plan — reflects what is already in the study planner */
   var CURRENT_PLAN = {
@@ -304,6 +305,31 @@
     return (diff > 0 ? '+' : '') + diff;
   }
 
+  /* Switch between modal steps */
+  function showPcmStep(n) {
+    pcmStep = n;
+    var s1 = document.getElementById('pcm-step-1');
+    var s2 = document.getElementById('pcm-step-2');
+    if (s1) { if (n === 1) s1.removeAttribute('hidden'); else s1.setAttribute('hidden', ''); }
+    if (s2) { if (n === 2) s2.removeAttribute('hidden'); else s2.setAttribute('hidden', ''); }
+
+    document.querySelectorAll('.pcm-step-item').forEach(function (el) {
+      el.classList.toggle('active', parseInt(el.dataset.step) === n);
+    });
+
+    var backBtn  = document.getElementById('pcm-back');
+    var nextBtn  = document.getElementById('pcm-next');
+    var applyBtn = document.getElementById('pcm-apply');
+    if (backBtn)  backBtn.style.display  = n === 2 ? '' : 'none';
+    if (nextBtn)  nextBtn.style.display  = n === 1 ? '' : 'none';
+    if (applyBtn) applyBtn.style.display = n === 2 ? '' : 'none';
+
+    var sub = document.getElementById('pcm-subtitle-text');
+    if (sub) sub.textContent = n === 1
+      ? 'Review changes before applying to your study planner'
+      : 'Activity breakdown and weekly schedule';
+  }
+
   function openPlanComparison() {
     /* close the drawer first */
     drawerOpen = false;
@@ -311,21 +337,81 @@
     document.getElementById('sim-overlay').classList.remove('open');
     document.getElementById('proj-banner').classList.remove('show');
 
-    var newPlan = getNewPlan();
+    var newPlan  = getNewPlan();
     var subjects = Object.keys(CURRENT_PLAN).filter(function (k) {
       return k !== 'uworld' && k !== 'aamc' && k !== 'aamcQs';
     });
 
-    /* Total hours: q×0.025 + f×0.016 + v per subject, plus common items */
+    /* ── Total hours ── */
     var curTotalHrs = 0, newTotalHrs = 0;
     subjects.forEach(function (k) {
       curTotalHrs += Math.round(CURRENT_PLAN[k].q * 0.025) + Math.round(CURRENT_PLAN[k].f * 0.016) + CURRENT_PLAN[k].v;
-      newTotalHrs += Math.round(newPlan.q[k] * 0.025) + Math.round(newPlan.f[k] * 0.016) + newPlan.v[k];
+      newTotalHrs += Math.round(newPlan.q[k] * 0.025)      + Math.round(newPlan.f[k] * 0.016)      + newPlan.v[k];
     });
     curTotalHrs += CURRENT_PLAN.uworld * 7 + CURRENT_PLAN.aamc * 6 + CURRENT_PLAN.aamcQs * 2;
     newTotalHrs += newPlan.uworld * 7 + newPlan.aamc * 6 + newPlan.aamcQs * 2;
 
-    /* Helper to build a content-type row with explicit label */
+    var curWeekHrs  = parseFloat((curTotalHrs / WEEKS).toFixed(1));
+    var newWeekHrs  = parseFloat((newTotalHrs / WEEKS).toFixed(1));
+    var totalDiff   = newTotalHrs - curTotalHrs;
+    var weekDiff    = parseFloat((newWeekHrs - curWeekHrs).toFixed(1));
+
+    /* Weekday / weekend split: 60 % over 5 days, 40 % over 2 days */
+    var curWkday = (curWeekHrs * 0.6 / 5).toFixed(1);
+    var newWkday = (newWeekHrs * 0.6 / 5).toFixed(1);
+    var curWkend = (curWeekHrs * 0.4 / 2).toFixed(1);
+    var newWkend = (newWeekHrs * 0.4 / 2).toFixed(1);
+
+    /* ── Step 1: Overview cards ── */
+    var curBand = BAND_COLORS[bandFor(BASE)];
+    var newBand = BAND_COLORS[bandFor(lastProjPct)];
+
+    var curBandEl = document.getElementById('pov-cur-band');
+    if (curBandEl) { curBandEl.textContent = curBand.name; curBandEl.style.color = curBand.fg; }
+    var newBandEl = document.getElementById('pov-new-band');
+    if (newBandEl) { newBandEl.textContent = newBand.name; newBandEl.style.color = newBand.fg; }
+
+    setText('pov-cur-hrs',       curTotalHrs + ' hrs');
+    setText('pov-new-hrs',       newTotalHrs + ' hrs');
+    setText('pov-cur-week-card', curWeekHrs  + ' hrs / week');
+    setText('pov-new-week-card', newWeekHrs  + ' hrs / week');
+
+    var deltaEl = document.getElementById('pov-hrs-delta');
+    if (deltaEl) {
+      deltaEl.textContent = (totalDiff >= 0 ? '+' : '') + totalDiff + ' hrs';
+      deltaEl.className   = 'pov-hrs-delta' + (totalDiff < 0 ? ' down' : '');
+    }
+
+    /* ── Step 1: Compact subject rows ── */
+    var subjRows = subjects.map(function (k) {
+      var curH = Math.round(CURRENT_PLAN[k].q * 0.025 + CURRENT_PLAN[k].f * 0.016 + CURRENT_PLAN[k].v);
+      var newH = Math.round(newPlan.q[k] * 0.025 + newPlan.f[k] * 0.016 + newPlan.v[k]);
+      var diff = newH - curH;
+      return '<div class="pov-subj-row">' +
+        '<span class="pov-subj-name">' + SUBJ_LABELS[k] + '</span>' +
+        '<span class="pov-subj-val">' + curH + ' hrs</span>' +
+        '<span class="pov-subj-val pov-new-val">' + newH + ' hrs</span>' +
+        '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
+      '</div>';
+    });
+    /* common items as compact rows */
+    subjRows.push('<hr class="pov-subj-divider">');
+    function compactCommon(label, curN, newN, unit) {
+      var diff = newN - curN;
+      return '<div class="pov-subj-row">' +
+        '<span class="pov-subj-name">' + label + '</span>' +
+        '<span class="pov-subj-val">' + curN + ' ' + unit + '</span>' +
+        '<span class="pov-subj-val pov-new-val">' + newN + ' ' + unit + '</span>' +
+        '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' +
+      '</div>';
+    }
+    subjRows.push(compactCommon('UWorld Practice Exam', CURRENT_PLAN.uworld,   newPlan.uworld,   'exam'));
+    subjRows.push(compactCommon('AAMC Practice Exam',   CURRENT_PLAN.aamc,     newPlan.aamc,     'exam'));
+    subjRows.push(compactCommon('AAMC Question Sets',   CURRENT_PLAN.aamcQs,   newPlan.aamcQs,   'set'));
+
+    document.getElementById('pov-subj-rows').innerHTML = subjRows.join('');
+
+    /* ── Step 2: Detailed activity table ── */
     function ctRow(icon, label, curVal, newVal, diffVal, curUnit, newUnit) {
       newUnit = newUnit || curUnit;
       return '<span class="pcm-ct-row">' +
@@ -343,65 +429,51 @@
         '</span>';
     }
 
-    /* Build subject rows — 3 content types each */
     var rows = subjects.map(function (k) {
-      var curQ = CURRENT_PLAN[k].q,  newQ = Math.round(newPlan.q[k]);
-      var curF = CURRENT_PLAN[k].f,  newF = Math.round(newPlan.f[k]);
-      var curV = CURRENT_PLAN[k].v,  newV = Math.round(newPlan.v[k]);
-      var qParts = ctRow('fa-file-lines', 'Practice Questions',     curQ, newQ, newQ - curQ, 'questions').split('||');
-      var fParts = ctRow('fa-bolt',       'Review Flashcards',      curF, newF, newF - curF, 'flashcards').split('||');
-      var vParts = ctRow('fa-book-open',  'Review UBooks &amp; Videos', curV, newV, newV - curV, 'hrs').split('||');
+      var curQ = CURRENT_PLAN[k].q, newQ = Math.round(newPlan.q[k]);
+      var curF = CURRENT_PLAN[k].f, newF = Math.round(newPlan.f[k]);
+      var curV = CURRENT_PLAN[k].v, newV = Math.round(newPlan.v[k]);
+      var qP = ctRow('fa-file-lines', 'Practice Questions',         curQ, newQ, newQ - curQ, 'questions').split('||');
+      var fP = ctRow('fa-bolt',       'Review Flashcards',          curF, newF, newF - curF, 'flashcards').split('||');
+      var vP = ctRow('fa-book-open',  'Review UBooks &amp; Videos', curV, newV, newV - curV, 'hrs').split('||');
       return '<tr>' +
         '<td class="pcmt-label">' + SUBJ_LABELS[k] + '</td>' +
-        '<td class="pcmt-current">' + qParts[0] + fParts[0] + vParts[0] + '</td>' +
-        '<td class="pcmt-new">'     + qParts[1] + fParts[1] + vParts[1] + '</td>' +
+        '<td class="pcmt-current">' + qP[0] + fP[0] + vP[0] + '</td>' +
+        '<td class="pcmt-new">'     + qP[1] + fP[1] + vP[1] + '</td>' +
       '</tr>';
     });
 
-    /* Common activities rows */
-    function commonRow(label, sublabel, icon, curN, curHrEach, newN, newHrEach) {
+    function commonRow(label, sublabel, icon, curN, hrEach, newN) {
       var diff = newN - curN;
+      var unit = function(n) { return n === 1 ? ' exam' : ' exams'; };
       return '<tr>' +
         '<td class="pcmt-label">' + label + '<span class="pcm-common-sub">' + sublabel + '</span></td>' +
-        '<td class="pcmt-current">' +
-          '<span class="pcm-ct-row">' +
-            '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-            '<span class="pcm-cur-val">' + curN + (curN === 1 ? ' exam' : ' exams') + ' · ' + (curN * curHrEach) + ' hrs</span>' +
-          '</span>' +
-        '</td>' +
-        '<td class="pcmt-new">' +
-          '<span class="pcm-ct-row">' +
-            '<span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
-            '<span class="pcm-new-val">' + newN + (newN === 1 ? ' exam' : ' exams') + ' · ' + (newN * newHrEach) + ' hrs' +
-              (diff !== 0 ? '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' : '') +
-            '</span>' +
-          '</span>' +
-        '</td>' +
+        '<td class="pcmt-current"><span class="pcm-ct-row"><span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+          '<span class="pcm-cur-val">' + curN + unit(curN) + ' · ' + (curN * hrEach) + ' hrs</span></span></td>' +
+        '<td class="pcmt-new"><span class="pcm-ct-row"><span class="pcm-ct-icon"><i class="fa-light ' + icon + '"></i></span>' +
+          '<span class="pcm-new-val">' + newN + unit(newN) + ' · ' + (newN * hrEach) + ' hrs' +
+            (diff !== 0 ? '<span class="pcm-delta ' + deltaClass(diff) + '">' + deltaText(diff) + '</span>' : '') +
+          '</span></span></td>' +
       '</tr>';
     }
-
-    rows.push(commonRow('UWorld Practice Exam', 'Full-length · 7 hrs each', 'fa-graduation-cap',
-      CURRENT_PLAN.uworld, 7, newPlan.uworld, 7));
-    rows.push(commonRow('AAMC Practice Exam', 'Full-length · 6 hrs each', 'fa-school',
-      CURRENT_PLAN.aamc, 6, newPlan.aamc, 6));
-    rows.push(commonRow('AAMC Question Sets', 'Section-specific · 2 hrs each', 'fa-list-check',
-      CURRENT_PLAN.aamcQs, 2, newPlan.aamcQs, 2));
-
+    rows.push(commonRow('UWorld Practice Exam', 'Full-length · 7 hrs each',       'fa-graduation-cap', CURRENT_PLAN.uworld, 7, newPlan.uworld));
+    rows.push(commonRow('AAMC Practice Exam',   'Full-length · 6 hrs each',       'fa-school',         CURRENT_PLAN.aamc,   6, newPlan.aamc));
+    rows.push(commonRow('AAMC Question Sets',   'Section-specific · 2 hrs each',  'fa-list-check',     CURRENT_PLAN.aamcQs, 2, newPlan.aamcQs));
     document.getElementById('pcm-tbody').innerHTML = rows.join('');
 
-    var curWeek = (curTotalHrs / WEEKS).toFixed(1);
-    var newWeek = (newTotalHrs / WEEKS).toFixed(1);
-    var totalDiff = newTotalHrs - curTotalHrs;
+    /* ── Step 2: Weekly schedule rows ── */
+    document.getElementById('pcm-cur-week').textContent    = curWeekHrs + ' hrs/week';
+    document.getElementById('pcm-new-week').innerHTML      = newWeekHrs + ' hrs/week' +
+      '<span class="pcm-delta ' + deltaClass(weekDiff) + '">' + (weekDiff >= 0 ? '+' : '') + weekDiff + '</span>';
+    document.getElementById('pcm-cur-weekday').textContent = curWkday + ' hrs/day';
+    document.getElementById('pcm-new-weekday').textContent = newWkday + ' hrs/day';
+    document.getElementById('pcm-cur-weekend').textContent = curWkend + ' hrs/day';
+    document.getElementById('pcm-new-weekend').textContent = newWkend + ' hrs/day';
+    document.getElementById('pcm-cur-total').textContent   = curTotalHrs + ' hrs';
+    document.getElementById('pcm-new-total').innerHTML     = newTotalHrs + ' hrs' +
+      '<span class="pcm-delta ' + deltaClass(totalDiff) + '">' + deltaText(totalDiff) + ' hrs</span>';
 
-    document.getElementById('pcm-cur-total').innerHTML =
-      '<span class="pcm-cur-val">' + curTotalHrs + ' hrs</span>';
-    document.getElementById('pcm-new-total').innerHTML =
-      '<span class="pcm-new-val">' + newTotalHrs + ' hrs' +
-        '<span class="pcm-delta ' + deltaClass(totalDiff) + '">' + deltaText(totalDiff) + ' hrs</span>' +
-      '</span>';
-    document.getElementById('pcm-cur-week').textContent = curWeek + ' hrs/week';
-    document.getElementById('pcm-new-week').textContent = newWeek + ' hrs/week';
-
+    showPcmStep(1);
     document.getElementById('plan-cmp-overlay').classList.add('open');
   }
 
@@ -522,10 +594,17 @@
 
     var pcmClose  = document.getElementById('pcm-close');
     var pcmCancel = document.getElementById('pcm-cancel');
+    var pcmNext   = document.getElementById('pcm-next');
+    var pcmBack   = document.getElementById('pcm-back');
     var pcmApply  = document.getElementById('pcm-apply');
     if (pcmClose)  pcmClose.addEventListener('click',  closePlanComparison);
     if (pcmCancel) pcmCancel.addEventListener('click', closePlanComparison);
+    if (pcmNext)   pcmNext.addEventListener('click',   function () { showPcmStep(2); });
+    if (pcmBack)   pcmBack.addEventListener('click',   function () { showPcmStep(1); });
     if (pcmApply)  pcmApply.addEventListener('click',  applyPlan);
+
+    /* initial footer state */
+    showPcmStep(1);
 
     document.getElementById('plan-cmp-overlay').addEventListener('click', function (e) {
       if (e.target === this) closePlanComparison();
