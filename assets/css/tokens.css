@@ -133,9 +133,9 @@
 
   /* ── Sidebar tokens ── */
   --sidebar-width:   clamp(190px, 15vw, 230px);
-  --sidebar-bg:      #1B2D3E;
-  --sidebar-active:  #243D52;
-  --sidebar-border:  #263F54;
+  --sidebar-bg:      #0F1E2D;
+  --sidebar-active:  #1A2E3F;
+  --sidebar-border:  #1C3044;
   --sidebar-text:    #A0B4C8;
   --sidebar-icon:    #6B8BA4;
   --topbar-height:   clamp(46px, 5vh, 56px);
