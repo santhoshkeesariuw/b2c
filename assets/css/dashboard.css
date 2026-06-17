@@ -97,7 +97,7 @@ body {
 
 /* Expanded parent nav item — darker bg + left accent border */
 .sidebar__nav-item--open {
-  background: #0F1E2D;
+  background: var(--sidebar-expanded);
   border-left-color: var(--color-brand-blue-dim);
   color: #fff;
 }
@@ -109,7 +109,7 @@ body {
   overflow: hidden;
   max-height: 0;
   transition: max-height var(--dur-slow) var(--ease-expo);
-  background: #0F1E2D;
+  background: var(--sidebar-expanded);
 }
 .sidebar__sub-menu--open { max-height: 3000px; }
 
@@ -135,7 +135,7 @@ body {
 
 /* Expanded sub-item (Performance row) — darker bg + left accent */
 .sidebar__sub-item--open {
-  background: #0B1824;
+  background: var(--sidebar-expanded);
   color: #C8D4E0;
   border-left-color: var(--color-brand-blue-dim);
 }
@@ -155,7 +155,7 @@ body {
 .sidebar__sub-item--active .sidebar__sub-item__icon { color: #fff; }
 
 /* Nested sub-menu (under Performance) — even darker */
-.sidebar__sub-menu--nested { background: #0B1824; }
+.sidebar__sub-menu--nested { background: var(--sidebar-expanded); }
 
 /* Nested (level-3) sub-items */
 .sidebar__sub-menu--nested .sidebar__sub-item--nested {
