@@ -20,6 +20,28 @@
   var hasSavedPlan = false;
   var lastProjPct  = 67;
 
+  /* Current (baseline) study plan — reflects what is already in the study planner */
+  var CURRENT_PLAN = {
+    bio:     { hrs: 5,  q: 61  },
+    biochem: { hrs: 4,  q: 42  },
+    genchem: { hrs: 7,  q: 41  },
+    orgchem: { hrs: 3,  q: 30  },
+    phys:    { hrs: 2,  q: 20  },
+    behsci:  { hrs: 4,  q: 48  },
+    cars:    { hrs: 3,  q: 36  },
+    exams:   1
+  };
+
+  var SUBJ_LABELS = {
+    bio:     'Biology',
+    biochem: 'Biochemistry',
+    genchem: 'General Chemistry',
+    orgchem: 'Organic Chemistry',
+    phys:    'Physics',
+    behsci:  'Behavioral Sciences',
+    cars:    'Critical Analysis &amp; Reasoning'
+  };
+
   var BAND_COLORS = {
     0: { bg: '#FBEAF0', fg: '#993556', cls: 'dc-cur',        name: 'Low' },
     1: { bg: '#FAEEDA', fg: '#854F0B', cls: 'dc-proj-amber', name: 'Borderline' },
@@ -217,16 +239,126 @@
     }
   }
 
-  function savePlan() {
-    hasSavedPlan = true;
-    drawerOpen   = false;
+  /* Read new plan values from the simulator sliders */
+  function getNewPlan() {
+    var plan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
+    var qPlan = { bio: 0, biochem: 0, genchem: 0, orgchem: 0, phys: 0, behsci: 0, cars: 0 };
+    document.querySelectorAll('.sim-drawer input[type="range"]').forEach(function (s) {
+      var subj = s.dataset.subj;
+      var kind = s.dataset.kind;
+      var v = parseFloat(s.value);
+      if (plan[subj] === undefined) return;
+      if (kind === 'q') {
+        qPlan[subj] += v;
+        plan[subj]  += v * parseFloat(s.dataset.hr);
+      } else {
+        plan[subj] += v;
+      }
+    });
+    return { hrs: plan, q: qPlan, exams: examCount };
+  }
+
+  function deltaClass(diff) {
+    if (diff > 0) return 'up';
+    if (diff < 0) return 'down';
+    return 'same';
+  }
+  function deltaText(diff) {
+    if (diff === 0) return '—';
+    return (diff > 0 ? '+' : '') + diff;
+  }
+
+  function openPlanComparison() {
+    /* close the drawer first */
+    drawerOpen = false;
     document.getElementById('sim-drawer').classList.remove('open');
     document.getElementById('sim-overlay').classList.remove('open');
     document.getElementById('proj-banner').classList.remove('show');
+
+    var newPlan = getNewPlan();
+    var subjects = Object.keys(CURRENT_PLAN).filter(function (k) { return k !== 'exams'; });
+
+    var curTotalHrs = 0, newTotalHrs = 0;
+    subjects.forEach(function (k) {
+      curTotalHrs += CURRENT_PLAN[k].hrs;
+      newTotalHrs += Math.round(newPlan.hrs[k]);
+    });
+    curTotalHrs += CURRENT_PLAN.exams * 7;
+    newTotalHrs += newPlan.exams * 7;
+
+    /* Build table rows */
+    var rows = subjects.map(function (k) {
+      var curHrs  = CURRENT_PLAN[k].hrs;
+      var newHrs  = Math.round(newPlan.hrs[k]);
+      var curQ    = CURRENT_PLAN[k].q;
+      var newQ    = Math.round(newPlan.q[k]);
+      var diffHrs = newHrs - curHrs;
+      return '<tr>' +
+        '<td class="pcmt-label">' + SUBJ_LABELS[k] + '</td>' +
+        '<td class="pcmt-current">' +
+          '<span class="pcm-cur-val">' + curHrs + ' hrs</span>' +
+          '<span class="pcm-cur-sub">' + curQ + ' questions</span>' +
+        '</td>' +
+        '<td class="pcmt-new">' +
+          '<span class="pcm-new-val">' + newHrs + ' hrs' +
+            '<span class="pcm-delta ' + deltaClass(diffHrs) + '">' + deltaText(diffHrs) + ' hrs</span>' +
+          '</span>' +
+          '<span class="pcm-new-sub">' + newQ + ' questions</span>' +
+        '</td>' +
+      '</tr>';
+    });
+
+    /* Exams row */
+    var curExamHrs = CURRENT_PLAN.exams * 7, newExamHrs = newPlan.exams * 7;
+    var examDiff = newExamHrs - curExamHrs;
+    rows.push('<tr>' +
+      '<td class="pcmt-label">Practice Exams</td>' +
+      '<td class="pcmt-current">' +
+        '<span class="pcm-cur-val">' + CURRENT_PLAN.exams + ' exam · ' + curExamHrs + ' hrs</span>' +
+      '</td>' +
+      '<td class="pcmt-new">' +
+        '<span class="pcm-new-val">' + newPlan.exams + ' exam · ' + newExamHrs + ' hrs' +
+          (examDiff !== 0 ? '<span class="pcm-delta ' + deltaClass(examDiff) + '">' + deltaText(examDiff) + ' hrs</span>' : '') +
+        '</span>' +
+      '</td>' +
+    '</tr>');
+
+    document.getElementById('pcm-tbody').innerHTML = rows.join('');
+
+    var curWeek = (curTotalHrs / WEEKS).toFixed(1);
+    var newWeek = (newTotalHrs / WEEKS).toFixed(1);
+    var totalDiff = newTotalHrs - curTotalHrs;
+
+    document.getElementById('pcm-cur-total').innerHTML =
+      '<span class="pcm-cur-val">' + curTotalHrs + ' hrs</span>';
+    document.getElementById('pcm-new-total').innerHTML =
+      '<span class="pcm-new-val">' + newTotalHrs + ' hrs' +
+        '<span class="pcm-delta ' + deltaClass(totalDiff) + '">' + deltaText(totalDiff) + ' hrs</span>' +
+      '</span>';
+    document.getElementById('pcm-cur-week').textContent = curWeek + ' hrs/week';
+    document.getElementById('pcm-new-week').textContent = newWeek + ' hrs/week';
+
+    document.getElementById('plan-cmp-overlay').classList.add('open');
+  }
+
+  function closePlanComparison() {
+    document.getElementById('plan-cmp-overlay').classList.remove('open');
+  }
+
+  function applyPlan() {
+    closePlanComparison();
+    /* commit the plan */
+    hasSavedPlan = true;
     document.getElementById('ps-plan-foot').classList.add('show');
     var improveBtn = document.getElementById('improve-btn');
     if (improveBtn) improveBtn.style.display = 'none';
     recalc();
+    /* success toast */
+    var toast = document.getElementById('pcm-toast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(function () { toast.classList.remove('show'); }, 3000);
+    }
   }
 
   function editPlan() {
@@ -299,7 +431,18 @@
     if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
 
     var saveBtn = document.getElementById('save-plan-btn');
-    if (saveBtn) saveBtn.addEventListener('click', savePlan);
+    if (saveBtn) saveBtn.addEventListener('click', openPlanComparison);
+
+    var pcmClose  = document.getElementById('pcm-close');
+    var pcmCancel = document.getElementById('pcm-cancel');
+    var pcmApply  = document.getElementById('pcm-apply');
+    if (pcmClose)  pcmClose.addEventListener('click',  closePlanComparison);
+    if (pcmCancel) pcmCancel.addEventListener('click', closePlanComparison);
+    if (pcmApply)  pcmApply.addEventListener('click',  applyPlan);
+
+    document.getElementById('plan-cmp-overlay').addEventListener('click', function (e) {
+      if (e.target === this) closePlanComparison();
+    });
 
     var editBtn = document.getElementById('edit-plan-btn');
     if (editBtn) editBtn.addEventListener('click', editPlan);
@@ -313,7 +456,13 @@
     if (stepDown) stepDown.addEventListener('click',  function () { stepExam(-1); });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && drawerOpen) closeDrawer();
+      if (e.key === 'Escape') {
+        if (document.getElementById('plan-cmp-overlay').classList.contains('open')) {
+          closePlanComparison();
+        } else if (drawerOpen) {
+          closeDrawer();
+        }
+      }
     });
 
     window.addEventListener('resize', function () {

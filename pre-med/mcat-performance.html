@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../assets/css/tokens.css?v=11" />
   <link rel="stylesheet" href="../assets/css/base.css?v=4" />
   <link rel="stylesheet" href="../assets/css/dashboard.css?v=11" />
-  <link rel="stylesheet" href="../assets/css/performance.css?v=4" />
+  <link rel="stylesheet" href="../assets/css/performance.css?v=5" />
 </head>
 <body>
 
@@ -669,12 +669,63 @@
       <i class="fa-light fa-arrow-trend-up"></i>
       Simulated: <strong id="foot-band">67</strong>th %ile
     </span>
-    <button class="save-plan-btn" id="save-plan-btn">Save plan</button>
+    <div>
+      <div class="drawer-next-label">Next Step</div>
+      <button class="save-plan-btn" id="save-plan-btn">
+        <i class="fa-light fa-calendar-check"></i> Update Study Planner
+      </button>
+    </div>
   </div>
 
 </aside><!-- /.sim-drawer -->
 
+<!-- ════════ PLAN COMPARISON MODAL ════════ -->
+<div class="plan-cmp-overlay" id="plan-cmp-overlay">
+  <div class="plan-cmp-modal" role="dialog" aria-modal="true" aria-label="Compare study plans">
+    <div class="pcm-hd">
+      <div class="pcm-title">Update Study Planner</div>
+      <div class="pcm-subtitle">Review changes before applying to your study planner</div>
+      <button class="pcm-close" id="pcm-close" aria-label="Close"><i class="fa-light fa-xmark"></i></button>
+    </div>
+    <div class="pcm-body">
+      <table class="pcm-table">
+        <thead>
+          <tr>
+            <th class="pcmt-label"></th>
+            <th class="pcmt-current pcmt-current-head">Current Plan</th>
+            <th class="pcmt-new pcmt-new-head">New Plan</th>
+          </tr>
+        </thead>
+        <tbody id="pcm-tbody"></tbody>
+        <tfoot>
+          <tr class="pcm-total-row">
+            <td class="pcmt-label">Total hours</td>
+            <td class="pcmt-current pcm-cur-val" id="pcm-cur-total"></td>
+            <td class="pcmt-new pcm-new-val" id="pcm-new-total"></td>
+          </tr>
+          <tr class="pcm-week-row">
+            <td class="pcmt-label">Per week</td>
+            <td class="pcmt-current pcm-cur-val" id="pcm-cur-week"></td>
+            <td class="pcmt-new pcm-new-val" id="pcm-new-week"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="pcm-foot">
+      <button class="pcm-cancel" id="pcm-cancel">Cancel</button>
+      <button class="pcm-apply" id="pcm-apply">
+        <i class="fa-light fa-circle-check"></i> Apply to Study Planner
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Applied toast -->
+<div class="pcm-toast" id="pcm-toast">
+  <i class="fa-light fa-circle-check"></i> Study Planner updated successfully
+</div>
+
 <script src="../assets/js/theme.js"></script>
-<script src="../assets/js/performance.js"></script>
+<script src="../assets/js/performance.js?v=2"></script>
 </body>
 </html>
