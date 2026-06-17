@@ -83,7 +83,7 @@
   font-size: clamp(13px, 1.1vw, 15px);
 }
 .ps-title .ps-band-label {
-  color: #E53E3E;
+  color: #D40000;
   font-weight: var(--fw-semibold);
 }
 .ps-info-icon {
@@ -136,7 +136,7 @@
   position: relative;
 }
 .ps-cell.active {
-  background: #E53E3E;
+  background: #D40000;
   color: #ffffff;
   font-weight: var(--fw-medium);
 }
@@ -148,7 +148,7 @@
   width: 0; height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #E53E3E;
+  border-top: 6px solid #D40000;
 }
 .ps-cell.proj-tint {
   background: #E1F5EE;
@@ -221,7 +221,7 @@
   padding: 6px 4px;
   transition: color var(--dur-fast);
 }
-.text-btn:hover { color: #E53E3E; }
+.text-btn:hover { color: #D40000; }
 
 /* ════════ STATS ROW (donut + 2 lists) ════════ */
 .stats-row {
@@ -499,7 +499,7 @@
 }
 .proj-block .pk-big { font-size: clamp(22px, 2.5vw, 30px); font-weight: var(--fw-medium); line-height: 1; }
 .proj-block .pk-meta { font-size: 12px; color: #5f5e5a; }
-.proj-block.pb-current .pk-big { color: #E53E3E; }
+.proj-block.pb-current .pk-big { color: #D40000; }
 .proj-block.pb-projected { text-align: right; }
 .proj-block.pb-projected .pk-num { justify-content: flex-end; }
 .proj-block.pb-projected .pk-big { color: #16A34A; transition: color 0.3s; }
@@ -520,7 +520,7 @@
   color: #888780;
   transition: background 0.3s, color 0.3s;
 }
-.dband .dc.dc-cur        { background: #FEF2F2; color: #991B1B; font-weight: var(--fw-medium); }
+.dband .dc.dc-cur        { background: #FFEBEB; color: #A30000; font-weight: var(--fw-medium); }
 .dband .dc.dc-proj-amber { background: #FAEEDA; color: #854F0B; font-weight: var(--fw-medium); }
 .dband .dc.dc-proj-teal  { background: #E1F5EE; color: #0F6E56; font-weight: var(--fw-medium); }
 .dband .dc.dc-proj-green { background: #EAF3DE; color: #3B6D11; font-weight: var(--fw-medium); }
@@ -553,7 +553,7 @@
   transition: left 0.45s cubic-bezier(.22,.71,.32,1), background 0.3s;
   box-sizing: border-box;
 }
-.sim-mark.sm-cur  { width: 14px; height: 14px; background: #E53E3E; left: 2%; z-index: 1; }
+.sim-mark.sm-cur  { width: 14px; height: 14px; background: #D40000; left: 2%; z-index: 1; }
 .sim-mark.sm-proj { width: 18px; height: 18px; background: #16A34A; z-index: 2; }
 .sim-scale {
   display: flex;
