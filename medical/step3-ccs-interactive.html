@@ -95,6 +95,10 @@
 
       <!-- Filter bar -->
       <div class="cases-filter-bar">
+        <button class="cases-btn cases-btn--ai" id="ai-case-open-btn">
+          <i class="fa-solid fa-sparkles"></i> Generate AI Case
+        </button>
+        <span style="flex:1"></span>
         <span class="cases-filter-label">Filter:</span>
         <input type="text" class="cases-filter-input" id="cases-filter" placeholder="Search cases…" />
       </div>
@@ -121,6 +125,96 @@
 
   </div><!-- /content -->
 </div><!-- /dash-main -->
+
+<!-- AI Case Generator Modal -->
+<div class="modal-overlay" id="ai-case-overlay">
+  <div class="modal ai-case-modal">
+
+    <div class="modal__head">
+      <div class="modal__head-icon" style="background:#EDE9FE;color:#7C3AED"><i class="fa-solid fa-sparkles"></i></div>
+      <div class="modal__head-content">
+        <div class="modal__head-title">Generate AI Interactive Case</div>
+        <div class="modal__head-subtitle" id="ai-modal-subtitle">Describe the case you want to practice</div>
+      </div>
+      <button class="modal__close" id="ai-case-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- Step 1: Prompt form -->
+    <div class="modal__body" id="ai-prompt-step">
+      <div class="ai-form">
+        <div class="ai-form__row">
+          <label class="ai-form__label">Specialty</label>
+          <select class="ai-form__select" id="ai-specialty">
+            <option value="">Select specialty…</option>
+            <option>Internal Medicine</option>
+            <option>OBGYN</option>
+            <option>Pediatrics</option>
+            <option>Surgery</option>
+            <option>Psychiatry</option>
+            <option>Emergency Medicine</option>
+            <option>Neurology</option>
+            <option>Cardiology</option>
+          </select>
+        </div>
+        <div class="ai-form__row">
+          <label class="ai-form__label">Sub-Specialty / Topic</label>
+          <input type="text" class="ai-form__input" id="ai-subspecialty" placeholder="e.g. Cardiology, Infectious Disease, Pulmonology…" />
+        </div>
+        <div class="ai-form__row">
+          <label class="ai-form__label">Location</label>
+          <div class="ai-form__radios">
+            <label class="ai-form__radio-label"><input type="radio" name="ai-location" value="Office" checked /> Office</label>
+            <label class="ai-form__radio-label"><input type="radio" name="ai-location" value="Emergency Department" /> Emergency Dept</label>
+            <label class="ai-form__radio-label"><input type="radio" name="ai-location" value="Inpatient" /> Inpatient</label>
+          </div>
+        </div>
+        <div class="ai-form__row">
+          <label class="ai-form__label">Duration</label>
+          <div class="ai-form__radios">
+            <label class="ai-form__radio-label"><input type="radio" name="ai-duration" value="20" checked /> 20 Minutes</label>
+            <label class="ai-form__radio-label"><input type="radio" name="ai-duration" value="10" /> 10 Minutes</label>
+          </div>
+        </div>
+        <div class="ai-form__row">
+          <label class="ai-form__label">Chief Complaint</label>
+          <input type="text" class="ai-form__input" id="ai-complaint" placeholder="e.g. Chest pain, Shortness of breath, Fever…" />
+        </div>
+        <div class="ai-form__row">
+          <label class="ai-form__label">Additional Instructions <span class="ai-form__optional">(optional)</span></label>
+          <textarea class="ai-form__textarea" id="ai-notes" placeholder="Any specific learning goals, patient demographics, or scenario details…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Generating -->
+    <div class="modal__body" id="ai-generating-step" style="display:none">
+      <div class="ai-gen-state">
+        <div class="ai-gen-spinner"></div>
+        <div class="ai-gen-title">Generating your case…</div>
+        <div class="ai-gen-sub">Our AI is building a personalised clinical scenario for you</div>
+      </div>
+    </div>
+
+    <!-- Step 3: Result -->
+    <div class="modal__body" id="ai-result-step" style="display:none">
+      <div class="ai-result-card">
+        <div class="ai-result-badge"><i class="fa-solid fa-sparkles"></i> AI Generated</div>
+        <div class="ai-result-title" id="ai-result-title"></div>
+        <div class="ai-result-meta" id="ai-result-meta"></div>
+        <div class="ai-result-summary" id="ai-result-summary"></div>
+      </div>
+    </div>
+
+    <div class="modal__foot" id="ai-modal-foot">
+      <span></span>
+      <div style="display:flex;gap:8px">
+        <button class="cases-btn cases-btn--explain" id="ai-cancel-btn">Cancel</button>
+        <button class="cases-btn cases-btn--ai" id="ai-generate-btn"><i class="fa-solid fa-sparkles"></i> Generate Case</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script src="../assets/js/theme.js?v=2"></script>
 <script src="../assets/js/dashboard.js?v=3"></script>
@@ -235,6 +329,113 @@
     }
     practiceMenu.innerHTML = html;
   }
+
+  /* ── AI Case Generator ── */
+  var aiOverlay      = document.getElementById('ai-case-overlay');
+  var aiPromptStep   = document.getElementById('ai-prompt-step');
+  var aiGenStep      = document.getElementById('ai-generating-step');
+  var aiResultStep   = document.getElementById('ai-result-step');
+  var aiModalFoot    = document.getElementById('ai-modal-foot');
+  var aiSubtitle     = document.getElementById('ai-modal-subtitle');
+  var aiGenerateBtn  = document.getElementById('ai-generate-btn');
+  var aiCancelBtn    = document.getElementById('ai-cancel-btn');
+
+  function openAiModal() {
+    aiOverlay.classList.add('modal-overlay--open');
+    showStep('prompt');
+  }
+
+  function closeAiModal() {
+    aiOverlay.classList.remove('modal-overlay--open');
+    setTimeout(function () { showStep('prompt'); }, 300);
+  }
+
+  function showStep(step) {
+    aiPromptStep.style.display  = step === 'prompt'     ? '' : 'none';
+    aiGenStep.style.display     = step === 'generating' ? '' : 'none';
+    aiResultStep.style.display  = step === 'result'     ? '' : 'none';
+
+    if (step === 'prompt') {
+      aiSubtitle.textContent = 'Describe the case you want to practice';
+      aiGenerateBtn.innerHTML = '<i class="fa-solid fa-sparkles"></i> Generate Case';
+      aiGenerateBtn.style.display = '';
+      aiCancelBtn.textContent = 'Cancel';
+    } else if (step === 'generating') {
+      aiSubtitle.textContent = 'Generating…';
+      aiGenerateBtn.style.display = 'none';
+      aiCancelBtn.textContent = 'Cancel';
+    } else if (step === 'result') {
+      aiSubtitle.textContent = 'Your case is ready';
+      aiGenerateBtn.innerHTML = '<i class="fa-solid fa-play"></i> Launch Case';
+      aiGenerateBtn.style.display = '';
+      aiCancelBtn.textContent = 'Start Over';
+    }
+  }
+
+  function buildResult() {
+    var specialty    = document.getElementById('ai-specialty').value || 'Internal Medicine';
+    var subspecialty = document.getElementById('ai-subspecialty').value.trim();
+    var complaint    = document.getElementById('ai-complaint').value.trim() || 'Chief complaint';
+    var location     = document.querySelector('input[name="ai-location"]:checked').value;
+    var duration     = document.querySelector('input[name="ai-duration"]:checked').value;
+    var notes        = document.getElementById('ai-notes').value.trim();
+
+    var topic = subspecialty || specialty;
+
+    document.getElementById('ai-result-title').textContent =
+      'AI Case: ' + (complaint.charAt(0).toUpperCase() + complaint.slice(1)) +
+      ' — ' + topic;
+
+    var metaEl = document.getElementById('ai-result-meta');
+    metaEl.innerHTML =
+      '<span class="ai-result-tag"><i class="fa-light fa-stethoscope"></i> ' + specialty + '</span>' +
+      (subspecialty ? '<span class="ai-result-tag">' + subspecialty + '</span>' : '') +
+      '<span class="ai-result-tag"><i class="fa-light fa-location-dot"></i> ' + location + '</span>' +
+      '<span class="ai-result-tag"><i class="fa-light fa-clock"></i> ' + duration + ' min</span>';
+
+    document.getElementById('ai-result-summary').textContent =
+      'A ' + duration + '-minute ' + location.toLowerCase() + ' case focusing on ' +
+      topic.toLowerCase() + '. The patient presents with ' + complaint.toLowerCase() + '. ' +
+      (notes ? notes : 'Work through history, physical exam, investigations, and management in a timed CCS-style simulation.');
+  }
+
+  var aiLaunchDuration = 20;
+
+  document.getElementById('ai-case-open-btn').addEventListener('click', openAiModal);
+  document.getElementById('ai-case-close').addEventListener('click', closeAiModal);
+
+  aiCancelBtn.addEventListener('click', function () {
+    if (aiResultStep.style.display !== 'none') {
+      showStep('prompt');
+    } else {
+      closeAiModal();
+    }
+  });
+
+  aiGenerateBtn.addEventListener('click', function () {
+    if (aiResultStep.style.display !== 'none') {
+      var dur = document.querySelector('input[name="ai-duration"]:checked').value;
+      closeAiModal();
+      window.location.href = 'step3-ccs-launch.html?case=ai&duration=' + dur;
+      return;
+    }
+    var complaint = document.getElementById('ai-complaint').value.trim();
+    var specialty = document.getElementById('ai-specialty').value;
+    if (!specialty && !complaint) {
+      document.getElementById('ai-specialty').focus();
+      return;
+    }
+    aiLaunchDuration = document.querySelector('input[name="ai-duration"]:checked').value;
+    showStep('generating');
+    setTimeout(function () {
+      buildResult();
+      showStep('result');
+    }, 2200);
+  });
+
+  aiOverlay.addEventListener('click', function (e) {
+    if (e.target === aiOverlay) closeAiModal();
+  });
 })();
 </script>
 </body>
