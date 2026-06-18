@@ -100,3 +100,25 @@ function applyThemes(container, stepMs = 40) {
     setStagger(el, idx, stepMs);
   });
 }
+
+/* ── Avatar dropdown (shared across all pages) ── */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.topbar__avatar-wrap').forEach(function (wrap) {
+    var btn = wrap.querySelector('.topbar__avatar');
+    if (!btn) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = wrap.classList.contains('open');
+      document.querySelectorAll('.topbar__avatar-wrap.open').forEach(function (w) { w.classList.remove('open'); });
+      if (!isOpen) wrap.classList.add('open');
+    });
+  });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.topbar__avatar-wrap.open').forEach(function (w) { w.classList.remove('open'); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.topbar__avatar-wrap.open').forEach(function (w) { w.classList.remove('open'); });
+    }
+  });
+});

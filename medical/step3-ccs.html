@@ -82,9 +82,13 @@
     <nav class="topbar__nav">
       <a href="#" class="topbar__nav-link">STEP3 CCS <i class="fa-solid fa-chevron-down icon--xs"></i></a>
       <span class="topbar__sep">|</span>
-      <a href="#" class="topbar__nav-link"><i class="fa-light fa-house"></i> My Account</a>
-      <span class="topbar__sep">|</span>
-      <a href="../index.html" class="topbar__nav-link"><i class="fa-light fa-arrow-right-from-bracket"></i> Log out</a>
+      <div class="topbar__avatar-wrap">
+        <button class="topbar__avatar" aria-label="Account"><i class="fa-light fa-user"></i></button>
+        <div class="topbar__avatar-menu">
+          <a href="#"><i class="fa-light fa-house"></i> My Account</a>
+          <a href="../index.html" class="menu-logout"><i class="fa-light fa-arrow-right-from-bracket"></i> Log out</a>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -127,8 +131,8 @@
   </div><!-- /content -->
 </div><!-- /dash-main -->
 
-<script src="../assets/js/theme.js"></script>
-<script src="../assets/js/dashboard.js?v=2"></script>
+<script src="../assets/js/theme.js?v=2"></script>
+<script src="../assets/js/dashboard.js?v=3"></script>
 <script>
 (function () {
   var TOTAL = 41;
