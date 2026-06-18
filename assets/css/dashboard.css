@@ -1310,7 +1310,7 @@ body {
   border-radius: var(--md-shape-lg);
   box-shadow: var(--md-elev-1);
   padding: clamp(24px, 2.5vw, 40px);
-  max-width: 900px;
+  width: 100%;
 }
 
 .ccs-welcome-card__title {
