@@ -278,7 +278,7 @@
     .need2 i{font-size:28px;display:block;margin-bottom:12px;color:#B6C2CC;}
 
     /* ── COMPARE: metric-bar cards ── */
-    .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:24px;}
+    .cmp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-bottom:24px;}
     .cmp-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;}
     .cmp-card-head{display:flex;align-items:center;gap:10px;padding:16px 22px;background:#FAFBFC;border-bottom:1px solid var(--line-soft);}
     .cmp-card-head .nm{font-size:17px;font-weight:700;color:#1F2937;}
@@ -302,8 +302,10 @@
     .acc-sec-head .sec-chev{color:#9AA6B0;font-size:15px;transition:transform .2s;}
     .acc-sec.collapsed .sec-chev{transform:rotate(180deg);}
     .acc-sec.collapsed .acc-sec-body{display:none;}
+    .acc-sec-body{overflow-x:auto;}
     .ct-head,.ct-row{
-      display:grid;grid-template-columns:40px minmax(0,1fr) 150px 150px 110px 30px;
+      display:grid;grid-template-columns:var(--cols, 40px minmax(0,1fr) 150px 150px 110px 30px);
+      min-width:var(--minw,100%);
       gap:12px;align-items:center;padding:0 22px;
     }
     .ct-head{height:44px;border-top:1px solid var(--line-soft);}
@@ -324,7 +326,7 @@
     .ct-chev{color:#C2CBD3;font-size:13px;text-align:center;}
 
     /* ── TIME cards ── */
-    .time-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+    .time-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;}
     .time-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;}
     .time-top{display:flex;align-items:center;gap:24px;padding:24px 22px;}
     .time-donut{position:relative;width:128px;height:128px;flex:0 0 128px;}
@@ -350,10 +352,7 @@
     .tas .l{font-size:12px;color:var(--muted);margin-bottom:6px;}
     .tas .v{font-size:16px;font-weight:700;color:#2B3742;}
 
-    @media (max-width:1080px){ .cmp-grid,.time-grid{grid-template-columns:1fr;} }
-    @media (max-width:760px){
-      .ct-head,.ct-row{grid-template-columns:30px minmax(0,1fr) 92px 92px 70px 20px;gap:7px;padding:0 14px;}
-    }
+    /* card grids auto-fit; concept tables scroll horizontally via --minw */
   </style>
 </head>
 <body>
@@ -734,39 +733,40 @@ function subtabsHtml(labels, active, key){
 }
 function changeHtml(d){ return `<span class="ct-change ${d>=0?'delta up':'delta down'}">${d>=0?'+':''}${d}%</span>`; }
 
-/* deterministic per-row values from two exams' base accuracy */
-function genRow(a,b,seed,denoms){
-  const d = denoms[Math.floor(rng(seed)*denoms.length)] || denoms[0];
-  let p1 = clamp(a.correct + (rng(seed+1)*30-15));
-  let p2 = clamp(b.correct + (rng(seed+2)*30-15));
-  if(p2 < p1) p2 = clamp(p1 + rng(seed+3)*22);
-  return {p1, p2, d, n1:Math.round(p1/100*d), n2:Math.round(p2/100*d), ch:p2-p1};
+/* dynamic grid template + min-width for N exam columns */
+function ctColStyle(n){
+  const cols = `40px minmax(200px,1.4fr) repeat(${n}, minmax(92px,1fr)) 100px 30px`;
+  const minw = 414 + n*116;
+  return `--cols:${cols};--minw:${minw}px`;
 }
-function ctHead(a,b,descLabel){
-  return `<div class="ct-head"><span></span><span>${descLabel||'Description'}</span><span>${a.name}</span><span>${b.name}</span><span>Change</span><span></span></div>`;
+/* deterministic per-exam values for a row (shared denominator across exams) */
+function genCells(list,seed,den){
+  const d = den!=null ? den : (DEN[Math.floor(rng(seed)*DEN.length)]||DEN[0]);
+  const cells = list.map((e,i)=>{ const p=clamp(e.correct + (rng(seed+i*7+1)*30-15)); return {p, n:Math.round(p/100*d)}; });
+  const ch = list.length>=2 ? cells[cells.length-1].p - cells[0].p : 0;
+  return {d, cells, ch};
+}
+function ctHead(list,descLabel){
+  return `<div class="ct-head"><span></span><span>${descLabel||'Description'}</span>`
+    + list.map(e=>`<span>${e.name}</span>`).join('')
+    + `<span>Change</span><span></span></div>`;
 }
 /* one concept-table row. opts: {hasChildren,gid,child,cg,den,frac} */
-function ctRow(desc,a,b,seed,o){
+function ctRow(desc,list,seed,o){
   o = o||{};
-  const r = genRow(a,b,seed, o.den!=null?[o.den]:DEN);
+  const r = genCells(list,seed,o.den);
   const frac = o.frac!==false;
   const exp = o.hasChildren
     ? `<span class="ct-exp" data-exp="${o.gid}"><i class="fa-light fa-plus"></i></span>`
     : `<span class="ct-exp leaf"></span>`;
   const cls = o.child ? `ct-row--child cg-${o.cg}` : '';
-  return `<div class="ct-row ${cls}">
-    ${exp}
-    <span class="ct-desc">${desc}</span>
-    <span class="ct-cell"><span class="ct-pct">${r.p1}%</span>${frac?`<span class="ct-frac">${r.n1} / ${r.d}</span>`:''}</span>
-    <span class="ct-cell"><span class="ct-pct">${r.p2}%</span>${frac?`<span class="ct-frac">${r.n2} / ${r.d}</span>`:''}</span>
-    ${changeHtml(r.ch)}
-    <span class="ct-chev"><i class="fa-light fa-chevron-right"></i></span>
-  </div>`;
+  const cells = r.cells.map(c=>`<span class="ct-cell"><span class="ct-pct">${c.p}%</span>${frac?`<span class="ct-frac">${c.n} / ${r.d}</span>`:''}</span>`).join('');
+  return `<div class="ct-row ${cls}">${exp}<span class="ct-desc">${desc}</span>${cells}${changeHtml(r.ch)}<span class="ct-chev"><i class="fa-light fa-chevron-right"></i></span></div>`;
 }
-function accSec(tag,title,a,b,rows,open,descLabel){
+function accSec(tag,title,list,rows,open,descLabel){
   return `<div class="acc-sec ${open?'':'collapsed'}">
     <div class="acc-sec-head">${tag?`<span class="sec-tag">${tag}</span>`:''}<span class="sec-h">${title}</span><i class="sec-chev fa-light fa-chevron-up"></i></div>
-    <div class="acc-sec-body">${ctHead(a,b,descLabel)}${rows}</div>
+    <div class="acc-sec-body" style="${ctColStyle(list.length)}">${ctHead(list,descLabel)}${rows}</div>
   </div>`;
 }
 
@@ -791,53 +791,53 @@ function cmpCard(e,si){
 function renderCompare(){
   const panel=document.getElementById('panel-compare');
   let html=subtabsHtml(SECTIONS.map(s=>s.tag), compareSec, 'cmp');
-  const pair=getPair();
-  if(!pair){ panel.innerHTML=html+need2(); return; }
-  const [a,b]=pair, si=compareSec;
-  html += `<div class="cmp-grid">${cmpCard(a,si)}${cmpCard(b,si)}</div>`;
-  const rows = SUBJ_CATS[si].map((c,ci)=> ctRow(c,a,b, si*97+ci*13+7, {frac:true})).join('');
-  html += accSec(SECTIONS[si].tag, 'Subject Accuracy - '+SECTION_FULL[si], a,b, rows, true, 'Category');
+  const list=selectedExams();
+  if(list.length<2){ panel.innerHTML=html+need2(); return; }
+  const si=compareSec;
+  html += `<div class="cmp-grid">${list.map(e=>cmpCard(e,si)).join('')}</div>`;
+  const rows = SUBJ_CATS[si].map((c,ci)=> ctRow(c,list, si*97+ci*13+7, {frac:true})).join('');
+  html += accSec(SECTIONS[si].tag, 'Subject Accuracy - '+SECTION_FULL[si], list, rows, true, 'Category');
   panel.innerHTML=html;
 }
 
 /* ════════ SKILLS & CONCEPTS TAB ════════ */
 let gidCounter=0;
-function renderFoundational(a,b){
+function renderFoundational(list){
   return FOUNDATIONAL.map(([tag,name,fcs])=>{
     let rows='';
     fcs.forEach((fc,fi)=>{
       const [label,den,kids]=fc, gid='g'+(gidCounter++);
-      rows += ctRow(label,a,b, 500+fi*40+tag.length, {hasChildren:kids.length>0, gid, den});
-      kids.forEach((k,ki)=> rows += ctRow(k,a,b, 530+fi*40+ki*3+tag.length, {child:true, cg:gid}));
+      rows += ctRow(label,list, 500+fi*40+tag.length, {hasChildren:kids.length>0, gid, den});
+      kids.forEach((k,ki)=> rows += ctRow(k,list, 530+fi*40+ki*3+tag.length, {child:true, cg:gid}));
     });
-    return accSec(tag,name,a,b,rows,true);
+    return accSec(tag,name,list,rows,true);
   }).join('');
 }
-function renderScienceSkills(a,b){
+function renderScienceSkills(list){
   return SCIENCE_GROUPS.map(([tag,name,frac],gi)=>{
-    const rows = SCIENCE_SKILLS.map((sk,ki)=> ctRow(sk,a,b, 1500+gi*17+ki*5, {frac})).join('');
-    return accSec(tag,name,a,b,rows,true);
+    const rows = SCIENCE_SKILLS.map((sk,ki)=> ctRow(sk,list, 1500+gi*17+ki*5, {frac})).join('');
+    return accSec(tag,name,list,rows,true);
   }).join('');
 }
-function renderTree(title,tag,arr,a,b,base){
+function renderTree(title,tag,arr,list,base){
   let rows='';
   arr.forEach((item,i)=>{
     const [label,den,kids]=item, gid='t'+(gidCounter++);
-    rows += ctRow(label,a,b, base+i*40, {hasChildren:kids.length>0, gid, den});
-    kids.forEach((k,ki)=> rows += ctRow(k,a,b, base+i*40+ki*3+1, {child:true, cg:gid}));
+    rows += ctRow(label,list, base+i*40, {hasChildren:kids.length>0, gid, den});
+    kids.forEach((k,ki)=> rows += ctRow(k,list, base+i*40+ki*3+1, {child:true, cg:gid}));
   });
-  return accSec(tag,title,a,b,rows,true);
+  return accSec(tag,title,list,rows,true);
 }
 function renderSkills(){
   const panel=document.getElementById('panel-skills');
   let html=subtabsHtml(['Foundational Concepts','Science Skills','CARS Skills','CARS Disciplines'], skillsSub, 'sk');
-  const pair=getPair();
-  if(!pair){ panel.innerHTML=html+need2(); return; }
-  const [a,b]=pair; gidCounter=0;
-  if(skillsSub===0) html+=renderFoundational(a,b);
-  else if(skillsSub===1) html+=renderScienceSkills(a,b);
-  else if(skillsSub===2) html+=renderTree('CARS Skill Performance','',CARS_SKILLS,a,b,3000);
-  else html+=renderTree('CARS Discipline Performance','',CARS_DISCIPLINES,a,b,4000);
+  const list=selectedExams();
+  if(list.length<2){ panel.innerHTML=html+need2(); return; }
+  gidCounter=0;
+  if(skillsSub===0) html+=renderFoundational(list);
+  else if(skillsSub===1) html+=renderScienceSkills(list);
+  else if(skillsSub===2) html+=renderTree('CARS Skill Performance','',CARS_SKILLS,list,3000);
+  else html+=renderTree('CARS Discipline Performance','',CARS_DISCIPLINES,list,4000);
   panel.innerHTML=html;
 }
 
@@ -883,37 +883,29 @@ function timeCard(e){
     ${accs}
   </div>`;
 }
-function timeRow(desc,a,b,seed,tag){
-  const t1=Math.round(35+rng(seed)*120), t2=Math.round(25+rng(seed+1)*95), ch=t2-t1;
-  return `<div class="ct-row">
-    <span class="ct-exp leaf"></span>
-    <span class="ct-desc">${desc}</span>
-    <span class="ct-cell"><span class="ct-pct">${fmtAvg(t1)}</span></span>
-    <span class="ct-cell"><span class="ct-pct">${fmtAvg(t2)}</span></span>
-    <span class="ct-change ${ch<=0?'delta up':'delta down'}">${ch>=0?'+':''}${ch}s</span>
-    <span class="ct-chev"><i class="fa-light fa-chevron-right"></i></span>
-  </div>`;
+function timeRow(desc,list,seed){
+  const cells = list.map((e,i)=> Math.max(8, Math.round(30+rng(seed+i*7)*120 - i*6)) );
+  const ch = list.length>=2 ? cells[cells.length-1]-cells[0] : 0;
+  return `<div class="ct-row"><span class="ct-exp leaf"></span><span class="ct-desc">${desc}</span>`
+    + cells.map(t=>`<span class="ct-cell"><span class="ct-pct">${fmtAvg(t)}</span></span>`).join('')
+    + `<span class="ct-change ${ch<=0?'delta up':'delta down'}">${ch>=0?'+':''}${ch}s</span><span class="ct-chev"><i class="fa-light fa-chevron-right"></i></span></div>`;
 }
-function renderTimeTable(sub,a,b){
-  let items, title, tag='';
+function renderTimeTable(sub,list){
+  let items, title;
   if(sub===1){ items=TIME_SUBJECTS; title='Average Time per Question by Subject'; }
   else if(sub===2){ items=SCIENCE_SKILLS; title='Average Time per Question by Science Skill'; }
   else if(sub===3){ items=CARS_SKILLS.map(x=>x[0]); title='Average Time per Question by CARS Skill'; }
   else { items=CARS_DISCIPLINES.map(x=>x[0]); title='Average Time per Question by CARS Discipline'; }
-  const rows = items.map((it,i)=> timeRow(it,a,b, 6000+sub*200+i*9)).join('');
-  return `<div class="acc-sec">
-    <div class="acc-sec-head"><span class="sec-h">${title}</span><i class="sec-chev fa-light fa-chevron-up"></i></div>
-    <div class="acc-sec-body">${ctHead(a,b,'Description')}${rows}</div>
-  </div>`;
+  const rows = items.map((it,i)=> timeRow(it,list, 6000+sub*200+i*9)).join('');
+  return accSec('', title, list, rows, true, 'Description');
 }
 function renderTime(){
   const panel=document.getElementById('panel-time');
   let html=subtabsHtml(['Overview','Science by Subject','Science by Skill','CARS by Skills','CARS by Disciplines'], timeSub, 'tm');
-  const pair=getPair();
-  if(!pair){ panel.innerHTML=html+need2(); return; }
-  const [a,b]=pair;
-  if(timeSub===0) html += `<div class="time-grid">${timeCard(a)}${timeCard(b)}</div>`;
-  else html += renderTimeTable(timeSub,a,b);
+  const list=selectedExams();
+  if(list.length<2){ panel.innerHTML=html+need2(); return; }
+  if(timeSub===0) html += `<div class="time-grid">${list.map(e=>timeCard(e)).join('')}</div>`;
+  else html += renderTimeTable(timeSub,list);
   panel.innerHTML=html;
 }
 
