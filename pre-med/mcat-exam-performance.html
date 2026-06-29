@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<!-- MCAT Practice Exams — Performance Dashboard (multi-exam comparison) -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UWorld – Performance Dashboard</title>
+  <link rel="stylesheet" href="https://use.typekit.net/pmo3mlo.css" />
+  <link rel="stylesheet" href="../assets/css/fa7-pro.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root{
+      --navy:#172A3A;
+      --navy-deep:#0F2230;
+      --navy-active:#1E3346;
+      --side-text:#C7D2DC;
+      --side-icon:#8FA3B3;
+      --blue:#1577C2;
+      --blue-dark:#0B6FBE;
+      --green:#1E9E5A;
+      --green-text:#1E9E5A;
+      --red:#C2410C;
+      --ink:#1F2937;
+      --ink-soft:#4B5563;
+      --muted:#6B7280;
+      --line:#E6E9EE;
+      --line-soft:#EEF1F4;
+      --bg:#F1F3F5;
+      --insight-bg:#F4F9FE;
+      --insight-border:#BFDDF5;
+      --font:"proxima-nova",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    }
+    html,body{margin:0;padding:0;}
+    body{
+      font-family:var(--font);
+      background:var(--bg);
+      color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+      display:flex;
+      min-height:100vh;
+    }
+
+    /* ════════ SIDEBAR ════════ */
+    .sidebar{
+      width:236px;flex:0 0 236px;background:var(--navy);color:var(--side-text);
+      display:flex;flex-direction:column;position:sticky;top:0;height:100vh;
+    }
+    .sb-brand{
+      display:flex;flex-direction:column;align-items:center;
+      padding:26px 16px 22px;border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .sb-logo{
+      width:62px;height:62px;border-radius:50%;background:#fff;
+      display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;
+    }
+    .sb-logo img{width:46px;height:46px;object-fit:contain;}
+    .sb-name{font-size:21px;font-weight:800;color:#fff;line-height:1.1;letter-spacing:.2px;}
+    .sb-sub{font-size:21px;font-weight:800;color:#fff;line-height:1.05;}
+    .sb-tag{font-size:12px;font-weight:700;color:var(--side-icon);letter-spacing:1.5px;margin-top:12px;}
+    .sb-nav{flex:1;overflow-y:auto;padding:10px 0;}
+    .sb-item{
+      display:flex;align-items:center;gap:13px;padding:11px 22px;font-size:15.5px;
+      color:var(--side-text);cursor:pointer;border-left:3px solid transparent;user-select:none;text-decoration:none;
+    }
+    .sb-item i.lead{width:18px;text-align:center;font-size:15px;color:var(--side-icon);}
+    .sb-item .chev{margin-left:auto;font-size:11px;color:var(--side-icon);}
+    .sb-item:hover{background:rgba(255,255,255,.04);}
+    .sb-item.parent-open{background:var(--navy-active);border-left-color:var(--blue);color:#fff;}
+    .sb-item.parent-open i.lead{color:#fff;}
+    .sb-sub{display:flex;flex-direction:column;background:var(--navy-deep);}
+    .sb-subitem{
+      display:flex;align-items:center;gap:11px;padding:10px 22px 10px 30px;font-size:14.5px;
+      color:var(--side-text);cursor:pointer;border-left:3px solid transparent;text-decoration:none;
+    }
+    .sb-subitem i.lead{width:16px;text-align:center;font-size:13px;color:var(--side-icon);}
+    .sb-subitem:hover{background:rgba(255,255,255,.04);}
+    .sb-subitem.active{background:var(--navy-active);border-left-color:var(--blue);color:#fff;}
+    .sb-subitem.active i.lead{color:#fff;}
+    .sb-foot{
+      padding:16px 22px;border-top:1px solid rgba(255,255,255,.07);
+      display:flex;flex-direction:column;gap:3px;
+    }
+    .sb-foot span:first-child{font-size:13px;color:#fff;font-weight:600;}
+    .sb-foot span:last-child{font-size:12px;color:var(--side-icon);}
+
+    /* ════════ MAIN ════════ */
+    .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .topbar{
+      background:#fff;display:flex;align-items:center;gap:18px;
+      padding:14px 26px;border-bottom:1px solid var(--line);
+    }
+    .tb-burger{
+      width:34px;height:34px;border-radius:7px;border:none;background:var(--blue);
+      color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    }
+    .tb-title{font-size:25px;font-weight:700;color:#222;}
+    .tb-right{margin-left:auto;display:flex;align-items:center;gap:22px;}
+    .tb-link{display:flex;align-items:center;gap:7px;font-size:14.5px;color:var(--ink-soft);cursor:pointer;text-decoration:none;}
+    .tb-link.accent{color:var(--blue);font-weight:600;}
+    .tb-link .chev{font-size:10px;}
+    .tb-avatar{
+      width:34px;height:34px;border-radius:50%;background:#E9EDF1;
+      display:flex;align-items:center;justify-content:center;color:#8A97A4;font-size:16px;cursor:pointer;
+    }
+
+    .content{padding:22px 26px 30px;}
+
+    /* ════════ SELECTOR TOOLBAR ════════ */
+    .selector{
+      background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);
+      padding:18px 22px;margin-bottom:22px;
+    }
+    .sel-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+    .sel-title{font-size:18px;font-weight:700;color:#2B3742;}
+    .sel-sub{font-size:14px;color:var(--muted);}
+    .sel-count{
+      margin-left:auto;font-size:13px;color:var(--ink-soft);background:#EEF2F5;
+      padding:5px 12px;border-radius:20px;font-weight:600;
+    }
+    .sel-actions{display:flex;gap:8px;}
+    .sel-link{
+      font-size:13px;color:var(--blue);background:none;border:none;cursor:pointer;
+      font-family:inherit;font-weight:600;padding:5px 8px;border-radius:6px;
+    }
+    .sel-link:hover{background:#F4F9FE;}
+    .chip-rail{
+      display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;
+    }
+    .chip{
+      flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:10px 15px;
+      border:1.5px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;
+      font-family:inherit;transition:border-color .15s,background .15s;text-align:left;min-width:148px;
+    }
+    .chip:hover{border-color:#C9D6E0;}
+    .chip.on{border-color:var(--blue);background:#F4F9FE;}
+    .chip-check{
+      width:18px;height:18px;border-radius:5px;border:1.5px solid #C9D6E0;flex:0 0 auto;
+      display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;background:#fff;
+    }
+    .chip.on .chip-check{background:var(--blue);border-color:var(--blue);}
+    .chip-meta{display:flex;flex-direction:column;line-height:1.25;}
+    .chip-name{font-size:14px;font-weight:700;color:#2B3742;}
+    .chip-info{font-size:12px;color:var(--muted);}
+    .chip-score{font-size:13px;font-weight:700;color:var(--blue);margin-left:auto;}
+
+    /* TABS */
+    .tabs{display:flex;gap:34px;border-bottom:1px solid var(--line);margin-bottom:24px;}
+    .tab{padding:12px 2px 14px;font-size:17px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;}
+    .tab.active{color:var(--blue);font-weight:600;border-bottom-color:var(--blue);}
+
+    /* ════════ LAYOUT ════════ */
+    .layout{display:block;}
+
+    /* TREND CARD */
+    .trend-card{
+      background:#fff;border:1px solid var(--line);border-radius:14px;
+      box-shadow:0 1px 3px rgba(0,0,0,.04);padding:20px 22px;margin-bottom:22px;
+    }
+    .trend-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+    .trend-head h3{margin:0;font-size:17px;font-weight:700;color:#2B3742;}
+    .trend-head .tag{font-size:13px;color:var(--muted);}
+    .trend-svg-wrap{width:100%;overflow-x:auto;}
+    .trend-svg{display:block;}
+
+    /* SCROLLABLE CARD STRIP */
+    .strip-head{display:flex;align-items:center;margin-bottom:12px;}
+    .strip-head h3{margin:0;font-size:17px;font-weight:700;color:#2B3742;}
+    .view-toggle{margin-left:auto;display:flex;background:#EAEEF2;border-radius:9px;padding:3px;}
+    .vt{
+      display:flex;align-items:center;gap:7px;border:none;background:none;cursor:pointer;
+      font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);
+      padding:7px 14px;border-radius:7px;transition:background .15s,color .15s;
+    }
+    .vt.on{background:#fff;color:var(--blue);box-shadow:0 1px 2px rgba(0,0,0,.08);}
+    .vt i{font-size:13px;}
+    .card-strip{display:flex;flex-direction:column;gap:18px;}
+    .card-strip.compact{gap:10px;}
+
+    /* COMPACT CARD — one slim row per exam */
+    .cpt-card{
+      display:grid;grid-template-columns:168px 70px 96px 100px 100px minmax(0,1fr);
+      gap:16px;align-items:center;background:#fff;border:1px solid var(--line);
+      border-radius:11px;padding:14px 20px;box-shadow:0 1px 2px rgba(0,0,0,.04);
+    }
+    .cpt-name{font-size:15px;font-weight:700;color:#1F2937;display:block;}
+    .cpt-date{font-size:12px;color:var(--muted);}
+    .cpt-metric{display:flex;flex-direction:column;gap:2px;min-width:0;}
+    .cpt-top{display:flex;align-items:baseline;gap:6px;}
+    .cpt-big{font-size:19px;font-weight:700;color:#2B3742;line-height:1;}
+    .cpt-pct{font-size:19px;font-weight:700;color:var(--blue);line-height:1;}
+    .cpt-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+    .cpt-d{font-size:11px;font-weight:700;}
+    .cpt-sections{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+    .cpt-pill{display:flex;align-items:center;gap:7px;background:#F3F6F8;border-radius:7px;padding:6px 11px;}
+    .cpt-pill b{font-size:11px;font-weight:700;color:#5B6B79;}
+    .cpt-pill .v{font-size:14px;font-weight:700;color:#2B3742;}
+    .cpt-pill .cpt-d{font-size:10px;}
+    @media (max-width:1080px){
+      .cpt-card{grid-template-columns:1fr;gap:12px;}
+      .cpt-sections{justify-content:flex-start;}
+    }
+
+    /* EXAM CARD — full-width horizontal, stacked vertically */
+    .exam-card{
+      width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,.04);
+    }
+    .ec-head{display:flex;align-items:center;gap:10px;padding:15px 22px;background:#FAFBFC;border-bottom:1px solid var(--line-soft);}
+    .ec-head .ec-name{font-size:17px;font-weight:700;color:#1F2937;}
+    .ec-head .ec-date{font-size:14px;color:var(--muted);}
+    .ec-head .ec-menu{margin-left:auto;color:#9AA6B0;font-size:17px;cursor:pointer;letter-spacing:2px;}
+
+    .ec-body{display:flex;gap:30px;padding:22px;align-items:stretch;}
+    .ec-summary{display:flex;align-items:center;gap:20px;flex:0 0 380px;border-right:1px solid var(--line-soft);padding-right:30px;}
+    .donut{position:relative;width:110px;height:110px;flex:0 0 110px;}
+    .donut svg{width:100%;height:100%;transform:rotate(-90deg);}
+    .donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .donut-pct{font-size:23px;font-weight:700;color:#2B3742;line-height:1;}
+    .donut-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+    .donut-delta{font-size:12px;font-weight:700;margin-top:3px;}
+
+    .ec-scores{flex:1;min-width:0;}
+    .ss-label{font-size:13px;color:var(--muted);margin-bottom:2px;}
+    .ss-score-row{display:flex;align-items:center;gap:9px;}
+    .ss-score{font-size:42px;font-weight:700;color:#2B3742;line-height:1;letter-spacing:-1px;}
+    .pill{font-size:13px;font-weight:700;padding:3px 9px;border-radius:7px;}
+    .pill-green{background:#E4F5EC;color:var(--green-text);}
+    .pill-red{background:#FBEAE3;color:var(--red);}
+    .pill-flat{background:#EEF2F5;color:var(--muted);}
+    .ss-meta{display:flex;gap:26px;margin-top:16px;}
+    .ssm-label{font-size:12px;color:var(--muted);margin-bottom:4px;}
+    .ssm-val{font-size:15px;font-weight:600;color:#2B3742;display:flex;align-items:center;gap:6px;}
+    .delta{font-size:12px;font-weight:700;}
+    .delta.up{color:var(--green);}
+    .delta.down{color:var(--red);}
+
+    /* SECTION TABLE (right side of card) */
+    .ec-sectiontable{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .sec-title{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:10px;}
+    .sectbl{display:flex;flex-direction:column;}
+    .sectbl-head,.sectbl-row{
+      display:grid;grid-template-columns:54px minmax(110px,1fr) repeat(4,86px);
+      gap:10px;align-items:center;
+    }
+    .sectbl-head{padding:0 0 9px;border-bottom:1px solid var(--line-soft);}
+    .sectbl-head span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+    .sectbl-head span:nth-child(n+3){text-align:center;}
+    .sectbl-row{padding:12px 0;border-bottom:1px solid var(--line-soft);}
+    .sectbl-row:last-child{border-bottom:none;}
+    .st-tag{font-size:12px;font-weight:700;color:#5B6B79;background:#EEF2F5;border-radius:6px;padding:5px 0;text-align:center;}
+    .st-name{font-size:13.5px;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .st-cell{text-align:center;}
+    .st-val{font-size:16px;font-weight:700;color:#2B3742;line-height:1.1;}
+    .st-delta{font-size:11px;font-weight:700;margin-top:2px;}
+
+    /* empty state */
+    .empty{
+      width:100%;background:#fff;border:1px dashed var(--line);border-radius:14px;
+      padding:48px;text-align:center;color:var(--muted);font-size:15px;
+    }
+    .empty i{font-size:28px;display:block;margin-bottom:12px;color:#B6C2CC;}
+
+    .copyright{text-align:center;font-size:13px;color:var(--muted);padding:26px 0 4px;}
+    .copyright strong{color:#4B5563;font-weight:700;}
+
+    @media (max-width:900px){
+      .ec-body{flex-direction:column;}
+      .ec-summary{flex-basis:auto;border-right:none;border-bottom:1px solid var(--line-soft);padding-right:0;padding-bottom:18px;}
+      .sectbl-head,.sectbl-row{grid-template-columns:48px minmax(90px,1fr) repeat(4,64px);gap:6px;}
+    }
+
+    /* ════════ TAB PANELS / SUB-TABS ════════ */
+    .tabpanel[hidden]{display:none;}
+    .subtabs{display:flex;gap:30px;border-bottom:1px solid var(--line);margin-bottom:24px;flex-wrap:wrap;}
+    .subtab{padding:10px 2px 13px;font-size:15.5px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;}
+    .subtab.on{color:var(--blue);font-weight:600;border-bottom-color:var(--blue);}
+    .need2{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:46px;text-align:center;color:var(--muted);font-size:15px;}
+    .need2 i{font-size:28px;display:block;margin-bottom:12px;color:#B6C2CC;}
+
+    /* ── COMPARE: metric-bar cards ── */
+    .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:24px;}
+    .cmp-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;}
+    .cmp-card-head{display:flex;align-items:center;gap:10px;padding:16px 22px;background:#FAFBFC;border-bottom:1px solid var(--line-soft);}
+    .cmp-card-head .nm{font-size:17px;font-weight:700;color:#1F2937;}
+    .cmp-card-head .dt{font-size:14px;color:var(--muted);}
+    .cmp-card-head .mn{margin-left:auto;color:#9AA6B0;letter-spacing:2px;cursor:pointer;}
+    .cmp-card-body{padding:22px;}
+    .mbar{margin-bottom:22px;}
+    .mbar:last-child{margin-bottom:0;}
+    .mbar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
+    .mbar-lbl{font-size:15px;color:#374151;}
+    .mbar-val{font-size:18px;font-weight:700;color:#2B3742;}
+    .mbar-track{height:9px;background:#EDEFF2;border-radius:6px;overflow:hidden;}
+    .mbar-fill{height:100%;background:var(--blue);border-radius:6px;}
+    .mbar-sub{text-align:right;font-size:12px;color:var(--muted);margin-top:6px;}
+
+    /* ── shared accordion section + concept table ── */
+    .acc-sec{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:18px;overflow:hidden;}
+    .acc-sec-head{display:flex;align-items:center;gap:12px;padding:17px 22px;cursor:pointer;background:#FAFBFC;}
+    .acc-sec-head .sec-tag{font-size:12px;font-weight:700;color:#5B6B79;background:#EAEEF2;border:1px solid #DDE3E9;border-radius:6px;padding:3px 9px;}
+    .acc-sec-head .sec-h{font-size:17px;font-weight:700;color:#1F2937;flex:1;}
+    .acc-sec-head .sec-chev{color:#9AA6B0;font-size:15px;transition:transform .2s;}
+    .acc-sec.collapsed .sec-chev{transform:rotate(180deg);}
+    .acc-sec.collapsed .acc-sec-body{display:none;}
+    .ct-head,.ct-row{
+      display:grid;grid-template-columns:40px minmax(0,1fr) 150px 150px 110px 30px;
+      gap:12px;align-items:center;padding:0 22px;
+    }
+    .ct-head{height:44px;border-top:1px solid var(--line-soft);}
+    .ct-head span{font-size:12px;color:var(--muted);}
+    .ct-row{min-height:58px;border-top:1px solid var(--line-soft);}
+    .ct-row:hover{background:#FAFBFC;}
+    .ct-row--child{display:none;background:#FCFDFE;}
+    .ct-row--child.show{display:grid;}
+    .ct-row--child .ct-desc{padding-left:16px;font-size:14px;color:#4B5563;font-weight:400;}
+    .ct-exp{display:flex;align-items:center;justify-content:center;color:#9AA6B0;cursor:pointer;font-size:13px;width:22px;height:22px;border-radius:5px;}
+    .ct-exp:hover{background:#EEF2F5;}
+    .ct-exp.leaf{visibility:hidden;cursor:default;}
+    .ct-desc{font-size:14.5px;color:#374151;font-weight:500;}
+    .ct-cell{display:flex;align-items:baseline;gap:8px;}
+    .ct-pct{font-size:15px;font-weight:700;color:#2B3742;}
+    .ct-frac{font-size:13px;color:var(--muted);}
+    .ct-change{font-size:15px;font-weight:700;}
+    .ct-chev{color:#C2CBD3;font-size:13px;text-align:center;}
+
+    /* ── TIME cards ── */
+    .time-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+    .time-card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden;}
+    .time-top{display:flex;align-items:center;gap:24px;padding:24px 22px;}
+    .time-donut{position:relative;width:128px;height:128px;flex:0 0 128px;}
+    .time-donut svg{width:100%;height:100%;transform:rotate(-90deg);}
+    .time-donut .dc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .time-donut .dc .p{font-size:26px;font-weight:700;color:#2B3742;}
+    .time-donut .dc .l{font-size:12px;color:var(--muted);margin-top:2px;}
+    .time-right .lbl{font-size:14px;color:var(--muted);}
+    .time-right .big{font-size:34px;font-weight:700;color:#2B3742;letter-spacing:-.5px;margin:2px 0 16px;}
+    .time-right .tot-l{font-size:13px;color:var(--muted);margin-bottom:2px;}
+    .time-right .tot-v{font-size:15px;font-weight:600;color:#2B3742;}
+    .time-sec-title{font-size:13px;color:var(--muted);padding:14px 22px 4px;border-top:1px solid var(--line-soft);}
+    .time-acc{border-top:1px solid var(--line-soft);}
+    .time-acc:first-child{border-top:none;}
+    .time-acc-head{display:flex;align-items:center;gap:12px;padding:14px 22px;cursor:pointer;}
+    .time-acc-head .tg{font-size:12px;font-weight:700;color:#5B6B79;background:#EEF2F5;border-radius:6px;padding:4px 8px;min-width:42px;text-align:center;}
+    .time-acc-head .t{font-size:14px;color:#374151;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .time-acc-head .c{color:#9AA6B0;font-size:13px;transition:transform .2s;}
+    .time-acc.open .time-acc-head .c{transform:rotate(180deg);}
+    .time-acc-body{display:none;background:#FAFBFC;padding:16px 22px;}
+    .time-acc.open .time-acc-body{display:flex;}
+    .tas{flex:1;text-align:center;}
+    .tas .l{font-size:12px;color:var(--muted);margin-bottom:6px;}
+    .tas .v{font-size:16px;font-weight:700;color:#2B3742;}
+
+    @media (max-width:1080px){ .cmp-grid,.time-grid{grid-template-columns:1fr;} }
+    @media (max-width:760px){
+      .ct-head,.ct-row{grid-template-columns:30px minmax(0,1fr) 92px 92px 70px 20px;gap:7px;padding:0 14px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo"><img src="../assets/images/UWorld logo icon.png" alt="UWorld" /></div>
+    <div class="sb-name">UWorld</div>
+    <div class="sb-sub">Grad School</div>
+    <div class="sb-tag">MCAT</div>
+  </div>
+  <nav class="sb-nav">
+    <a class="sb-item" href="mcat.html"><i class="lead fa-light fa-house"></i>Dashboard</a>
+    <div class="sb-item"><i class="lead fa-light fa-calendar-days"></i>Study Planner</div>
+    <div class="sb-item"><i class="lead fa-light fa-book-open"></i>UBooks</div>
+    <div class="sb-item"><i class="lead fa-light fa-file-lines"></i>QBank<i class="chev fa-light fa-chevron-down"></i></div>
+    <div class="sb-item parent-open"><i class="lead fa-light fa-list-check"></i>Practice Exams<i class="chev fa-light fa-chevron-up"></i></div>
+    <div class="sb-sub">
+      <a class="sb-subitem active" href="mcat-exam-performance.html"><i class="lead fa-light fa-chart-line"></i>Performance Dashboard</a>
+      <div class="sb-subitem"><i class="lead fa-light fa-list-check"></i>Mock Exam 1</div>
+      <div class="sb-subitem"><i class="lead fa-light fa-list-check"></i>Mock Exam 2</div>
+    </div>
+    <div class="sb-item"><i class="lead fa-light fa-graduation-cap"></i>AAMC&reg; Resources</div>
+    <div class="sb-item"><i class="lead fa-light fa-bolt"></i>Flashcards<i class="chev fa-light fa-chevron-down"></i></div>
+    <div class="sb-item"><i class="lead fa-light fa-book"></i>My Notebook</div>
+    <div class="sb-item"><i class="lead fa-light fa-rotate-left"></i>Reset Options</div>
+    <div class="sb-item"><i class="lead fa-light fa-circle-question"></i>Help</div>
+    <div class="sb-item"><i class="lead fa-light fa-comments"></i>Forum</div>
+  </nav>
+  <div class="sb-foot">
+    <span>Expiration Date</span>
+    <span>Jan 01, 2024 11:59 PM EDT</span>
+  </div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="main">
+  <header class="topbar">
+    <button class="tb-burger" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+    <span class="tb-title">Performance Dashboard</span>
+    <div class="tb-right">
+      <a class="tb-link accent" href="#"><i class="fa-solid fa-sparkles"></i> What's New</a>
+      <a class="tb-link" href="#">MCAT Comprehensive <i class="chev fa-light fa-chevron-down"></i></a>
+      <a class="tb-link" href="#"><i class="fa-light fa-calendar-days"></i> Test Date</a>
+      <div class="tb-avatar"><i class="fa-light fa-user"></i></div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ════ EXAM SELECTOR ════ -->
+    <div class="selector">
+      <div class="sel-top">
+        <span class="sel-title">Compare your exams</span>
+        <span class="sel-sub">Pick any exams to analyze side by side</span>
+        <span class="sel-count" id="sel-count">2 selected</span>
+        <div class="sel-actions">
+          <button class="sel-link" id="select-all">Select all</button>
+          <button class="sel-link" id="clear-all">Clear</button>
+        </div>
+      </div>
+      <div class="chip-rail" id="chip-rail"></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" data-tab="overview">Overview</div>
+      <div class="tab" data-tab="compare">Compare</div>
+      <div class="tab" data-tab="skills">Skills &amp; Concepts</div>
+      <div class="tab" data-tab="time">Time Analysis</div>
+    </div>
+
+    <!-- ════ PANEL: OVERVIEW ════ -->
+    <div class="tabpanel" id="panel-overview">
+      <!-- TREND -->
+      <div class="trend-card" id="trend-card">
+        <div class="trend-head">
+          <h3>Scaled Score Trend</h3>
+          <span class="tag" id="trend-tag"></span>
+        </div>
+        <div class="trend-svg-wrap"><svg class="trend-svg" id="trend-svg"></svg></div>
+      </div>
+
+      <!-- CARD STACK -->
+      <div class="strip-head">
+        <h3>Exam Details</h3>
+        <div class="view-toggle" id="view-toggle">
+          <button class="vt on" data-view="comfortable"><i class="fa-light fa-table-rows"></i> Comfortable</button>
+          <button class="vt" data-view="compact"><i class="fa-light fa-bars"></i> Compact</button>
+        </div>
+      </div>
+      <div class="card-strip" id="card-strip"></div>
+    </div>
+
+    <!-- ════ PANEL: COMPARE ════ -->
+    <div class="tabpanel" id="panel-compare" hidden></div>
+
+    <!-- ════ PANEL: SKILLS & CONCEPTS ════ -->
+    <div class="tabpanel" id="panel-skills" hidden></div>
+
+    <!-- ════ PANEL: TIME ANALYSIS ════ -->
+    <div class="tabpanel" id="panel-time" hidden></div>
+
+    <div class="copyright"><strong>Copyright</strong> © UWorld. All rights reserved.</div>
+  </div>
+</div>
+
+<script>
+/* ════════ DATA: any number of completed exams ════════ */
+const SECTIONS = [
+  {tag:'C/P',  name:'Chemical and Physical Foundations of Biological Syst…'},
+  {tag:'CARS', name:'Critical Analysis and Reasoning Skills'},
+  {tag:'B/B',  name:'Biological and Biochemical Foundations of Living Sys…'},
+  {tag:'P/S',  name:'Psychological, Social, and Biological Foundations of…'},
+];
+// Each exam: scaled total, % correct, percentile, qCorrect; per-section [scaled, pctile, accuracy, qCorrect, qTotal]
+const EXAMS = [
+  {id:1, name:'Exam 1', date:'Jan 14, 2026', total:472, correct:2,  pctile:0,  qc:6,   qt:230,
+    sec:[[118,1,3,2,59],[117,1,2,1,53],[119,2,4,2,59],[118,1,3,1,59]]},
+  {id:2, name:'Exam 2', date:'Mar 22, 2026', total:498, correct:43, pctile:25, qc:98,  qt:230,
+    sec:[[124,18,32,19,59],[123,16,38,20,53],[126,27,46,27,59],[125,22,54,32,59]]},
+  {id:3, name:'Exam 3', date:'Apr 18, 2026', total:505, correct:52, pctile:38, qc:119, qt:230,
+    sec:[[126,30,44,26,59],[124,22,45,24,53],[127,36,55,32,59],[128,40,61,36,59]]},
+  {id:4, name:'Exam 4', date:'May 16, 2026', total:511, correct:60, pctile:52, qc:138, qt:230,
+    sec:[[128,44,56,33,59],[126,33,53,28,53],[129,52,66,39,59],[128,46,68,40,59]]},
+  {id:5, name:'Exam 5', date:'Jun 13, 2026', total:516, correct:66, pctile:63, qc:152, qt:230,
+    sec:[[129,55,64,38,59],[127,40,58,31,53],[130,60,72,42,59],[130,58,76,45,59]]},
+];
+
+/* per-exam meta: completion ratio + time-used % (for Compare/Time tabs) */
+const META = {1:{comp:0.10,timePct:1},2:{comp:0.93,timePct:91},3:{comp:0.97,timePct:95},4:{comp:0.99,timePct:98},5:{comp:1.00,timePct:99}};
+
+const SECTION_FULL = [
+  'Chemical and Physical Foundations of Biological Systems',
+  'Critical Analysis and Reasoning Skills',
+  'Biological and Biochemical Foundations of Living Systems',
+  'Psychological, Social, and Biological Foundations of Behavior',
+];
+
+/* Compare → subject-accuracy categories per section */
+const SUBJ_CATS = [
+  ['General Chemistry','Physics','Organic Chemistry','Biochemistry'],
+  ['Humanities','Social Sciences','Natural Sciences'],
+  ['Biology','Biochemistry','Organic Chemistry','General Chemistry'],
+  ['Psychology','Sociology','Biology'],
+];
+
+/* Skills & Concepts → Foundational Concepts tree  [tag,name,[ [fcLabel,denom,[children]] ]] */
+const FOUNDATIONAL = [
+  ['C/P','Chemical and Physical Foundations of Biological Systems',[
+    ['FC 4: Translational motion, forces, light, electrostatics',22,['4A: Translational motion & equilibrium','4B: Fluids & gas movement','4C: Electrochemistry & circuits','4D: Light & sound','4E: Atoms & nuclear decay']],
+    ['FC 5: Chemical interactions & molecular dynamics',32,['5A: Unique nature of water','5B: Nature of molecules & bonding','5C: Separation & purification','5D: Structure & function of molecules','5E: Principles of chemical thermodynamics']],
+  ]],
+  ['B/B','Biological and Biochemical Foundations of Living Systems',[
+    ['FC 1: Biomolecules & cellular processes',34,['1A: Structure & function of proteins','1B: Transmission of genetic information','1C: Transmission of heritable information','1D: Principles of bioenergetics']],
+    ['FC 2: Cellular assemblies & organisms',10,['2A: Assemblies of molecules & cells','2B: Structure & integrative functions','2C: Processes of cell division']],
+    ['FC 3: Organ systems & homeostasis',15,['3A: Structure & function of organ systems','3B: Coordinated functioning of systems']],
+  ]],
+  ['P/S','Psychological, Social, and Biological Foundations of Behavior',[
+    ['FC 6: Sensing & perceiving the world',16,['6A: Sensing the environment','6B: Making sense of the environment','6C: Responding to the world']],
+    ['FC 7: Behavior & behavior change',19,['7A: Individual influences on behavior','7B: Social processes influencing behavior','7C: Attitude & behavior change']],
+    ['FC 8: Self & social interaction',12,['8A: Self-identity','8B: Social thinking','8C: Social interactions']],
+    ['FC 9: Cultural & social differences',9,['9A: Understanding social structure','9B: Demographic characteristics & processes']],
+    ['FC 10: Social stratification & resources',2,['10A: Social inequality']],
+  ]],
+];
+
+const SCIENCE_SKILLS = ['Skill 1: Knowledge of Scientific Principles','Skill 2: Scientific Reasoning & Problem-solving','Skill 3: Reasoning about Research Design','Skill 4: Data-based Statistical Reasoning'];
+const SCIENCE_GROUPS = [
+  ['','Aggregated Across All Science Sections',false],
+  ['C/P','Chemical and Physical Foundations of Biological Systems',true],
+  ['B/B','Biological and Biochemical Foundations of Living Systems',true],
+  ['P/S','Psychological, Social, and Biological Foundations of Behavior',true],
+];
+
+const CARS_SKILLS = [
+  ['1. Foundations of Comprehension',15,['1a. Main Idea or Purpose','1b. Meaning of Term','1c. Direct Passage Claims','1d. Implicit Claims','1e. Identifying Perspectives','1f. Further Implications']],
+  ['2. Reasoning Within the Text',17,['2a. Integrating distinct passage components','2b. Identifying internal logic']],
+  ['3. Reasoning about Research Design',1,[]],
+  ['4. Reasoning Beyond the Text',20,['4a. Applying passage information','4b. Extending passage ideas']],
+];
+const CARS_DISCIPLINES = [
+  ['Humanities',24,['Architecture','Art','Ethics','Literature','Music','Philosophy','Religion','Theater']],
+  ['Social Sciences',28,['Anthropology','Economics','Geography','History','Linguistics','Political Science','Psychology','Sociology']],
+];
+
+/* Time → allotments (sec). Total 06:14:57 ≈ 22497 */
+const TOTAL_ALLOT = 22497;
+const ALLOT = [5700,5400,5700,5697];
+const TIME_SUBJECTS = ['Biology','Biochemistry','General Chemistry','Organic Chemistry','Physics','Psychology','Sociology'];
+const DEN = [2,3,4,5,7,9,11,14,15,19,22,28,32,34];
+
+const C = 263.9; // donut circumference (r=42)
+let selected = new Set([1,2]); // default selection
+let view = 'comfortable';      // 'comfortable' | 'compact'
+let activeTab = 'overview';
+let compareSec = 0, skillsSub = 0, timeSub = 0;
+
+/* ── delta pill helper ── */
+function deltaPill(cur, prev, suffix=''){
+  if(prev===undefined||prev===null) return '';
+  const d = cur - prev;
+  if(d===0) return `<span class="pill pill-flat">±0</span>`;
+  const cls = d>0?'pill-green':'pill-red';
+  return `<span class="pill ${cls}">${d>0?'+':''}${d}${suffix}</span>`;
+}
+function deltaTxt(cur, prev, suffix=''){
+  if(prev===undefined||prev===null) return '';
+  const d = cur - prev;
+  if(d===0) return `<span class="delta">±0</span>`;
+  return `<span class="delta ${d>0?'up':'down'}">${d>0?'+':''}${d}${suffix}</span>`;
+}
+
+/* ════════ RENDER CHIPS ════════ */
+function renderChips(){
+  const rail = document.getElementById('chip-rail');
+  rail.innerHTML = EXAMS.map(e=>`
+    <button class="chip ${selected.has(e.id)?'on':''}" data-id="${e.id}">
+      <span class="chip-check"><i class="fa-solid fa-check"></i></span>
+      <span class="chip-meta">
+        <span class="chip-name">${e.name}</span>
+        <span class="chip-info">${e.date}</span>
+      </span>
+      <span class="chip-score">${e.total}</span>
+    </button>`).join('');
+  rail.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      const id = +c.dataset.id;
+      if(selected.has(id)) selected.delete(id); else selected.add(id);
+      renderAll();
+    });
+  });
+}
+
+function selectedExams(){
+  return EXAMS.filter(e=>selected.has(e.id)).sort((a,b)=>a.id-b.id);
+}
+
+/* ════════ RENDER TREND ════════ */
+function renderTrend(list){
+  const svg = document.getElementById('trend-svg');
+  const tag = document.getElementById('trend-tag');
+  if(list.length<1){ svg.innerHTML=''; tag.textContent=''; return; }
+  const W = Math.max(640, list.length*150), H=200, padX=50, padY=34;
+  const xs = list.map((_,i)=> padX + (list.length===1?0:i*((W-padX*2)/(list.length-1))) );
+  const min=472, max=528;
+  const y = v => H-padY - ((v-min)/(max-min))*(H-padY*2);
+  const pts = list.map((e,i)=>[xs[i], y(e.total)]);
+  // gridlines
+  let grid='';
+  [472,486,500,514,528].forEach(v=>{
+    grid += `<line x1="${padX}" y1="${y(v)}" x2="${W-padX/2}" y2="${y(v)}" stroke="#EEF1F4" stroke-width="1"/>
+             <text x="${padX-10}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#9AA6B0">${v}</text>`;
+  });
+  const line = pts.map((p,i)=> (i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  const area = `M${pts[0][0]} ${H-padY} ` + pts.map(p=>'L'+p[0]+' '+p[1]).join(' ') + ` L${pts[pts.length-1][0]} ${H-padY} Z`;
+  const dots = pts.map((p,i)=>`
+    <circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#fff" stroke="#1577C2" stroke-width="2.5"/>
+    <text x="${p[0]}" y="${p[1]-13}" text-anchor="middle" font-size="13" font-weight="700" fill="#2B3742">${list[i].total}</text>
+    <text x="${p[0]}" y="${H-12}" text-anchor="middle" font-size="11" fill="#6B7280">${list[i].name}</text>`).join('');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.innerHTML = grid +
+    (list.length>1?`<path d="${area}" fill="rgba(21,119,194,.08)"/><path d="${line}" fill="none" stroke="#1577C2" stroke-width="2.5"/>`:'') +
+    dots;
+  if(list.length>1){
+    const d = list[list.length-1].total - list[0].total;
+    tag.textContent = `${list.length} exams · ${d>=0?'+':''}${d} pts overall`;
+  } else { tag.textContent = `1 exam selected`; }
+}
+
+/* ════════ RENDER CARDS ════════ */
+/* ════════ RENDER COMPACT (slim rows) ════════ */
+function renderCompact(list, strip){
+  const cd = (cur,prev,suf='')=> prev===null||prev===undefined ? ''
+    : `<span class="cpt-d ${cur-prev>=0?'delta up':'delta down'}">${cur-prev>=0?'+':''}${cur-prev}${suf}</span>`;
+  strip.innerHTML = list.map((e,idx)=>{
+    const prev = idx>0 ? list[idx-1] : null;
+    const pills = SECTIONS.map((s,si)=>{
+      const sc = e.sec[si][0];
+      return `<span class="cpt-pill"><b>${s.tag}</b><span class="v">${sc}</span>${cd(sc, prev?prev.sec[si][0]:null)}</span>`;
+    }).join('');
+    return `
+      <div class="cpt-card">
+        <div><span class="cpt-name">${e.name}</span><span class="cpt-date">${e.date}</span></div>
+        <div class="cpt-metric"><span class="cpt-pct">${e.correct}%</span><span class="cpt-lbl">Correct</span></div>
+        <div class="cpt-metric"><div class="cpt-top"><span class="cpt-big">${e.total}</span>${cd(e.total, prev?prev.total:null)}</div><span class="cpt-lbl">Scaled</span></div>
+        <div class="cpt-metric"><div class="cpt-top"><span class="cpt-big">${e.pctile}th</span>${cd(e.pctile, prev?prev.pctile:null)}</div><span class="cpt-lbl">Percentile</span></div>
+        <div class="cpt-metric"><div class="cpt-top"><span class="cpt-big">${e.qc}/${e.qt}</span>${cd(e.qc, prev?prev.qc:null)}</div><span class="cpt-lbl">Q Correct</span></div>
+        <div class="cpt-sections">${pills}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderCards(list){
+  const strip = document.getElementById('card-strip');
+  strip.classList.toggle('compact', view==='compact');
+  if(list.length===0){
+    strip.classList.remove('compact');
+    strip.innerHTML = `<div class="empty"><i class="fa-light fa-chart-column"></i>Select one or more exams above to see details.</div>`;
+    return;
+  }
+  if(view==='compact'){ renderCompact(list, strip); return; }
+  const stDelta = (cur,prev)=> prev===null||prev===undefined ? ''
+    : `<div class="st-delta ${cur-prev>=0?'delta up':'delta down'}">${cur-prev>=0?'+':''}${cur-prev}</div>`;
+
+  strip.innerHTML = list.map((e,idx)=>{
+    const prev = idx>0 ? list[idx-1] : null;
+    const arc = (e.correct/100*C).toFixed(1);
+    const donutDelta = prev ? `<div class="donut-delta ${e.correct-prev.correct>=0?'delta up':'delta down'}">${e.correct-prev.correct>=0?'+':''}${e.correct-prev.correct}</div>` : '';
+
+    const secRows = SECTIONS.map((s,si)=>{
+      const [sc,pc,ac,qc,qt] = e.sec[si];
+      const p = prev ? prev.sec[si] : null;
+      return `
+        <div class="sectbl-row">
+          <span class="st-tag">${s.tag}</span>
+          <span class="st-name">${s.name}</span>
+          <div class="st-cell"><div class="st-val">${sc}</div>${stDelta(sc, p?p[0]:null)}</div>
+          <div class="st-cell"><div class="st-val">${pc}%</div>${stDelta(pc, p?p[1]:null)}</div>
+          <div class="st-cell"><div class="st-val">${ac}%</div>${stDelta(ac, p?p[2]:null)}</div>
+          <div class="st-cell"><div class="st-val">${qc}/${qt}</div>${stDelta(qc, p?p[3]:null)}</div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="exam-card">
+        <div class="ec-head">
+          <span class="ec-name">${e.name}</span>
+          <span class="ec-date">${e.date}</span>
+          <span class="ec-menu">&#8943;</span>
+        </div>
+        <div class="ec-body">
+          <div class="ec-summary">
+            <div class="donut">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#E9ECEF" stroke-width="9"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#1577C2" stroke-width="9" stroke-dasharray="${arc} ${(C-arc).toFixed(1)}" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-pct">${e.correct}%</div>
+                <div class="donut-lbl">Correct</div>
+                ${donutDelta}
+              </div>
+            </div>
+            <div class="ec-scores">
+              <div class="ss-label">Scaled Score</div>
+              <div class="ss-score-row"><span class="ss-score">${e.total}</span>${deltaPill(e.total, prev?prev.total:null)}</div>
+              <div class="ss-meta">
+                <div><div class="ssm-label">Percentile</div><div class="ssm-val">${e.pctile}th ${deltaTxt(e.pctile, prev?prev.pctile:null)}</div></div>
+                <div><div class="ssm-label">Questions Correct</div><div class="ssm-val">${e.qc} / ${e.qt} ${deltaTxt(e.qc, prev?prev.qc:null)}</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="ec-sectiontable">
+            <div class="sec-title">Section Scores${prev?' · change vs '+prev.name:''}</div>
+            <div class="sectbl">
+              <div class="sectbl-head">
+                <span></span><span>Section</span><span>Scaled</span><span>Percentile</span><span>Accuracy</span><span>Q Correct</span>
+              </div>
+              ${secRows}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ════════ SHARED HELPERS FOR COMPARISON TABS ════════ */
+function getPair(){ const l=selectedExams(); return l.length>=2 ? [l[0],l[1]] : null; }
+function rng(s){ const x=Math.sin(s*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+function clamp(v){ return Math.max(0,Math.min(100,Math.round(v))); }
+function need2(){ return `<div class="need2"><i class="fa-light fa-layer-group"></i>Select at least 2 exams in the rail above to compare.</div>`; }
+function subtabsHtml(labels, active, key){
+  return `<div class="subtabs">`+labels.map((l,i)=>`<div class="subtab ${i===active?'on':''}" data-sub="${key}:${i}">${l}</div>`).join('')+`</div>`;
+}
+function changeHtml(d){ return `<span class="ct-change ${d>=0?'delta up':'delta down'}">${d>=0?'+':''}${d}%</span>`; }
+
+/* deterministic per-row values from two exams' base accuracy */
+function genRow(a,b,seed,denoms){
+  const d = denoms[Math.floor(rng(seed)*denoms.length)] || denoms[0];
+  let p1 = clamp(a.correct + (rng(seed+1)*30-15));
+  let p2 = clamp(b.correct + (rng(seed+2)*30-15));
+  if(p2 < p1) p2 = clamp(p1 + rng(seed+3)*22);
+  return {p1, p2, d, n1:Math.round(p1/100*d), n2:Math.round(p2/100*d), ch:p2-p1};
+}
+function ctHead(a,b,descLabel){
+  return `<div class="ct-head"><span></span><span>${descLabel||'Description'}</span><span>${a.name}</span><span>${b.name}</span><span>Change</span><span></span></div>`;
+}
+/* one concept-table row. opts: {hasChildren,gid,child,cg,den,frac} */
+function ctRow(desc,a,b,seed,o){
+  o = o||{};
+  const r = genRow(a,b,seed, o.den!=null?[o.den]:DEN);
+  const frac = o.frac!==false;
+  const exp = o.hasChildren
+    ? `<span class="ct-exp" data-exp="${o.gid}"><i class="fa-light fa-plus"></i></span>`
+    : `<span class="ct-exp leaf"></span>`;
+  const cls = o.child ? `ct-row--child cg-${o.cg}` : '';
+  return `<div class="ct-row ${cls}">
+    ${exp}
+    <span class="ct-desc">${desc}</span>
+    <span class="ct-cell"><span class="ct-pct">${r.p1}%</span>${frac?`<span class="ct-frac">${r.n1} / ${r.d}</span>`:''}</span>
+    <span class="ct-cell"><span class="ct-pct">${r.p2}%</span>${frac?`<span class="ct-frac">${r.n2} / ${r.d}</span>`:''}</span>
+    ${changeHtml(r.ch)}
+    <span class="ct-chev"><i class="fa-light fa-chevron-right"></i></span>
+  </div>`;
+}
+function accSec(tag,title,a,b,rows,open,descLabel){
+  return `<div class="acc-sec ${open?'':'collapsed'}">
+    <div class="acc-sec-head">${tag?`<span class="sec-tag">${tag}</span>`:''}<span class="sec-h">${title}</span><i class="sec-chev fa-light fa-chevron-up"></i></div>
+    <div class="acc-sec-body">${ctHead(a,b,descLabel)}${rows}</div>
+  </div>`;
+}
+
+/* ════════ COMPARE TAB ════════ */
+function mbar(lbl,val,fill,sub){
+  return `<div class="mbar"><div class="mbar-top"><span class="mbar-lbl">${lbl}</span><span class="mbar-val">${val}</span></div>
+    <div class="mbar-track"><div class="mbar-fill" style="width:${fill}%"></div></div>${sub?`<div class="mbar-sub">${sub}</div>`:''}</div>`;
+}
+function cmpCard(e,si){
+  const [sc,pc,ac,qc,qt]=e.sec[si];
+  const comp=META[e.id].comp, ans=Math.round(qt*comp), compPct=Math.round(comp*100), qcPct=Math.round(qc/qt*100);
+  const scFill=clamp((sc-118)/14*100);
+  return `<div class="cmp-card">
+    <div class="cmp-card-head"><span class="nm">${e.name}</span><span class="dt">${e.date}</span><span class="mn">&#8943;</span></div>
+    <div class="cmp-card-body">
+      ${mbar('Scaled Score', sc, scFill)}
+      ${mbar('Percentile Rank', pc+'%', pc)}
+      ${mbar('Questions Correct', qcPct+'%', qcPct, qc+' / '+qt)}
+      ${mbar('Completed', compPct+'%', compPct, ans+' / '+qt)}
+    </div></div>`;
+}
+function renderCompare(){
+  const panel=document.getElementById('panel-compare');
+  let html=subtabsHtml(SECTIONS.map(s=>s.tag), compareSec, 'cmp');
+  const pair=getPair();
+  if(!pair){ panel.innerHTML=html+need2(); return; }
+  const [a,b]=pair, si=compareSec;
+  html += `<div class="cmp-grid">${cmpCard(a,si)}${cmpCard(b,si)}</div>`;
+  const rows = SUBJ_CATS[si].map((c,ci)=> ctRow(c,a,b, si*97+ci*13+7, {frac:true})).join('');
+  html += accSec(SECTIONS[si].tag, 'Subject Accuracy - '+SECTION_FULL[si], a,b, rows, true, 'Category');
+  panel.innerHTML=html;
+}
+
+/* ════════ SKILLS & CONCEPTS TAB ════════ */
+let gidCounter=0;
+function renderFoundational(a,b){
+  return FOUNDATIONAL.map(([tag,name,fcs])=>{
+    let rows='';
+    fcs.forEach((fc,fi)=>{
+      const [label,den,kids]=fc, gid='g'+(gidCounter++);
+      rows += ctRow(label,a,b, 500+fi*40+tag.length, {hasChildren:kids.length>0, gid, den});
+      kids.forEach((k,ki)=> rows += ctRow(k,a,b, 530+fi*40+ki*3+tag.length, {child:true, cg:gid}));
+    });
+    return accSec(tag,name,a,b,rows,true);
+  }).join('');
+}
+function renderScienceSkills(a,b){
+  return SCIENCE_GROUPS.map(([tag,name,frac],gi)=>{
+    const rows = SCIENCE_SKILLS.map((sk,ki)=> ctRow(sk,a,b, 1500+gi*17+ki*5, {frac})).join('');
+    return accSec(tag,name,a,b,rows,true);
+  }).join('');
+}
+function renderTree(title,tag,arr,a,b,base){
+  let rows='';
+  arr.forEach((item,i)=>{
+    const [label,den,kids]=item, gid='t'+(gidCounter++);
+    rows += ctRow(label,a,b, base+i*40, {hasChildren:kids.length>0, gid, den});
+    kids.forEach((k,ki)=> rows += ctRow(k,a,b, base+i*40+ki*3+1, {child:true, cg:gid}));
+  });
+  return accSec(tag,title,a,b,rows,true);
+}
+function renderSkills(){
+  const panel=document.getElementById('panel-skills');
+  let html=subtabsHtml(['Foundational Concepts','Science Skills','CARS Skills','CARS Disciplines'], skillsSub, 'sk');
+  const pair=getPair();
+  if(!pair){ panel.innerHTML=html+need2(); return; }
+  const [a,b]=pair; gidCounter=0;
+  if(skillsSub===0) html+=renderFoundational(a,b);
+  else if(skillsSub===1) html+=renderScienceSkills(a,b);
+  else if(skillsSub===2) html+=renderTree('CARS Skill Performance','',CARS_SKILLS,a,b,3000);
+  else html+=renderTree('CARS Discipline Performance','',CARS_DISCIPLINES,a,b,4000);
+  panel.innerHTML=html;
+}
+
+/* ════════ TIME ANALYSIS TAB ════════ */
+function fmtTime(sec){
+  const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60;
+  const pad=n=>String(n).padStart(2,'0');
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+function fmtAvg(sec){ return sec<60 ? `${sec} sec` : `${Math.floor(sec/60)} min ${sec%60} sec`; }
+function timeCard(e){
+  const tp=META[e.id].timePct, comp=META[e.id].comp;
+  const spent=Math.round(TOTAL_ALLOT*tp/100), ans=Math.round(230*comp), avg=ans?Math.round(spent/ans):0;
+  const arc=(tp/100*C).toFixed(1);
+  const accs = SECTIONS.map((s,si)=>{
+    const allot=ALLOT[si], ssp=Math.round(allot*tp/100), sans=Math.round(e.sec[si][4]*comp), savg=sans?Math.round(ssp/sans):0;
+    const open = si===0 ? 'open' : '';
+    return `<div class="time-acc ${open}">
+      <div class="time-acc-head"><span class="tg">${s.tag}</span><span class="t">${SECTION_FULL[si]}</span><i class="c fa-light fa-chevron-up"></i></div>
+      <div class="time-acc-body">
+        <div class="tas"><div class="l">Time Spent</div><div class="v">${fmtTime(ssp)} / ${fmtTime(allot)}</div></div>
+        <div class="tas"><div class="l">Avg. Time per Question</div><div class="v">${fmtAvg(savg)}</div></div>
+      </div></div>`;
+  }).join('');
+  return `<div class="time-card">
+    <div class="cmp-card-head"><span class="nm">${e.name}</span><span class="dt">${e.date}</span><span class="mn">&#8943;</span></div>
+    <div class="time-top">
+      <div class="time-donut">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#E9ECEF" stroke-width="9"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#1577C2" stroke-width="9" stroke-dasharray="${arc} ${(C-arc).toFixed(1)}" stroke-linecap="round"/>
+        </svg>
+        <div class="dc"><div class="p">${tp}%</div><div class="l">Time Used</div></div>
+      </div>
+      <div class="time-right">
+        <div class="lbl">Avg. Time per Question</div>
+        <div class="big">${fmtAvg(avg)}</div>
+        <div class="tot-l">Total Time Spent</div>
+        <div class="tot-v">${fmtTime(spent)} / ${fmtTime(TOTAL_ALLOT)}</div>
+      </div>
+    </div>
+    <div class="time-sec-title">Section Scores</div>
+    ${accs}
+  </div>`;
+}
+function timeRow(desc,a,b,seed,tag){
+  const t1=Math.round(35+rng(seed)*120), t2=Math.round(25+rng(seed+1)*95), ch=t2-t1;
+  return `<div class="ct-row">
+    <span class="ct-exp leaf"></span>
+    <span class="ct-desc">${desc}</span>
+    <span class="ct-cell"><span class="ct-pct">${fmtAvg(t1)}</span></span>
+    <span class="ct-cell"><span class="ct-pct">${fmtAvg(t2)}</span></span>
+    <span class="ct-change ${ch<=0?'delta up':'delta down'}">${ch>=0?'+':''}${ch}s</span>
+    <span class="ct-chev"><i class="fa-light fa-chevron-right"></i></span>
+  </div>`;
+}
+function renderTimeTable(sub,a,b){
+  let items, title, tag='';
+  if(sub===1){ items=TIME_SUBJECTS; title='Average Time per Question by Subject'; }
+  else if(sub===2){ items=SCIENCE_SKILLS; title='Average Time per Question by Science Skill'; }
+  else if(sub===3){ items=CARS_SKILLS.map(x=>x[0]); title='Average Time per Question by CARS Skill'; }
+  else { items=CARS_DISCIPLINES.map(x=>x[0]); title='Average Time per Question by CARS Discipline'; }
+  const rows = items.map((it,i)=> timeRow(it,a,b, 6000+sub*200+i*9)).join('');
+  return `<div class="acc-sec">
+    <div class="acc-sec-head"><span class="sec-h">${title}</span><i class="sec-chev fa-light fa-chevron-up"></i></div>
+    <div class="acc-sec-body">${ctHead(a,b,'Description')}${rows}</div>
+  </div>`;
+}
+function renderTime(){
+  const panel=document.getElementById('panel-time');
+  let html=subtabsHtml(['Overview','Science by Subject','Science by Skill','CARS by Skills','CARS by Disciplines'], timeSub, 'tm');
+  const pair=getPair();
+  if(!pair){ panel.innerHTML=html+need2(); return; }
+  const [a,b]=pair;
+  if(timeSub===0) html += `<div class="time-grid">${timeCard(a)}${timeCard(b)}</div>`;
+  else html += renderTimeTable(timeSub,a,b);
+  panel.innerHTML=html;
+}
+
+function renderActiveTab(){
+  if(activeTab==='compare') renderCompare();
+  else if(activeTab==='skills') renderSkills();
+  else if(activeTab==='time') renderTime();
+}
+
+/* ════════ MASTER RENDER ════════ */
+function renderAll(){
+  const list = selectedExams();
+  document.getElementById('sel-count').textContent = `${selected.size} selected`;
+  renderChips();
+  renderTrend(list);
+  renderCards(list);
+  renderActiveTab();
+}
+
+document.getElementById('select-all').addEventListener('click',()=>{ selected=new Set(EXAMS.map(e=>e.id)); renderAll(); });
+document.getElementById('clear-all').addEventListener('click',()=>{ selected=new Set(); renderAll(); });
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  activeTab = t.dataset.tab;
+  ['overview','compare','skills','time'].forEach(p=>{
+    document.getElementById('panel-'+p).hidden = (p!==activeTab);
+  });
+  renderActiveTab();
+}));
+
+/* delegated interactions inside re-rendered panels */
+document.addEventListener('click', e=>{
+  const st=e.target.closest('.subtab');
+  if(st){ const [k,i]=st.dataset.sub.split(':'); const idx=+i;
+    if(k==='cmp') compareSec=idx; else if(k==='sk') skillsSub=idx; else if(k==='tm') timeSub=idx;
+    renderActiveTab(); return; }
+  const ex=e.target.closest('.ct-exp');
+  if(ex && !ex.classList.contains('leaf') && ex.dataset.exp){
+    const opened=ex.classList.toggle('open');
+    ex.querySelector('i').className='fa-light '+(opened?'fa-minus':'fa-plus');
+    document.querySelectorAll('.cg-'+ex.dataset.exp).forEach(r=>r.classList.toggle('show',opened));
+    return; }
+  const sh=e.target.closest('.acc-sec-head');
+  if(sh){ sh.closest('.acc-sec').classList.toggle('collapsed'); return; }
+  const th=e.target.closest('.time-acc-head');
+  if(th){ th.closest('.time-acc').classList.toggle('open'); return; }
+});
+document.getElementById('view-toggle').querySelectorAll('.vt').forEach(b=>{
+  b.addEventListener('click',()=>{
+    view = b.dataset.view;
+    document.querySelectorAll('#view-toggle .vt').forEach(x=>x.classList.toggle('on', x===b));
+    renderCards(selectedExams());
+  });
+});
+
+renderAll();
+</script>
+</body>
+</html>
