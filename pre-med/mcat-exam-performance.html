@@ -408,20 +408,6 @@
 
   <div class="content">
 
-    <!-- ════ EXAM SELECTOR ════ -->
-    <div class="selector">
-      <div class="sel-top">
-        <span class="sel-title">Compare your exams</span>
-        <span class="sel-sub">Pick any exams to analyze side by side</span>
-        <span class="sel-count" id="sel-count">2 selected</span>
-        <div class="sel-actions">
-          <button class="sel-link" id="select-all">Select all</button>
-          <button class="sel-link" id="clear-all">Clear</button>
-        </div>
-      </div>
-      <div class="chip-rail" id="chip-rail"></div>
-    </div>
-
     <!-- TABS -->
     <div class="tabs">
       <div class="tab active" data-tab="overview">Overview</div>
@@ -551,7 +537,7 @@ const TIME_SUBJECTS = ['Biology','Biochemistry','General Chemistry','Organic Che
 const DEN = [2,3,4,5,7,9,11,14,15,19,22,28,32,34];
 
 const C = 263.9; // donut circumference (r=42)
-let selected = new Set([1,2]); // default selection
+let selected = new Set(EXAMS.map(e=>e.id)); // all exams shown (selector removed)
 let view = 'comfortable';      // 'comfortable' | 'compact'
 let activeTab = 'overview';
 let compareSec = 0, skillsSub = 0, timeSub = 0;
@@ -574,6 +560,7 @@ function deltaTxt(cur, prev, suffix=''){
 /* ════════ RENDER CHIPS ════════ */
 function renderChips(){
   const rail = document.getElementById('chip-rail');
+  if(!rail) return; // selector removed
   rail.innerHTML = EXAMS.map(e=>`
     <button class="chip ${selected.has(e.id)?'on':''}" data-id="${e.id}">
       <span class="chip-check"><i class="fa-solid fa-check"></i></span>
@@ -922,15 +909,16 @@ function renderActiveTab(){
 /* ════════ MASTER RENDER ════════ */
 function renderAll(){
   const list = selectedExams();
-  document.getElementById('sel-count').textContent = `${selected.size} selected`;
+  const cnt = document.getElementById('sel-count');
+  if(cnt) cnt.textContent = `${selected.size} selected`;
   renderChips();
   renderTrend(list);
   renderCards(list);
   renderActiveTab();
 }
 
-document.getElementById('select-all').addEventListener('click',()=>{ selected=new Set(EXAMS.map(e=>e.id)); renderAll(); });
-document.getElementById('clear-all').addEventListener('click',()=>{ selected=new Set(); renderAll(); });
+document.getElementById('select-all')?.addEventListener('click',()=>{ selected=new Set(EXAMS.map(e=>e.id)); renderAll(); });
+document.getElementById('clear-all')?.addEventListener('click',()=>{ selected=new Set(); renderAll(); });
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
   activeTab = t.dataset.tab;
